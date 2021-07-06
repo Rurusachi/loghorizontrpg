@@ -162,11 +162,6 @@ export class LogHorizonTRPGActor extends Actor {
   async fullRest(event) {
       const actorData = this.actor.data.data;
 
-      console.log(this);
-      actorData.hate.value = actorData.hate.min;
-      actorData.fatigue.value = actorData.fatigue.min;
-      actorData.hp.value = actorData.hp.max;
-
       const skillList = this.actor.items?.filter((s => s.data.data.limit != undefined));
       console.log(skillList);
       for ( let s of skillList ) {
