@@ -58,7 +58,7 @@ LOGHORIZONTRPG.checkTypes = {
 };
 
 LOGHORIZONTRPG.limitTypes = {
-    "none": "LOGHORIZONTRPG.ActionLimitNone",
+    "None": "LOGHORIZONTRPG.ActionLimitNone",
     "scene": "LOGHORIZONTRPG.ActionLimitScene",
     "scenario": "LOGHORIZONTRPG.ActionLimitScenario",
     "round": "LOGHORIZONTRPG.ActionLimitRound",
@@ -97,7 +97,7 @@ LOGHORIZONTRPG.difficultyTypes = {
 };
 
 LOGHORIZONTRPG.targetTypes = {
-    "self": "LOGHORIZONTRPG.ActionTargetSelf",
+    "Self": "LOGHORIZONTRPG.ActionTargetSelf",
     "single": "LOGHORIZONTRPG.ActionTargetSingle",
     "multiple": "LOGHORIZONTRPG.ActionTargetMultiple",
     "areap": "LOGHORIZONTRPG.ActionTargetAreaP",

@@ -46,7 +46,7 @@ export class LogHorizonTRPGActor extends Actor {
       } else {
           attribute.mod = data.abilities[attribute.ability].mod;
       }
-      attribute.total = attribute.mod + attribute.value + attribute.bonus;
+      attribute.total = (attribute.mod + attribute.bonus);
     }
 
     // combatstats
@@ -84,8 +84,9 @@ export class LogHorizonTRPGActor extends Actor {
     const data = actorData.data;
 
     // Max HP calculation
-    data.fatigue.max = data.hp.base + (data.hp.mod * (data.cr -1));
-    data.hp.max = data.hp.base + (data.hp.mod * (data.cr -1)) - data.fatigue.value;
+    data.hp.maxbase = data.hp.base + (data.hp.mod * (data.cr -1));
+    data.fatigue.max = data.hp.maxbase;
+    data.hp.max = data.hp.maxbase - data.fatigue.value;
 
   }
 
@@ -158,13 +159,35 @@ export class LogHorizonTRPGActor extends Actor {
     // Process additional NPC data here.
   }
 
+  async fullRest(event) {
+      const actorData = this.actor.data.data;
+
+      console.log(this);
+      actorData.hate.value = actorData.hate.min;
+      actorData.fatigue.value = actorData.fatigue.min;
+      actorData.hp.value = actorData.hp.max;
+
+      const skillList = this.actor.items?.filter((s => s.data.data.limit != undefined));
+      console.log(skillList);
+      for ( let s of skillList ) {
+            s.update({"data.limit.value": s.data.data.limit.max})
+      }
+
+      const actorUpdate = this.actor.update({"data.hate.value": actorData.hate.min, "data.fatigue.value": actorData.fatigue.min, "data.hp.value": actorData.hp.maxbase})
+      return actorUpdate;
+  }
+
   async rollAttributeCheck(attributeId, options={}) {
       const label = CONFIG.LOGHORIZONTRPG.attributes[attributeId];
       const attribute = this.data.data.attributes[attributeId];
 
-      const parts = ["@total", "@dice", "@bonus", "@addsr"];
-      const data = {total: attribute.total, dice: attribute.dice, bonus: options.item.data.data.check.bonus, addsr: (options.item.data.data.check.addsr ? options.item.data.data.sr.value : 0)};
-
+      const parts = ["@value", "@total", "@dice"];
+      const data = {value: attribute.value, total: attribute.total, dice: attribute.dice};
+      if (options.item != undefined) {
+          parts.push("@bonus", "@addsr");
+          data["bonus"] = options.item.data.data.check.bonus;
+          data["addsr"] = (options.item.data.data.check.addsr ? options.item.data.data.sr.value : 0);
+      }
       if (options.parts?.length > 0) {
         parts.push(...options.parts);
       }
@@ -176,7 +199,7 @@ export class LogHorizonTRPGActor extends Actor {
       let formula = "2d6";
 
       for (let [k, v] of Object.entries(parts)) {
-          
+
           if (data[v.slice(1)]){
               formula = formula + " + " + v;
           }

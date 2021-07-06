@@ -283,25 +283,16 @@ async rollFormula(formula, options={}) {
     const itemData = this.data;
     const actorData = this.actor.data;
 
-    console.log(itemData.data.equipped);
-
     const effects = actorData.effects?.filter((e => e.data.origin === `Actor.${actorData._id}.Item.${itemData._id}`));
 
     for ( let e of effects ) {
-          //console.log(`Setting effect to ${!itemData.data.equipped}`);
-          //console.log(e);
           e.disabled = itemData.data.equipped;
-          //lastOne = e.update({disabled: itemData.data.equipped});
     }
 
     const changes = this.actor.updateEmbeddedDocuments("ActiveEffect", effects);
-
-
     const itemupdate = this.update({"data.equipped": !itemData.data.equipped})
 
-
     return itemupdate;
-      //effect.update({disabled: !effect.data.disabled});
   }
 
   static async _getChatCardActor(card) {

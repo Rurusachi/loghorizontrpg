@@ -39,8 +39,8 @@
         },
         "inventory": {
             "gold": 0,
-            "slots": 0,
-            "slotsmax": 2
+            "value": 0,
+            "max": 2
         },
         "combatstats": {
             "patk": {
@@ -90,55 +90,55 @@
       },
       "attributes": {
         "athletics": {
-          "value": 0,
+          "value": "",
           "bonus": 0,
           "dice": "",
           "ability": "str"
         },
         "endurance": {
-          "value": 0,
+          "value": "",
           "bonus": 0,
           "dice": "",
           "ability": "str"
         },
         "disable": {
-          "value": 0,
+          "value": "",
           "bonus": 0,
           "dice": "",
           "ability": "dex"
         },
         "operate": {
-          "value": 0,
+          "value": "",
           "bonus": 0,
           "dice": "",
           "ability": "dex"
         },
         "perception": {
-          "value": 0,
+          "value": "",
           "bonus": 0,
           "dice": "",
           "ability": "pow"
         },
         "negotiation": {
-          "value": 0,
+          "value": "",
           "bonus": 0,
           "dice": "",
           "ability": "pow"
         },
         "knowledge": {
-          "value": 0,
+          "value": "",
           "bonus": 0,
           "dice": "",
           "ability": "int"
         },
         "analyze": {
-          "value": 0,
+          "value": "",
           "bonus": 0,
           "dice": "",
           "ability": "int"
         },
         "accuracy": {
-          "value": 0,
+          "value": "0",
           "bonus": 0,
           "dice": "",
           "ability": "highest"
@@ -172,9 +172,9 @@
           "tags": ""
       },
       "item": {
-        "rank": 0,
+        "ir": 1,
         "quantity": 1,
-        "size": 0,
+        "size": 1,
         "value": 0
       },
       "equippable": {
@@ -208,9 +208,10 @@
       },
       "action": {
           "limit": {
+              "min": 0,
               "value": 1,
               "max": 1,
-              "type": ""
+              "type": "None"
           },
           "timing": "",
           "check": {
@@ -225,7 +226,7 @@
               "value": ""
           },
           "target": {
-              "type": "",
+              "type": "self",
               "value": ""
           },
           "cost": 0,

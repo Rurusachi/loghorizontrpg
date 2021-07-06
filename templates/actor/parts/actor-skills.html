@@ -2,6 +2,7 @@
   {{#each skills as |skills tag|}}
     <li class="item flexrow items-header">
       <div class="item-name">{{tag}} Skills</div>
+      <div class="item-limit">Limit</div>
       <div class="item-tags">Tags</div>
       <div class="item-controls">
         <a class="item-control item-create" title="Create item" data-type="skill" data-tags="{{tag}}"><i class="fas fa-plus"></i> Add {{tag}}</a>
@@ -14,6 +15,11 @@
             <a class="rollable" data-roll-type="item"><img src="{{item.img}}" title="{{item.name}}" width="24" height="24"/></a>
           </div>
           <h4>{{item.name}}</h4>
+        </div>
+        <div class="item-limit resource-content flexrow flex-group-center">
+            {{#ifNotEquals item.data.limit.type "None"}}
+              <span>{{item.data.limit.value}} / {{item.data.limit.max}} {{localize (asIndexMiddle "config.limitTypes.$arg" data.limit.type)}}</span>
+            {{/ifNotEquals}}
         </div>
         <div class="item-tags item-prop">{{item.data.tags}}</div>
         <div class="item-controls">

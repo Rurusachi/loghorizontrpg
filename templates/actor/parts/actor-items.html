@@ -1,3 +1,20 @@
+<div class="grid grid-4col">
+    <div class="resource flex-group-center">
+      <label for="data.inventory.gold" class="resource-label">Gold</label>
+      <div class="resource-content flexrow flex-center flex-between flex-group-center">
+          <input type="text" name="data.inventory.gold" value="{{data.inventory.gold}}" data-dtype="Number"/>
+      </div>
+    </div>
+    <div class="resource flex-group-center">
+      <label for="data.inventory.value" class="resource-label">Inventory Slots</label>
+      <div class="resource-content flexrow flex-center flex-between flex-group-center">
+          <input type="text" name="data.inventory.value" value="{{data.inventory.value}}" data-dtype="Number"/>
+          <span> / </span>
+          <input type="text" name="data.inventory.max" value="{{data.inventory.max}}" data-dtype="Number"/>
+      </div>
+    </div>
+</div>
+
 <label class="resource-label">Weapons</label>
 <ol class="items-list">
   <li class="item flexrow items-header">

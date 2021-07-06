@@ -34,6 +34,7 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
 
     // Use a safe clone of the actor data for further operations.
     const actorData = context.actor.data;
+    context.config = CONFIG.LOGHORIZONTRPG;
 
     // Add the actor's data to context.data for easier access, as well as flags.
     context.data = actorData.data;
@@ -98,6 +99,7 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
     const skills = {
       "Combat": [],
       "General": [],
+      "Basic": [],
       "Other": []
     };
 
@@ -188,6 +190,8 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
       item.toggleEquipped();
     });
 
+    html.find('.full-rest').click(this.actor.fullRest.bind(this));
+
     // Active Effect management
     html.find(".effect-control").click(ev => onManageActiveEffect(ev, this.actor));
 
@@ -247,6 +251,9 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
         const itemId = element.closest('.item').dataset.itemId;
         const item = this.actor.items.get(itemId);
         if (item) return item.roll();
+      }
+      if (dataset.rollType == 'attribute') {
+          this.actor.rollAttributeCheck(dataset.attribute);
       }
     }
 
