@@ -1,0 +1,28 @@
+{
+  "name": "loghorizontrpg",
+  "title": "LogHorizonTRPG",
+  "description": "The Log Horizon TRPG system for FoundryVTT",
+  "version": "0.1.0",
+  "minimumCoreVersion": "0.8.3",
+  "compatibleCoreVersion": "0.8.8",
+  "author": "Rurusachi",
+  "esmodules": ["module/loghorizontrpg.mjs"],
+  "styles": ["css/loghorizontrpg.css"],
+  "scripts": [],
+  "packs": [],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "gridDistance": 1,
+  "gridUnits": "sq.",
+  "primaryTokenAttribute": "hp",
+  "secondaryTokenAttribute": "hate",
+  "url": "",
+  "manifest": "",
+  "download": "",
+  "license": "LICENSE.txt"
+}

@@ -1,0 +1,42 @@
+<div class="loghorizontrpg chat-card item-card" data-actor-id="{{actor._id}}" data-item-id="{{item._id}}"
+     {{#if tokenId}}data-token-id="{{tokenId}}"{{/if}} {{#if isSkill}}data-sr-value="{{item.data.sr.value}}"{{/if}}>
+    <header class="card-header flexrow">
+        <img src="{{item.img}}" title="{{item.name}}" width="36" height="36"/>
+        <h3 class="item-name">{{item.name}}</h3>
+    </header>
+
+    <div class="card-content">
+        <strong>{{data.tags}}</strong>
+        {{{data.description}}}
+    </div>
+
+    <div class="card-buttons">
+
+        <label class="label">Check: {{checkTypeMessage}}</label>
+        {{#if hasCasterCheck}}
+        <button data-action="castercheck" data-attribute="{{data.check.caster}}">Caster Check</button>
+        {{/if}}
+
+        {{#if hasTargetCheck}}
+        <button data-action="targetcheck" data-attribute="{{data.check.target}}">
+            Target Check
+        </button>
+        {{/if}}
+
+        {{#if hasFormula}}
+        <button data-action="formula">
+            Damage / Healing
+        </button>
+        {{/if}}
+
+        {{#if hasSecondFormula}}
+        <button data-action="secondformula">Secondary effect</button>
+        {{/if}}
+    </div>
+
+    <footer class="card-footer">
+        {{#each data.properties}}
+        <span>{{this}}</span>
+        {{/each}}
+    </footer>
+</div>

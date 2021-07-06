@@ -1,0 +1,309 @@
+{
+  "Actor": {
+    "types": ["character", "npc"],
+    "templates": {
+      "base": {
+        "cr": 1,
+        "hp": {
+          "value": 0,
+          "min": 0,
+          "mod": 0,
+          "base": 0,
+          "max": 0
+        },
+        "speed": {
+          "value": 2
+        },
+        "fate": {
+          "value": 1,
+          "min": 0,
+          "max": 1
+        },
+        "abilities": {
+          "str": {
+            "bonus": 0,
+            "value": 0
+          },
+          "dex": {
+            "bonus": 0,
+            "value": 0
+          },
+          "pow": {
+            "bonus": 0,
+            "value": 0
+          },
+          "int": {
+            "bonus": 0,
+            "value": 0
+          }
+        },
+        "inventory": {
+            "gold": 0,
+            "slots": 0,
+            "slotsmax": 2
+        },
+        "combatstats": {
+            "patk": {
+                "value": 0,
+                "bonus": 0
+            },
+            "matk": {
+                "value": 0,
+                "bonus": 0
+            },
+            "pdef": {
+                "value": 0,
+                "bonus": 0
+            },
+            "mdef": {
+                "value": 0,
+                "bonus": 0
+            },
+            "initiative": {
+                "value": 0,
+                "bonus": 0
+            },
+            "speed": {
+                "value": 0,
+                "bonus": 0
+            },
+            "recovery": {
+                "value": 0,
+                "bonus": 0
+            }
+        },
+        "biography": "",
+        "tags" : ""
+      }
+    },
+    "character": {
+      "templates": ["base"],
+      "hate": {
+          "min": 0,
+          "value": 0,
+          "max": 99
+      },
+      "fatigue": {
+          "min": 0,
+          "value": 0,
+          "max": 0
+      },
+      "attributes": {
+        "athletics": {
+          "value": 0,
+          "bonus": 0,
+          "dice": "",
+          "ability": "str"
+        },
+        "endurance": {
+          "value": 0,
+          "bonus": 0,
+          "dice": "",
+          "ability": "str"
+        },
+        "disable": {
+          "value": 0,
+          "bonus": 0,
+          "dice": "",
+          "ability": "dex"
+        },
+        "operate": {
+          "value": 0,
+          "bonus": 0,
+          "dice": "",
+          "ability": "dex"
+        },
+        "perception": {
+          "value": 0,
+          "bonus": 0,
+          "dice": "",
+          "ability": "pow"
+        },
+        "negotiation": {
+          "value": 0,
+          "bonus": 0,
+          "dice": "",
+          "ability": "pow"
+        },
+        "knowledge": {
+          "value": 0,
+          "bonus": 0,
+          "dice": "",
+          "ability": "int"
+        },
+        "analyze": {
+          "value": 0,
+          "bonus": 0,
+          "dice": "",
+          "ability": "int"
+        },
+        "accuracy": {
+          "value": 0,
+          "bonus": 0,
+          "dice": "",
+          "ability": "highest"
+        },
+        "evasion": {
+          "value": 0,
+          "bonus": 0,
+          "dice": "",
+          "ability": "dex"
+        },
+        "resistance": {
+          "value": 0,
+          "bonus": 0,
+          "dice": "",
+          "ability": "pow"
+        }
+    }
+    },
+    "npc": {
+      "templates": ["base"],
+      "iddifficulty": 0
+    }
+  },
+  "Item": {
+    "types": ["item", "weapon", "equipment", "consumable", "class", "race", "skill"],
+    "templates": {
+      "base": {
+        "description": ""
+        },
+      "tagged": {
+          "tags": ""
+      },
+      "item": {
+        "rank": 0,
+        "quantity": 1,
+        "size": 0,
+        "value": 0
+      },
+      "equippable": {
+          "equipped": false,
+          "combatstats": {
+              "patk": {
+                  "bonus": 0
+              },
+              "matk": {
+                  "bonus": 0
+              },
+              "pdef": {
+                  "bonus": 0
+              },
+              "mdef": {
+                  "bonus": 0
+              },
+              "initiative": {
+                  "bonus": 0
+              },
+              "speed": {
+                  "bonus": 0
+              },
+              "recovery": {
+                  "bonus": 0
+              }
+          },
+          "other": {
+              "inventoryslots": 0
+          }
+      },
+      "action": {
+          "limit": {
+              "value": 1,
+              "max": 1,
+              "type": ""
+          },
+          "timing": "",
+          "check": {
+            "type": "none",
+            "caster": "",
+            "bonus": "",
+            "addsr": false,
+            "target": ""
+          },
+          "range": {
+              "type": "",
+              "value": ""
+          },
+          "target": {
+              "type": "",
+              "value": ""
+          },
+          "cost": 0,
+          "fatecost": 0,
+          "formula": {
+              "value": "",
+              "bonus": {},
+              "bonusmultiplier": {}
+          },
+          "secondformula": {
+              "value": "",
+              "bonus": {},
+              "bonusmultiplier": {}
+          }
+      }
+    },
+    "item": {
+      "templates": ["base", "item", "action", "tagged"]
+    },
+    "weapon": {
+      "templates": ["base", "item", "equippable", "action", "tagged"]
+    },
+    "equipment": {
+      "templates": ["base", "item", "equippable", "action", "tagged"]
+    },
+    "consumable": {
+        "templates": ["base", "item", "action", "tagged"]
+    },
+    "class": {
+      "templates": ["base"],
+      "hp": {
+          "value": 1,
+          "modifier": 1
+      },
+      "abilities": {
+        "str": {
+          "value": 0
+        },
+        "dex": {
+          "value": 0
+        },
+        "pow": {
+          "value": 0
+        },
+        "int": {
+          "value": 0
+        }
+      }
+    },
+    "race": {
+      "templates": ["base"],
+      "hp": {
+          "value": 0
+      },
+      "abilities": {
+        "str": {
+          "value": 0
+        },
+        "dex": {
+          "value": 0
+        },
+        "pow": {
+          "value": 0
+        },
+        "int": {
+          "value": 0
+        }
+    },
+      "fate": {
+          "value": 0
+      }
+    },
+    "skill": {
+      "templates": ["base", "action", "tagged"],
+      "sr": {
+          "value": 1,
+          "max": 1
+      }
+    }
+  }
+}
