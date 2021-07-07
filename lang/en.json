@@ -21,8 +21,8 @@
   "LOGHORIZONTRPG.AttributeEvasion": "Evasion",
   "LOGHORIZONTRPG.AttributeResistance": "Resistance",
 
-  "LOGHORIZONTRPG.CombatstatPatk": "Physical attack",
-  "LOGHORIZONTRPG.CombatstatMatk": "Magic attack",
+  "LOGHORIZONTRPG.CombatstatPatk": "Attack power",
+  "LOGHORIZONTRPG.CombatstatMatk": "Magic power",
   "LOGHORIZONTRPG.CombatstatPdef": "Physical defense",
   "LOGHORIZONTRPG.CombatstatMdef": "Magic defense",
   "LOGHORIZONTRPG.CombatstatInitiative": "Initiative",

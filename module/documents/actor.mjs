@@ -196,16 +196,20 @@ export class LogHorizonTRPGActor extends Actor {
       return this.update(updates);
   }
 
-  async rollAttributeCheck(attributeId, options={}) {
+  async rollAttributeCheck(attributeId, target=false, options={}) {
       const label = CONFIG.LOGHORIZONTRPG.attributes[attributeId];
       const attribute = this.data.data.attributes[attributeId];
 
-      const parts = ["@value", "@total", "@dice"];
-      const data = {value: attribute.value, total: attribute.total, dice: attribute.dice};
-      if (options.item != undefined) {
+      const parts = ["@value", "@total"];
+      const data = {value: attribute.value, total: attribute.total};
+      if (options.item != undefined && target == false) {
           parts.push("@bonus", "@addsr");
           data["bonus"] = options.item.data.data.check.bonus;
-          data["addsr"] = (options.item.data.data.check.addsr ? options.item.data.data.sr.value : 0);
+          data["addsr"] = (options.item.data.data.check.addsr ? `${options.item.data.data.sr.value}[SR]` : 0);
+      }
+      if (attribute.dice) {
+          parts.push("@dice");
+          data["dice"] = `${attribute.dice}d6`;
       }
       if (options.parts?.length > 0) {
         parts.push(...options.parts);
@@ -223,12 +227,22 @@ export class LogHorizonTRPGActor extends Actor {
               formula = formula + " + " + v;
           }
       }
+      const roll = new Roll(formula, data);
+      try {
+          roll.roll();
+          roll.toMessage({
+              speaker: options.speaker || ChatMessage.getSpeaker({actor: this}),
+              flavor: `${this.name} - ${game.i18n.localize(label)} Check`,
+          });
+          return roll;
+      } catch (e) {
+          console.log(e);
+          roll.toMessage({
+              speaker: options.speaker || ChatMessage.getSpeaker({actor: this}),
+              flavor: `${this.name} - ${game.i18n.localize(label)} Check - ${e}`,
+          });
+      }
 
-      const roll = new Roll(formula, data).roll();
-      roll.toMessage({
-        speaker: options.speaker || ChatMessage.getSpeaker({actor: this}),
-        flavor: `${this.name} - ${game.i18n.localize(label)} Check`,
-      });
-      return roll;
+      return null;
   }
 }

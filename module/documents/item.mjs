@@ -172,14 +172,14 @@ export class LogHorizonTRPGItem extends Item {
 
     switch ( action ) {
       case "castercheck":
-        await actor.rollAttributeCheck(button.dataset.attribute, { event, item });
+        await actor.rollAttributeCheck(button.dataset.attribute, false, { event, item });
       break;
 
       case "targetcheck":
         const targets = this._getChatCardTargets(card);
         for ( let token of targets ) {
             const speaker = ChatMessage.getSpeaker({scene: canvas.scene, token: token});
-            await token.actor.rollAttributeCheck(button.dataset.attribute, { event, item, speaker });
+            await token.actor.rollAttributeCheck(button.dataset.attribute, true, { event, item, speaker });
           }
       break;
 
@@ -207,6 +207,14 @@ export class LogHorizonTRPGItem extends Item {
 async rollFormula(formula, options={}) {
     const itemData = this.data.data;
     const actorData = this.actor.data.data;
+    const config = CONFIG.LOGHORIZONTRPG;
+    const localized = {};
+    Object.entries(config.combatstats).map(v => localized[v[0]] = game.i18n.localize(v[1]));
+    Object.entries(config.abilities).map(v => {
+        localized[`${v[0]}base`] = `Base ${game.i18n.localize(v[1])}`;
+        localized[`${v[0]}mod`] = `${game.i18n.localize(v[1])} Mod`;
+    });
+    localized["cr"] = "CR";
 
     const parts = [];
     const data = {};
@@ -215,22 +223,22 @@ async rollFormula(formula, options={}) {
         if (v) {
             parts.push(`@${k}`);
             if (k == "sr") {
-                data[k] = `${formula.bonusmultiplier[k] * itemData.sr.value}`;
+                data[k] = `${formula.bonusmultiplier[k] * itemData.sr.value}[SR]`;
             }
             else if (k == "srd") {
-                data[k] = `${formula.bonusmultiplier[k] * itemData.sr.value}d6`;
+                data[k] = `${formula.bonusmultiplier[k] * itemData.sr.value}d6[SRD]`;
             }
             else if (["patk", "matk", "recovery"].includes(k)) {
-                data[k] = `${formula.bonusmultiplier[k] * actorData.combatstats[k].total}`;
+                data[k] = `${formula.bonusmultiplier[k] * actorData.combatstats[k].total}[${localized[k]}]`;
             }
             else if (["strmod", "dexmod", "powmod", "intmod"].includes(k)) {
-                data[k] = `${formula.bonusmultiplier[k] * actorData.abilities[k.slice(0,3)].mod}`;
+                data[k] = `${formula.bonusmultiplier[k] * actorData.abilities[k.slice(0,3)].mod}[${localized[k]}]`;
             }
             else if (["strbase", "dexbase", "powbase", "intbase"].includes(k)) {
-                data[k] = `${formula.bonusmultiplier[k] * actorData.abilities[k.slice(0,3)].base}`;
+                data[k] = `${formula.bonusmultiplier[k] * actorData.abilities[k.slice(0,3)].base}[${localized[k]}]`;
             }
             else if (k == "cr") {
-                data[k] = `${formula.bonusmultiplier[k] * actorData.cr}`;
+                data[k] = `${formula.bonusmultiplier[k] * actorData.cr}[CR]`;
             }
             else {
                 console.log(k);
@@ -254,12 +262,23 @@ async rollFormula(formula, options={}) {
         }
     }
 
-    const roll = new Roll(finalFormula, data).roll();
-    roll.toMessage({
-      speaker: options.speaker || ChatMessage.getSpeaker({actor: this}),
-      flavor: `${this.name} - Formula`,
-    });
-    return roll;
+    const roll = new Roll(finalFormula, data);
+    try {
+        roll.roll();
+        roll.toMessage({
+          speaker: options.speaker || ChatMessage.getSpeaker({actor: this}),
+          flavor: `${this.name} - Formula`,
+        });
+        return roll;
+    } catch (e) {
+        console.log(e);
+        roll.toMessage({
+          speaker: options.speaker || ChatMessage.getSpeaker({actor: this}),
+          flavor: `${this.name} - Formula - ${e}`,
+        });
+    }
+
+    return null;
 }
 
   get hasCasterCheck() {

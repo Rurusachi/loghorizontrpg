@@ -92,67 +92,67 @@
         "athletics": {
           "value": "",
           "bonus": 0,
-          "dice": "",
+          "dice": 0,
           "ability": "str"
         },
         "endurance": {
           "value": "",
           "bonus": 0,
-          "dice": "",
+          "dice": 0,
           "ability": "str"
         },
         "disable": {
           "value": "",
           "bonus": 0,
-          "dice": "",
+          "dice": 0,
           "ability": "dex"
         },
         "operate": {
           "value": "",
           "bonus": 0,
-          "dice": "",
+          "dice": 0,
           "ability": "dex"
         },
         "perception": {
           "value": "",
           "bonus": 0,
-          "dice": "",
+          "dice": 0,
           "ability": "pow"
         },
         "negotiation": {
           "value": "",
           "bonus": 0,
-          "dice": "",
+          "dice": 0,
           "ability": "pow"
         },
         "knowledge": {
           "value": "",
           "bonus": 0,
-          "dice": "",
+          "dice": 0,
           "ability": "int"
         },
         "analyze": {
           "value": "",
           "bonus": 0,
-          "dice": "",
+          "dice": 0,
           "ability": "int"
         },
         "accuracy": {
           "value": "0",
           "bonus": 0,
-          "dice": "",
+          "dice": 0,
           "ability": "highest"
         },
         "evasion": {
           "value": 0,
           "bonus": 0,
-          "dice": "",
+          "dice": 0,
           "ability": "dex"
         },
         "resistance": {
           "value": 0,
           "bonus": 0,
-          "dice": "",
+          "dice": 0,
           "ability": "pow"
         }
     }
