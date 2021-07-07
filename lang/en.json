@@ -47,6 +47,22 @@
   "LOGHORIZONTRPG.ActionLimitParty": "[Party]",
   "LOGHORIZONTRPG.ActionLimitOther": "Other",
 
+  "LOGHORIZONTRPG.Rest": "Rest",
+  "LOGHORIZONTRPG.RestScene": "Scene",
+  "LOGHORIZONTRPG.RestScenario": "Scenario",
+  "LOGHORIZONTRPG.RestRound": "Round",
+  "LOGHORIZONTRPG.RestParty": "[Party]",
+  "LOGHORIZONTRPG.RestOther": "Other",
+  "LOGHORIZONTRPG.RestHP": "HP",
+  "LOGHORIZONTRPG.RestFatigue": "Fatigue",
+  "LOGHORIZONTRPG.RestHate": "Hate",
+  "LOGHORIZONTRPG.RestFate": "Fate",
+  "LOGHORIZONTRPG.RestAll": "All",
+
+  "LOGHORIZONTRPG.RestLimits": "Restore used skills",
+  "LOGHORIZONTRPG.RestResources": "HP, Fatigue and Fate points",
+  "LOGHORIZONTRPG.RestAllTitle": "Restore everything",
+
   "LOGHORIZONTRPG.ActionTimingConstant": "Constant",
   "LOGHORIZONTRPG.ActionTimingPrePlay": "Pre-Play",
   "LOGHORIZONTRPG.ActionTimingInterlude": "Interlude",

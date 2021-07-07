@@ -1,3 +1,5 @@
+import RestDialog from "../apps/rest.mjs";
+
 /**
  * Extend the base Actor document by defining a custom roll data structure which is ideal for the Simple system.
  * @extends {Actor}
@@ -159,17 +161,39 @@ export class LogHorizonTRPGActor extends Actor {
     // Process additional NPC data here.
   }
 
-  async fullRest(event) {
-      const actorData = this.actor.data.data;
+  async onRest() {
+      return RestDialog.restDialog({actor: this});
+  }
 
-      const skillList = this.actor.items?.filter((s => s.data.data.limit != undefined));
-      console.log(skillList);
-      for ( let s of skillList ) {
-            s.update({"data.limit.value": s.data.data.limit.max})
+  async rest(options) {
+      const actorData = this.data.data;
+
+      let all = false;
+      if (options.includes("all")) {
+          all = true;
       }
 
-      const actorUpdate = this.actor.update({"data.hate.value": actorData.hate.min, "data.fatigue.value": actorData.fatigue.min, "data.hp.value": actorData.hp.maxbase})
-      return actorUpdate;
+      const actionList = this.items?.filter((s => s.data.data.limit != undefined));
+      for ( let s of actionList ) {
+          if (options.includes(s.data.data.limit.type) || all) {
+              s.update({"data.limit.value": s.data.data.limit.max})
+          }
+      }
+
+      const updates = {};
+      if (options.includes("hp") || all) {
+          updates["data.hp.value"] = actorData.hp.maxbase;
+      }
+      if (options.includes("fatigue") || all) {
+          updates["data.fatigue.value"] = actorData.fatigue.min;
+      }
+      if (options.includes("hate") || all) {
+          updates["data.hate.value"] = actorData.hate.min;
+      }
+      if (options.includes("fate") || all) {
+          updates["data.fate.value"] = actorData.fate.max;
+      }
+      return this.update(updates);
   }
 
   async rollAttributeCheck(attributeId, options={}) {

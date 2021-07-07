@@ -1,4 +1,5 @@
 import {onManageActiveEffect, prepareActiveEffectCategories} from "../helpers/effects.mjs";
+import RestDialog from "../apps/rest.mjs";
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -190,7 +191,7 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
       item.toggleEquipped();
     });
 
-    html.find('.full-rest').click(this.actor.fullRest.bind(this));
+    html.find('.rest').click(this._onRest.bind(this));
 
     // Active Effect management
     html.find(".effect-control").click(ev => onManageActiveEffect(ev, this.actor));
@@ -207,6 +208,12 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
         li.addEventListener("dragstart", handler, false);
       });
     }
+  }
+
+  async _onRest(event) {
+      event.preventDefault();
+
+      return new RestDialog(this.actor).render(true)
   }
 
   /**

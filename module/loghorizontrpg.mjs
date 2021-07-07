@@ -7,7 +7,10 @@ import { LogHorizonTRPGItemSheet } from "./sheets/item-sheet.mjs";
 // Import helper/utility classes and constants.
 import { preloadHandlebarsTemplates } from "./helpers/templates.mjs";
 import { LOGHORIZONTRPG } from "./helpers/config.mjs";
-import { measureDistances } from "./helpers/canvas.js";
+import { measureDistances } from "./helpers/canvas.mjs";
+
+
+import RestDialog from "./apps/rest.mjs";
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */
@@ -20,6 +23,7 @@ Hooks.once('init', async function() {
   game.loghorizontrpg = {
     LogHorizonTRPGActor,
     LogHorizonTRPGItem,
+    RestDialog,
     rollItemMacro
   };
 
@@ -106,6 +110,13 @@ Handlebars.registerHelper('asIndexMiddle', function(arg1, arg2, options) {
     }
 
     return current;
+});
+
+Handlebars.registerHelper('boolOr', function(arg1, arg2, options) {
+    console.log(arg1);
+    console.log(arg2);
+    console.log((arg1 || arg2));
+    return (arg1 || arg2);
 });
 /* -------------------------------------------- */
 /*  Ready Hook                                  */

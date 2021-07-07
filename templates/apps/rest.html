@@ -1,0 +1,39 @@
+<form class="dialog-content" onsubmit="event.preventDefault();">
+    <h2 class="flex-group-center">{{localize "LOGHORIZONTRPG.RestLimits"}}</h2>
+    <div class="flexrow flex-group-center">
+        {{#each config.restOptionsLimits as |name key|}}
+        <label class="checkbox">
+            <input type="checkbox" name="{{key}}" data-dtype="Boolean" {{checked (asIndexMiddle "choices.$arg" key)}}>
+            {{localize name}}
+        </label>
+        {{/each}}
+    </div>
+    <h2 class="flex-group-center">{{localize "LOGHORIZONTRPG.RestResources"}}</h2>
+    <div class="flexrow flex-group-center">
+        {{#each config.restOptionsResources as |name key|}}
+        <label class="checkbox">
+            <input type="checkbox" name="{{key}}" data-dtype="Boolean" {{checked (asIndexMiddle "choices.$arg" key)}}>
+            {{localize name}}
+        </label>
+        {{/each}}
+    </div>
+    <h2 class="flex-group-center">{{localize "LOGHORIZONTRPG.RestAllTitle"}}</h2>
+    <div class="flexrow flex-group-center">
+        <label class="checkbox">
+            <input type="checkbox" name="all" data-dtype="Boolean" {{checked choices.all}}>
+            {{localize "LOGHORIZONTRPG.RestAll"}}
+        </label>
+    </div>
+    <div class="dialog-buttons">
+        <button type="submit" name="submit" value="1">
+            <i class="fas fa-bed"></i>
+            {{localize "LOGHORIZONTRPG.Rest"}}
+        </button>
+        {{#each buttons as |button id|}}
+        <button class="dialog-button {{button.class}}" data-button="{{id}}">
+            {{{button.icon}}}
+            {{{button.label}}}
+        </button>
+        {{/each}}
+    </div>
+</form>

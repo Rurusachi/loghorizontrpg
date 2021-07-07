@@ -66,6 +66,28 @@ LOGHORIZONTRPG.limitTypes = {
     "other": "LOGHORIZONTRPG.ActionLimitOther"
 };
 
+LOGHORIZONTRPG.restOptionsLimits = {
+    "scene": "LOGHORIZONTRPG.RestScene",
+    "scenario": "LOGHORIZONTRPG.RestScenario",
+    "round": "LOGHORIZONTRPG.RestRound",
+    "party": "LOGHORIZONTRPG.RestParty",
+    "other": "LOGHORIZONTRPG.RestOther"
+};
+
+LOGHORIZONTRPG.restOptionsResources = {
+    "hp": "LOGHORIZONTRPG.RestHP",
+    "fatigue": "LOGHORIZONTRPG.RestFatigue",
+    "hate": "LOGHORIZONTRPG.RestHate",
+    "fate": "LOGHORIZONTRPG.RestFate"
+};
+
+LOGHORIZONTRPG.restOptions = {
+    "limits": "LOGHORIZONTRPG.RestLimits",
+    "resources": "LOGHORIZONTRPG.RestResources",
+    "alltitle": "LOGHORIZONTRPG.RestAllTitle",
+    "all": "LOGHORIZONTRPG.RestAll"
+}
+
 LOGHORIZONTRPG.timingTypes = {
     "constant": "LOGHORIZONTRPG.ActionTimingConstant",
     "preplay": "LOGHORIZONTRPG.ActionTimingPrePlay",
