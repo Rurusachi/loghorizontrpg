@@ -27,7 +27,7 @@
           <div class="resource-content flexrow flex-center flex-between flex-group-center">
               <input type="text" name="data.fate.value" value="{{data.fate.value}}" data-dtype="Number"/>
               <span> / </span>
-              <span>{{data.fate.max}}</span>
+              <input type="text" name="data.fate.max" value="{{data.fate.max}}" data-dtype="Number"/>
           </div>
         </div>
 
@@ -42,6 +42,13 @@
           <label for="data.hatemultiplier" class="resource-label">Hate multiplier</label>
           <div class="resource-content flexrow flex-center flex-between flex-group-center">
               <input type="text" name="data.hatemultiplier" value="{{data.hatemultiplier}}" data-dtype="Number"/>
+          </div>
+        </div>
+
+        <div class="resource flex-group-center grid-span-2">
+          <label for="data.tags" class="resource-label">Tags</label>
+          <div class="resource-content flexrow flex-center flex-between flex-group-center">
+              <input type="text" name="data.tags" value="{{data.tags}}" data-dtype="String"/>
           </div>
         </div>
 
@@ -74,7 +81,6 @@
                 <div class="flexrow flex-group-center">
                     <label class="resource-text flex-group-center">Abilities</label>
                     <span></span>
-                    <span>Bonus</span>
                     <span>Base</span>
                     <span>Mod</span>
                 </div>
@@ -85,9 +91,6 @@
                   </div>
                     <div>
                   <input type="text" name="data.abilities.{{key}}.value" value="{{ability.value}}" data-dtype="Number"/>
-              </div>
-                <div>
-                  <span>{{ability.bonus}}</span>
               </div>
                 <div>
                   <span>{{ability.base}}</span>
@@ -115,8 +118,6 @@
                   <label class="resource-text">Attributes</label>
                   <span></span>
                   <span>Fixed</span>
-                  <span>Mod</span>
-                  <span>Total</span>
               </div>
               {{#each data.attributes as |attribute key|}}
               <div class="attribute flexrow flex-group-center">
@@ -134,12 +135,25 @@
                         {{/select}}
                     </select>
                 </div>
-                <div>
-                    <span>{{attribute.mod}}</span>
-                </div>
-                <div>
-                    <span class="attribute-mod rollable">{{numberFormat attribute.total decimals=0 sign=true}}</span>
-                </div>
+              </div>
+              {{/each}}
+          </div>
+          <div class="grid">
+
+          </div>
+          <div class="difficulties flexcol">
+              <div class="flexrow flex-group-center">
+                  <label class="resource-text">Difficulties</label>
+                  <span></span>
+              </div>
+              {{#each data.difficulties as |difficulty key|}}
+              <div class="difficulties flexrow flex-group-center">
+                  <div>
+                      <label for="data.difficulties.{{key}}.value" class="resource-label flexlarge align-left"">{{difficulty.label}}</label>
+                  </div>
+                  <div>
+                      <input type="text" name="data.difficulties.{{key}}.value" value="{{difficulty.value}}" data-dtype="Number"/>
+                  </div>
               </div>
               {{/each}}
           </div>

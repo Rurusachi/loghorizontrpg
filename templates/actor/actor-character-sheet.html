@@ -86,7 +86,6 @@
               <div class="flexrow flex-group-center">
                   <label class="resource-text flex-group-center">Abilities</label>
                   <span></span>
-                  <span>Bonus</span>
                   <span>Base</span>
                   <span>Mod</span>
               </div>
@@ -97,9 +96,6 @@
                 </div>
                   <div>
                 <input type="text" name="data.abilities.{{key}}.value" value="{{ability.value}}" data-dtype="Number"/>
-            </div>
-              <div>
-                <span>{{ability.bonus}}</span>
             </div>
               <div>
                 <span>{{ability.base}}</span>
@@ -133,18 +129,18 @@
               </div>
             {{#each data.attributes as |attribute key|}}
             <div class="attribute flexrow flex-group-center">
-              <div>
-              <label for="data.attributes.{{key}}.value" class="resource-label rollable flexlarge align-left" data-roll-type="attribute" data-attribute="{{key}}">{{attribute.label}}</label>
-          </div>
-            <div>
-              <input type="text" name="data.attributes.{{key}}.value" value="{{attribute.value}}" data-dtype="String"/>
-          </div>
-            <div>
-              <span>{{attribute.mod}}</span>
-          </div>
-            <div>
-              <span class="attribute-mod rollable">{{numberFormat attribute.total decimals=0 sign=true}}</span>
-          </div>
+                <div class="flex-group-left">
+                    <label for="data.attributes.{{key}}.value" class="resource-label rollable flexlarge align-left" data-roll-type="attribute" data-attribute="{{key}}">{{attribute.label}}</label>
+                </div>
+                <div>
+                    <input type="text" name="data.attributes.{{key}}.value" value="{{attribute.value}}" data-dtype="String"/>
+                </div>
+                <div>
+                    <span>{{attribute.mod}}</span>
+                </div>
+                <div>
+                    <span class="attribute-mod rollable">{{numberFormat attribute.total decimals=0 sign=true}}</span>
+                </div>
             </div>
             {{/each}}
           </div>
@@ -152,10 +148,14 @@
     </section>
 
         {{!-- For the main features list, span the right two columns --}}
-        <section class="main grid grid-2col">
+        <section class="main grid grid-3col">
           {{!-- This is a Handlebars partial. They're stored in the `/parts` folder next to this sheet, and defined in module/helpers/templates.mjs --}}
           <div class="">
               {{> "systems/loghorizontrpg/templates/actor/parts/actor-features.html"}}
+          </div>
+          <div class="grid-span-2">
+              <h1 class="flex-group-center">Status</h1>
+              {{> "systems/loghorizontrpg/templates/actor/parts/actor-status.html"}}
           </div>
         </section>
 

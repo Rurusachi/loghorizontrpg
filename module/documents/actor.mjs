@@ -37,40 +37,11 @@ export class LogHorizonTRPGActor extends Actor {
 
     // Make separate methods for each Actor type (character, npc, etc.) to keep
     // things organized.
+    // abilities
     for (let [key, ability] of Object.entries(data.abilities)) {
-        ability.base = ability.value + ability.bonus + (actorData.type === 'character' ? (1 * (data.cr -1)) : 0);
+        ability.base = ability.value + ability.bonus + (actorData.type === 'character' ? (1 * (data.cr -1)) : 0); // adds cr if player
         ability.mod = Math.floor((ability.base) / 3);
     }
-
-    for (let [key, attribute] of Object.entries(data.attributes)) {
-      if (attribute.ability == "highest") {
-          attribute.mod = Math.max(data.abilities["str"].mod, data.abilities["dex"].mod, data.abilities["pow"].mod, data.abilities["int"].mod)
-      } else {
-          attribute.mod = data.abilities[attribute.ability].mod;
-      }
-      attribute.total = (attribute.mod + attribute.bonus);
-    }
-
-    // combatstats
-    data.combatstats["pdef"].mod = data.abilities["str"].mod * 2;
-    data.combatstats["pdef"].total = data.combatstats["pdef"].mod + data.combatstats["pdef"].bonus + data.combatstats["pdef"].value;
-
-    data.combatstats["mdef"].mod = data.abilities["int"].mod * 2;
-    data.combatstats["mdef"].total = data.combatstats["mdef"].mod + data.combatstats["mdef"].bonus + data.combatstats["mdef"].value;
-
-    data.combatstats["initiative"].mod = data.abilities["str"].mod + data.abilities["int"].mod;
-    data.combatstats["initiative"].total = data.combatstats["initiative"].mod + data.combatstats["initiative"].bonus + data.combatstats["initiative"].value;
-
-    for (let [key, combatstat] of Object.entries(data.combatstats)) {
-      if (combatstat == data.combatstats["pdef"] || combatstat == data.combatstats["mdef"] || combatstat == data.combatstats["initiative"]) {
-          continue;
-      } else if (combatstat == data.combatstats["speed"]) {
-          combatstat.total = 2 + combatstat.bonus + combatstat.value;
-      } else {
-          combatstat.total = combatstat.bonus + combatstat.value;
-      }
-    }
-
 
     this._prepareCharacterData(actorData);
     this._prepareNpcData(actorData);
@@ -84,6 +55,36 @@ export class LogHorizonTRPGActor extends Actor {
 
     // Make modifications to data here. For example:
     const data = actorData.data;
+
+    // attributes
+    for (let [key, attribute] of Object.entries(data.attributes)) {
+        if (attribute.ability == "highest") {
+            attribute.mod = Math.max(data.abilities["str"].mod, data.abilities["dex"].mod, data.abilities["pow"].mod, data.abilities["int"].mod)
+        } else {
+            attribute.mod = data.abilities[attribute.ability].mod;
+        }
+        attribute.total = (attribute.mod + attribute.bonus);
+    }
+
+    // combatstats
+    data.combatstats["pdef"].mod = data.abilities["str"].mod * 2;
+    data.combatstats["pdef"].total = data.combatstats["pdef"].mod + data.combatstats["pdef"].bonus + data.combatstats["pdef"].value;
+
+    data.combatstats["mdef"].mod = data.abilities["int"].mod * 2;
+    data.combatstats["mdef"].total = data.combatstats["mdef"].mod + data.combatstats["mdef"].bonus + data.combatstats["mdef"].value;
+
+    data.combatstats["initiative"].mod = data.abilities["str"].mod + data.abilities["int"].mod;
+    data.combatstats["initiative"].total = data.combatstats["initiative"].mod + data.combatstats["initiative"].bonus + data.combatstats["initiative"].value;
+
+    for (let [key, combatstat] of Object.entries(data.combatstats)) {
+        if (combatstat == data.combatstats["pdef"] || combatstat == data.combatstats["mdef"] || combatstat == data.combatstats["initiative"]) {
+            continue;
+        } else if (combatstat == data.combatstats["speed"]) {
+            combatstat.total = 2 + combatstat.bonus + combatstat.value;
+        } else {
+            combatstat.total = combatstat.bonus + combatstat.value;
+        }
+    }
 
     // Max HP calculation
     data.hp.maxbase = data.hp.base + (data.hp.mod * (data.cr -1));
@@ -100,6 +101,15 @@ export class LogHorizonTRPGActor extends Actor {
 
     // Make modifications to data here. For example:
     const data = actorData.data;
+
+    // attributes
+    for (let [key, attribute] of Object.entries(data.attributes)) {
+        attribute.total = attribute.bonus;
+    }
+    // combatstats
+    for (let [key, combatstat] of Object.entries(data.combatstats)) {
+          combatstat.total = combatstat.bonus + combatstat.value;
+    }
   }
 
   /**

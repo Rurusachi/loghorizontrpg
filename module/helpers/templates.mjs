@@ -11,6 +11,7 @@
     "systems/loghorizontrpg/templates/actor/parts/actor-items.html",
     "systems/loghorizontrpg/templates/actor/parts/actor-skills.html",
     "systems/loghorizontrpg/templates/actor/parts/actor-effects.html",
+    "systems/loghorizontrpg/templates/actor/parts/actor-status.html",
     "systems/loghorizontrpg/templates/item/parts/item-combatstats.html",
     "systems/loghorizontrpg/templates/item/parts/item-action.html",
   ]);

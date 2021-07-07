@@ -19,6 +19,61 @@
           "min": 0,
           "max": 1
         },
+        "status": {
+            "combat": {
+                "regen": {
+                    "value":  ""
+                },
+                "cancel": {
+                    "value":  ""
+                },
+                "barrier": {
+                    "value":  ""
+                }
+            },
+            "life": {
+                "weakness": {
+                    "value": ""
+                },
+                "incapacitated": {
+                    "value":  false
+                },
+                "dead": {
+                    "value":  false
+                }
+            },
+            "bad": {
+                "staggered": {
+                    "value":  false
+                },
+                "dazed": {
+                    "value":  false
+                },
+                "rigor": {
+                    "value":  false
+                },
+                "confusion": {
+                    "value":  false
+                },
+                "decay": {
+                    "value":  ""
+                },
+                "pursuit": {
+                    "value":  ""
+                },
+                "afflicted": {
+                    "value":  false
+                },
+                "overconfident": {
+                    "value":  false
+                }
+            },
+            "other": {
+                "other": {
+                    "value":  ""
+                }
+            }
+        },
         "abilities": {
           "str": {
             "bonus": 0,
@@ -159,13 +214,21 @@
     },
     "npc": {
       "templates": ["base"],
-      "difficulties": {
-          "detectiondifficulty": 0,
-          "identificationdifficulty": 0,
-          "analysisdifficulty": 0,
-          "disabledifficulty": 0
-      },
       "hatemultiplier": 0,
+      "difficulties": {
+          "detection": {
+              "value": 0
+          },
+          "identification": {
+              "value": 0
+          },
+          "analysis": {
+              "value": 0
+          },
+          "disable": {
+              "value": 0
+          }
+      },
       "attributes": {
           "accuracy": {
             "value": "0",

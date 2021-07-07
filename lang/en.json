@@ -113,6 +113,25 @@
 
   "LOGHORIZONTRPG.ActionCheckVs": "{type} ({caster} vs. {target})",
 
+  "LOGHORIZONTRPG.StatusRegen": "Regen",
+  "LOGHORIZONTRPG.StatusBarrier": "Barrier",
+  "LOGHORIZONTRPG.StatusCancel": "Cancel",
+
+  "LOGHORIZONTRPG.StatusWeakness": "Weakness",
+  "LOGHORIZONTRPG.StatusIncapacitated": "Incapacitated",
+  "LOGHORIZONTRPG.StatusDead": "Dead",
+
+  "LOGHORIZONTRPG.StatusStaggered": "Staggered",
+  "LOGHORIZONTRPG.StatusDazed": "Dazed",
+  "LOGHORIZONTRPG.StatusRigor": "Rigor",
+  "LOGHORIZONTRPG.StatusConfusion": "Confusion",
+  "LOGHORIZONTRPG.StatusDecay": "Decay",
+  "LOGHORIZONTRPG.StatusPursuit": "Pursuit",
+  "LOGHORIZONTRPG.StatusAfflicted": "Afflicted",
+  "LOGHORIZONTRPG.StatusOverconfident": "Overconfident",
+
+  "LOGHORIZONTRPG.StatusOther": "Other",
+
   "LOGHORIZONTRPG.Tags.Human": "Human",
   "LOGHORIZONTRPG.Tags.Elf": "Elf",
   "LOGHORIZONTRPG.Tags.Dwarf": "Dwarf",

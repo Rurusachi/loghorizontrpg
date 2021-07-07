@@ -131,6 +131,24 @@ LOGHORIZONTRPG.targetTypes = {
     "refer": "LOGHORIZONTRPG.ActionTargetRefer"
 };
 
+LOGHORIZONTRPG.status = {
+    "regen": "LOGHORIZONTRPG.StatusRegen",
+    "barrier": "LOGHORIZONTRPG.StatusBarrier",
+    "cancel": "LOGHORIZONTRPG.StatusCancel",
+    "weakness": "LOGHORIZONTRPG.StatusWeakness",
+    "incapacitated": "LOGHORIZONTRPG.StatusIncapacitated",
+    "dead": "LOGHORIZONTRPG.StatusDead",
+    "staggered": "LOGHORIZONTRPG.StatusStaggered",
+    "dazed": "LOGHORIZONTRPG.StatusDazed",
+    "rigor": "LOGHORIZONTRPG.StatusRigor",
+    "confusion": "LOGHORIZONTRPG.StatusConfusion",
+    "decay": "LOGHORIZONTRPG.StatusDecay",
+    "pursuit": "LOGHORIZONTRPG.StatusPursuit",
+    "afflicted": "LOGHORIZONTRPG.StatusAfflicted",
+    "overconfident": "LOGHORIZONTRPG.StatusOverconfident",
+    "other": "LOGHORIZONTRPG.StatusOther"
+};
+
 LOGHORIZONTRPG.targetTypesMulti = ["multiple", "widep", "widea", "linep", "linea"];
 
 LOGHORIZONTRPG.actionBonus = {

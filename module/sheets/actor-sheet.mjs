@@ -50,7 +50,7 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
     // Prepare NPC data and items.
     if (actorData.type == 'npc') {
       this._prepareItems(context);
-      this._prepareCharacterData(context);
+      this._prepareNpcData(context);
     }
 
     // Add roll data for TinyMCE editors.
@@ -70,19 +70,38 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
    * @return {undefined}
    */
   _prepareCharacterData(context) {
-    // Handle ability scores.
-
-    for (let [k, v] of Object.entries(context.data.abilities)) {
-      v.label = game.i18n.localize(CONFIG.LOGHORIZONTRPG.abilities[k]) ?? k;
-    }
-    for (let [k, v] of Object.entries(context.data.attributes)) {
-      v.label = game.i18n.localize(CONFIG.LOGHORIZONTRPG.attributes[k]) ?? k;
-    }
-    for (let [k, v] of Object.entries(context.data.combatstats)) {
-      v.label = game.i18n.localize(CONFIG.LOGHORIZONTRPG.combatstats[k]) ?? k;
-    }
+      this._prepareActorData(context);
   }
-
+  _prepareNpcData(context) {
+      this._prepareActorData(context);
+      for (let [k, v] of Object.entries(context.data.difficulties)) {
+          v.label = game.i18n.localize(CONFIG.LOGHORIZONTRPG.difficultyTypes[k]) ?? k;
+      }
+  }
+  _prepareActorData(context) {
+      for (let [k, v] of Object.entries(context.data.abilities)) {
+          v.label = game.i18n.localize(CONFIG.LOGHORIZONTRPG.abilities[k]) ?? k;
+      }
+      for (let [k, v] of Object.entries(context.data.attributes)) {
+          v.label = game.i18n.localize(CONFIG.LOGHORIZONTRPG.attributes[k]) ?? k;
+      }
+      for (let [k, v] of Object.entries(context.data.combatstats)) {
+          v.label = game.i18n.localize(CONFIG.LOGHORIZONTRPG.combatstats[k]) ?? k;
+      }
+      // Status
+      for (let [k, v] of Object.entries(context.data.status.combat)) {
+          v.label = game.i18n.localize(CONFIG.LOGHORIZONTRPG.status[k]) ?? k;
+      }
+      for (let [k, v] of Object.entries(context.data.status.life)) {
+          v.label = game.i18n.localize(CONFIG.LOGHORIZONTRPG.status[k]) ?? k;
+      }
+      for (let [k, v] of Object.entries(context.data.status.bad)) {
+          v.label = game.i18n.localize(CONFIG.LOGHORIZONTRPG.status[k]) ?? k;
+      }
+      for (let [k, v] of Object.entries(context.data.status.other)) {
+          v.label = game.i18n.localize(CONFIG.LOGHORIZONTRPG.status[k]) ?? k;
+      }
+  }
   /**
    * Organize and classify Items for Character sheets.
    *

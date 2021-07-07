@@ -84,6 +84,10 @@ Handlebars.registerHelper('ifNotEquals', function(str1, str2, options) {
     return (str1 != str2) ? options.fn(this) : options.inverse(this);
 });
 
+Handlebars.registerHelper('ifNotInArray', function(str1, str2, options) {
+    return (!str2.includes(str1)) ? options.fn(this) : options.inverse(this);
+});
+
 Handlebars.registerHelper('ifInArray', function(str1, list, options) {
     return (list.includes(str1)) ? options.fn(this) : options.inverse(this);
 });
