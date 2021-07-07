@@ -111,13 +111,6 @@ Handlebars.registerHelper('asIndexMiddle', function(arg1, arg2, options) {
 
     return current;
 });
-
-Handlebars.registerHelper('boolOr', function(arg1, arg2, options) {
-    console.log(arg1);
-    console.log(arg2);
-    console.log((arg1 || arg2));
-    return (arg1 || arg2);
-});
 /* -------------------------------------------- */
 /*  Ready Hook                                  */
 /* -------------------------------------------- */
