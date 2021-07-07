@@ -159,7 +159,36 @@
     },
     "npc": {
       "templates": ["base"],
-      "iddifficulty": 0
+      "difficulties": {
+          "detectiondifficulty": 0,
+          "identificationdifficulty": 0,
+          "analysisdifficulty": 0,
+          "disabledifficulty": 0
+      },
+      "hatemultiplier": 0,
+      "attributes": {
+          "accuracy": {
+            "value": "0",
+            "bonus": 0,
+            "dice": 0,
+            "ability": "highest",
+            "static": "false"
+          },
+          "evasion": {
+            "value": 0,
+            "bonus": 0,
+            "dice": 0,
+            "ability": "dex",
+            "static": "false"
+          },
+          "resistance": {
+            "value": 0,
+            "bonus": 0,
+            "dice": 0,
+            "ability": "pow",
+            "static": "false"
+          }
+      }
     }
   },
   "Item": {

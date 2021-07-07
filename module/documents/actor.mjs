@@ -38,8 +38,8 @@ export class LogHorizonTRPGActor extends Actor {
     // Make separate methods for each Actor type (character, npc, etc.) to keep
     // things organized.
     for (let [key, ability] of Object.entries(data.abilities)) {
-      ability.base = ability.value + ability.bonus + (1 * (data.cr -1));
-      ability.mod = Math.floor((ability.base) / 3);
+        ability.base = ability.value + ability.bonus + (actorData.type === 'character' ? (1 * (data.cr -1)) : 0);
+        ability.mod = Math.floor((ability.base) / 3);
     }
 
     for (let [key, attribute] of Object.entries(data.attributes)) {
@@ -221,12 +221,17 @@ export class LogHorizonTRPGActor extends Actor {
 
       let formula = "2d6";
 
-      for (let [k, v] of Object.entries(parts)) {
+      if (attribute.static != undefined && attribute.static == "true") {
+          formula = "@value";
+      } else {
+          for (let [k, v] of Object.entries(parts)) {
 
-          if (data[v.slice(1)]){
-              formula = formula + " + " + v;
+              if (data[v.slice(1)]){
+                  formula = formula + " + " + v;
+              }
           }
       }
+
       const roll = new Roll(formula, data);
       try {
           roll.roll();
