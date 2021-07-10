@@ -313,7 +313,8 @@
             "caster": "",
             "bonus": "",
             "addsr": false,
-            "target": ""
+            "target": "",
+            "targetbonus": ""
           },
           "range": {
               "type": "",

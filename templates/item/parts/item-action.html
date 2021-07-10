@@ -24,10 +24,12 @@
         <div class="resource flexrow flex-group-center">
             <span>+</span>
             <input type="text" name="data.check.bonus" value="{{data.check.bonus}}" data-dtype="Number"/>
+            {{#unless (lequal data.sr.max 1)}}
             <label class="checkbox">
                 <input type="checkbox" name="data.check.addsr" data-dtype="Boolean" {{checked data.check.addsr}}>
                 + SR
             </label>
+            {{/unless}}
         </div>
         <div class="form-group select">
             <label class="resource-label">Target:</label>
@@ -38,6 +40,15 @@
                     {{/each}}
                 {{/select}}
             </select>
+        </div>
+        <div class="resource flexrow flex-group-center">
+            {{#ifEquals data.check.target "value"}}
+            <span>=</span>
+            {{/ifEquals}}
+            {{#ifNotEquals data.check.target "value"}}
+            <span>+</span>
+            {{/ifNotEquals}}
+            <input type="text" name="data.check.targetbonus" value="{{data.check.targetbonus}}" data-dtype="String"/>
         </div>
         {{/ifEquals}}
         {{#ifEquals data.check.type "opposed"}}
@@ -54,20 +65,26 @@
         <div class="resource flexrow flex-group-center">
             <span>+</span>
             <input type="text" name="data.check.bonus" value="{{data.check.bonus}}" data-dtype="String"/>
+            {{#unless (lequal data.sr.max 1)}}
             <label class="checkbox">
                 <input type="checkbox" name="data.check.addsr" data-dtype="Boolean" {{checked data.check.addsr}}>
                 + SR
             </label>
+            {{/unless}}
         </div>
-        <div class="form-group select">
+        <div class="form-group select flexrow flex-group-center">
             <label class="resource-label">Target:</label>
             <select name="data.check.target">
                 {{#select data.check.target}}
-                    {{#each config.attributes as |name type|}}
-                        <option value="{{type}}">{{localize name}}</option>
-                    {{/each}}
+                {{#each config.attributes as |name type|}}
+                <option value="{{type}}">{{localize name}}</option>
+                {{/each}}
                 {{/select}}
             </select>
+        </div>
+        <div class="resource flexrow flex-group-center">
+            <span>+</span>
+            <input type="text" name="data.check.targetbonus" value="{{data.check.targetbonus}}" data-dtype="String"/>
         </div>
         {{/ifEquals}}
     </div>
@@ -78,6 +95,7 @@
             <input type="text" name="data.limit.value" value="{{data.limit.value}}" data-dtype="Number"/>
             <span> / </span>
             <input type="text" name="data.limit.bonus" value="{{data.limit.bonus}}" data-dtype="Number"/>
+            {{#unless (lequal data.sr.max 1)}}
             <select name="data.limit.addsr">
                 {{#select data.limit.addsr}}
                         <option value="none"></option>
@@ -85,6 +103,7 @@
                         <option value="x">xSR</option>
                 {{/select}}
             </select>
+            {{/unless}}
             <span>{{data.limit.max}}</span>
             <span> / </span>
             {{/ifNotEquals}}
@@ -128,16 +147,20 @@
             </div>
             {{#ifInArray data.target.type config.targetTypesMulti}}
             <input type="text" name="data.target.value" value="{{data.target.value}}" data-dtype="String"/>
+            {{#unless (lequal data.sr.max 1)}}
             <input type="checkbox" name="data.target.addsr" data-dtype="Boolean" {{checked data.target.addsr}}>
             +SR
+            {{/unless}}
             {{/ifInArray}}
         </div>
 
         <div class="resource flexrow flex-group-center">
             <label class="resource-label">Hate Cost:</label>
             <input type="text" name="data.hatecost.value" value="{{data.hatecost.value}}" data-dtype="Number"/>
+            {{#unless (lequal data.sr.max 1)}}
             <input type="checkbox" name="data.hatecost.addsr" data-dtype="Boolean" {{checked data.hatecost.addsr}}>
             +SR
+            {{/unless}}
         </div>
         <div class="resource flexrow flex-group-center">
             <label class="resource-label">Fate Cost:</label>

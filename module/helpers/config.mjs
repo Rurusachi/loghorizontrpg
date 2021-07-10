@@ -115,7 +115,8 @@ LOGHORIZONTRPG.difficultyTypes = {
     "detection": "LOGHORIZONTRPG.ActionCheckDifficultyDetection",
     "identification": "LOGHORIZONTRPG.ActionCheckDifficultyIdentification",
     "analysis": "LOGHORIZONTRPG.ActionCheckDifficultyAnalysis",
-    "disable": "LOGHORIZONTRPG.ActionCheckDifficultyDisable"
+    "disable": "LOGHORIZONTRPG.ActionCheckDifficultyDisable",
+    "value": "LOGHORIZONTRPG.ActionCheckDifficultyValue"
 };
 
 LOGHORIZONTRPG.targetTypes = {
