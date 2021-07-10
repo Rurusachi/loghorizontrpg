@@ -96,6 +96,8 @@
   "LOGHORIZONTRPG.ActionTargetLineA": "Line (A)",
   "LOGHORIZONTRPG.ActionTargetRefer": "Refer",
 
+  "LOGHORIZONTRPG.ActionTargetString": "{type1} {number} {type2}",
+
   "LOGHORIZONTRPG.ActionBonusSRD": "+(SR)D",
   "LOGHORIZONTRPG.ActionBonusSR": "+SR",
   "LOGHORIZONTRPG.ActionBonusStrBase": "+STR base",

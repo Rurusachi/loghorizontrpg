@@ -16,7 +16,7 @@ export class LogHorizonTRPGItem extends Item {
   prepareDerivedData() {
     const itemData = this.data;
     const data = itemData.data;
-
+    const config = CONFIG.LOGHORIZONTRPG;
     // Make separate methods for each Actor type (character, npc, etc.) to keep
     // things organized.
     // abilities
@@ -33,6 +33,17 @@ export class LogHorizonTRPGItem extends Item {
         }
     }
 
+    if (data.hatecost != undefined) {
+        data.hatecost.total = data.hatecost.value + (data.hatecost.addsr ? data.sr.value : 0);
+    }
+    if (data.target != undefined) {
+        const targetTypesMulti = config.targetTypesMulti;
+        if (targetTypesMulti.includes(data.target.type)) {
+            data.target.total = data.target.value + (data.target.addsr ? data.sr.value : 0);
+        } else {
+            data.target.total = 0;
+        }
+    }
   }
   /**
    * Prepare a data object which is passed to any Roll formulas which are created related to this Item
@@ -106,12 +117,19 @@ export class LogHorizonTRPGItem extends Item {
 
       let checkType = game.i18n.format(config.checkTypes[itemData.check.type]);
       if (["basic", "opposed"].includes(itemData.check.type)){
-          const casterCheck = game.i18n.format(config.attributes[itemData.check.caster]);
+          let casterCheck = game.i18n.format(config.attributes[itemData.check.caster]);
           let targetCheck = "";
           if (itemData.check.type == "basic") {
               targetCheck = game.i18n.format(config.difficultyTypes[itemData.check.target]);
           } else {
               targetCheck = game.i18n.format(config.attributes[itemData.check.target]);
+          }
+          if ((itemData.check.bonus != null && itemData.check.bonus != 0) || itemData.check.addsr) {
+              casterCheck = `${casterCheck} + ${itemData.check.bonus + (itemData.check.addsr ? itemData.sr.value : 0)}`
+          }
+
+          if (itemData.check.targetbonus != null && itemData.check.targetbonus != 0) {
+              targetCheck = `${targetCheck} + ${itemData.check.targetbonus}`
           }
 
           checkType = game.i18n.format("LOGHORIZONTRPG.ActionCheckVs", {type: checkType, caster: casterCheck, target: targetCheck});
@@ -127,7 +145,8 @@ export class LogHorizonTRPGItem extends Item {
       hasCasterCheck: this.hasCasterCheck,
       hasTargetCheck: this.hasTargetCheck,
       hasSecondFormula: this.hasSecondFormula,
-      checkTypeMessage: checkType
+      checkTypeMessage: checkType,
+      config: CONFIG.LOGHORIZONTRPG
     };
     const html = await renderTemplate("systems/loghorizontrpg/templates/chat/item-card.html", templateData);
 

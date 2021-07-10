@@ -10,6 +10,31 @@
         {{{data.description}}}
     </div>
 
+    <div class="card-content grid grid-2col">
+        <span><strong>SR:</strong> {{data.sr.value}}/{{data.sr.max}}</span>
+        <span><strong>Timing:</strong> {{localize (asIndexMiddle "config.timingTypes.$arg" data.timing)}}</span>
+        {{#ifEquals data.target.total 0}}
+        <span><strong>Target:</strong> {{data.target.type}}</span>
+        {{/ifEquals}}
+        {{#ifNotEquals data.target.total 0}}
+        {{#ifNotEquals data.target.type "multiple"}}
+        <span><strong>Target:</strong> {{localizeTargetType data.target.type data.target.total}}</span>
+        {{/ifNotEquals}}
+        {{#ifEquals data.target.type "multiple"}}
+        <span><strong>Target:</strong> {{data.target.total}}</span>
+        {{/ifEquals}}
+        {{/ifNotEquals}}
+        <span><strong>Range:</strong> {{data.range.value}}</span>
+        <span><strong>Hate:</strong> {{data.hatecost.total}}</span>
+        {{#ifNotEquals data.fatecost.value null}}
+        <span><strong>Fate:</strong> {{data.fatecost.value}}</span>
+        {{/ifNotEquals}}
+        {{#ifNotEquals data.limit.type "None"}}
+        <span><strong>Limit:</strong> {{data.limit.value}} / {{data.limit.max}} {{localize (asIndexMiddle "config.limitTypes.$arg" data.limit.type)}}</span>
+        {{/ifNotEquals}}
+
+    </div>
+
     <div class="card-buttons">
 
         <label class="label">Check: {{checkTypeMessage}}</label>

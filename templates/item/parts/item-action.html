@@ -64,7 +64,7 @@
         </div>
         <div class="resource flexrow flex-group-center">
             <span>+</span>
-            <input type="text" name="data.check.bonus" value="{{data.check.bonus}}" data-dtype="String"/>
+            <input type="text" name="data.check.bonus" value="{{data.check.bonus}}" data-dtype="Number"/>
             {{#unless (lequal data.sr.max 1)}}
             <label class="checkbox">
                 <input type="checkbox" name="data.check.addsr" data-dtype="Boolean" {{checked data.check.addsr}}>
@@ -146,7 +146,7 @@
                 </select>
             </div>
             {{#ifInArray data.target.type config.targetTypesMulti}}
-            <input type="text" name="data.target.value" value="{{data.target.value}}" data-dtype="String"/>
+            <input type="text" name="data.target.value" value="{{data.target.value}}" data-dtype="Number"/>
             {{#unless (lequal data.sr.max 1)}}
             <input type="checkbox" name="data.target.addsr" data-dtype="Boolean" {{checked data.target.addsr}}>
             +SR

@@ -217,6 +217,11 @@ export class LogHorizonTRPGActor extends Actor {
           data["bonus"] = options.item.data.data.check.bonus;
           data["addsr"] = (options.item.data.data.check.addsr ? `${options.item.data.data.sr.value}[SR]` : 0);
       }
+      else if (options.item != undefined && target == true) {
+          parts.push("@bonus");
+          data["bonus"] = options.item.data.data.check.targetbonus;
+      }
+
       if (attribute.dice) {
           parts.push("@dice");
           data["dice"] = `${attribute.dice}d6`;

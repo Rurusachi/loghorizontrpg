@@ -128,6 +128,11 @@ Handlebars.registerHelper('lequal', function(arg1, arg2) {
     return (arg1 <= arg2);
 });
 
+Handlebars.registerHelper('localizeTargetType', function(type, number) {
+    const typesplit = game.i18n.format(CONFIG.LOGHORIZONTRPG.targetTypes[type]).split(" ");
+    return game.i18n.format("LOGHORIZONTRPG.ActionTargetString", {type1: typesplit[0], number: number, type2: typesplit[1]});
+});
+
 /* -------------------------------------------- */
 /*  Ready Hook                                  */
 /* -------------------------------------------- */
