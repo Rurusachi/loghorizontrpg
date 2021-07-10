@@ -115,6 +115,19 @@ Handlebars.registerHelper('asIndexMiddle', function(arg1, arg2, options) {
 
     return current;
 });
+
+Handlebars.registerHelper('and', function(arg1, arg2) {
+    return (arg1 && arg2);
+});
+
+Handlebars.registerHelper('or', function(arg1, arg2) {
+    return (arg1 || arg2);
+});
+
+Handlebars.registerHelper('lequal', function(arg1, arg2) {
+    return (arg1 <= arg2);
+});
+
 /* -------------------------------------------- */
 /*  Ready Hook                                  */
 /* -------------------------------------------- */

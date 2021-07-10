@@ -10,6 +10,11 @@
   cursor: pointer;
 }
 
+.outlined {
+    border-style: solid;
+    border-width: thin;
+}
+
 .grid,
 .grid-2col {
   display: grid;

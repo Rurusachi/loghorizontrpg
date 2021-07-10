@@ -321,7 +321,7 @@
           },
           "target": {
               "type": "self",
-              "value": "",
+              "value": 1,
               "addsr": false
           },
           "hatecost": {

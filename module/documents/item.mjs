@@ -13,6 +13,27 @@ export class LogHorizonTRPGItem extends Item {
 
 
   }
+  prepareDerivedData() {
+    const itemData = this.data;
+    const data = itemData.data;
+
+    // Make separate methods for each Actor type (character, npc, etc.) to keep
+    // things organized.
+    // abilities
+
+    if (data.limit != undefined && data.limit.type != "None") {
+        if (data.limit.addsr == "x") {
+            data.limit.max = data.sr.value * data.limit.bonus;
+        }
+        else if (data.limit.addsr == "+") {
+            data.limit.max = data.sr.value + data.limit.bonus;
+        }
+        else {
+            data.limit.max = data.limit.bonus;
+        }
+    }
+
+  }
   /**
    * Prepare a data object which is passed to any Roll formulas which are created related to this Item
    * @private
