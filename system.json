@@ -9,7 +9,168 @@
   "esmodules": ["module/loghorizontrpg.mjs"],
   "styles": ["css/loghorizontrpg.css"],
   "scripts": [],
-  "packs": [],
+  "packs": [
+    {
+      "name": "warrior-skills",
+      "label": "Warrior Skills",
+      "path": "./packs/warrior-skills.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "guardian-skills",
+      "label": "Guardian Skills",
+      "path": "./packs/guardian-skills.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "samurai-skills",
+      "label": "Samurai Skills",
+      "path": "./packs/samurai-skills.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "monk-skills",
+      "label": "Monk Skills",
+      "path": "./packs/monk-skills.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "healer-skills",
+      "label": "Healer Skills",
+      "path": "./packs/healer-skills.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "cleric-skills",
+      "label": "Cleric Skills",
+      "path": "./packs/cleric-skills.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "druid-skills",
+      "label": "Druid Skills",
+      "path": "./packs/druid-skills.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "kannagi-skills",
+      "label": "Kannagi Skills",
+      "path": "./packs/kannagi-skills.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "weapon-master-skills",
+      "label": "Weapon Master Skills",
+      "path": "./packs/weapon-master-skills.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "assassin-skills",
+      "label": "Assassin Skills",
+      "path": "./packs/assassin-skills.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "swashbuckler-skills",
+      "label": "Swashbuckler Skills",
+      "path": "./packs/swashbuckler-skills.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "bard-skills",
+      "label": "Bard Skills",
+      "path": "./packs/bard-skills.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "mage-skills",
+      "label": "Mage Skills",
+      "path": "./packs/mage-skills.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "sorcerer-skills",
+      "label": "Sorcerer Skills",
+      "path": "./packs/sorcerer-skills.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "summoner-skills",
+      "label": "Summoner Skills",
+      "path": "./packs/summoner-skills.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "enchanter-skills",
+      "label": "Enchanter Skills",
+      "path": "./packs/enchanter-skills.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "basic-skills",
+      "label": "Basic Skills",
+      "path": "./packs/basic-skills.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "common-skills",
+      "label": "Common Skills",
+      "path": "./packs/common-skills.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "races",
+      "label": "Races",
+      "path": "./packs/races.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "classes",
+      "label": "Classes",
+      "path": "./packs/classes.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    }
+  ],
   "languages": [
     {
       "lang": "en",
