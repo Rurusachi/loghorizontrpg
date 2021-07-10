@@ -171,6 +171,7 @@
     <div class="resource">
         <div class="grid grid-3col">
             {{#each config.actionBonus as |name key|}}
+            {{#unless (and (or (eq key "sr") (eq key "srd")) (lequal ../data.sr.max 1))}}
             <div class=" flexrow flex-group-center outlined">
                 <input type="text" name="data.secondformula.bonusmultiplier.{{key}}" value="{{asIndexMiddle "data.secondformula.bonusmultiplier.$arg" key}}" data-dtype="Number"/>
                 <span>x</span>
@@ -179,6 +180,7 @@
                     {{localize name}}
                 </label>
             </div>
+            {{/unless}}
             {{/each}}
         </div>
     </div>
