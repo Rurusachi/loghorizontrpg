@@ -17,7 +17,7 @@
         "fate": {
           "value": 1,
           "min": 0,
-          "max": 1
+          "max": 0
         },
         "status": {
             "combat": {
@@ -199,13 +199,13 @@
           "ability": "highest"
         },
         "evasion": {
-          "value": 0,
+          "value": "0",
           "bonus": 0,
           "dice": 0,
           "ability": "dex"
         },
         "resistance": {
-          "value": 0,
+          "value": "0",
           "bonus": 0,
           "dice": 0,
           "ability": "pow"
@@ -303,6 +303,8 @@
               "min": 0,
               "value": 1,
               "max": 1,
+              "bonus": 1,
+              "addsr": "none",
               "type": "None"
           },
           "timing": "",
@@ -319,10 +321,16 @@
           },
           "target": {
               "type": "self",
-              "value": ""
+              "value": "",
+              "addsr": false
           },
-          "cost": 0,
-          "fatecost": 0,
+          "hatecost": {
+              "value": 0,
+              "addsr": false
+          },
+          "fatecost": {
+              "value": 0
+          },
           "formula": {
               "value": "",
               "bonus": {},
