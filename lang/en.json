@@ -39,7 +39,8 @@
   "LOGHORIZONTRPG.ActionCheckDifficultyIdentification": "Identification Difficulty",
   "LOGHORIZONTRPG.ActionCheckDifficultyAnalysis": "Analysis Difficulty",
   "LOGHORIZONTRPG.ActionCheckDifficultyDisable": "Disable Difficulty",
-  "LOGHORIZONTRPG.ActionCheckDifficultyValue": "Static value",
+  "LOGHORIZONTRPG.ActionCheckDifficultyStatic": "Static",
+  "LOGHORIZONTRPG.ActionCheckDifficultyRefer": "Refer",
 
   "LOGHORIZONTRPG.ActionLimitNone": "-",
   "LOGHORIZONTRPG.ActionLimitScenario": "Scenario",

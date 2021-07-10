@@ -125,11 +125,14 @@ export class LogHorizonTRPGItem extends Item {
               targetCheck = game.i18n.format(config.attributes[itemData.check.target]);
           }
           if ((itemData.check.bonus != null && itemData.check.bonus != 0) || itemData.check.addsr) {
-              casterCheck = `${casterCheck} + ${itemData.check.bonus + (itemData.check.addsr ? itemData.sr.value : 0)}`
+              casterCheck = `${casterCheck} + ${itemData.check.bonus + (itemData.check.addsr ? itemData.sr.value : 0)}`;
           }
 
           if (itemData.check.targetbonus != null && itemData.check.targetbonus != 0) {
-              targetCheck = `${targetCheck} + ${itemData.check.targetbonus}`
+              targetCheck = `${targetCheck} + ${itemData.check.targetbonus}`;
+          }
+          if (itemData.check.target == "static") {
+              targetCheck = `${itemData.check.targetbonus}`;
           }
 
           checkType = game.i18n.format("LOGHORIZONTRPG.ActionCheckVs", {type: checkType, caster: casterCheck, target: targetCheck});
