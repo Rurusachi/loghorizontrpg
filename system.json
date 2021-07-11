@@ -169,6 +169,14 @@
       "module": "world",
       "entity": "Item",
       "lang": ["en"]
+    },
+    {
+      "name": "weapons",
+      "label": "Weapons",
+      "path": "./packs/weapons.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
     }
   ],
   "languages": [

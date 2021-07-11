@@ -267,33 +267,79 @@
         "ir": 1,
         "quantity": 1,
         "size": 1,
-        "value": 0
+        "price": 0
       },
       "equippable": {
           "equipped": false,
           "combatstats": {
               "patk": {
-                  "bonus": 0
+                  "bonus": ""
               },
               "matk": {
-                  "bonus": 0
+                  "bonus": ""
               },
               "pdef": {
-                  "bonus": 0
+                  "bonus": ""
               },
               "mdef": {
-                  "bonus": 0
+                  "bonus": ""
               },
               "initiative": {
-                  "bonus": 0
+                  "bonus": ""
               },
               "speed": {
-                  "bonus": 0
+                  "bonus": ""
               },
               "recovery": {
-                  "bonus": 0
+                  "bonus": ""
               }
           },
+          "attributes": {
+            "athletics": {
+              "bonus": 0,
+              "dice": 0
+            },
+            "endurance": {
+              "bonus": 0,
+              "dice": 0
+            },
+            "disable": {
+              "bonus": 0,
+              "dice": 0
+            },
+            "operate": {
+              "bonus": 0,
+              "dice": 0
+            },
+            "perception": {
+              "bonus": 0,
+              "dice": 0
+            },
+            "negotiation": {
+              "bonus": 0,
+              "dice": 0
+            },
+            "knowledge": {
+              "bonus": 0,
+              "dice": 0
+            },
+            "analyze": {
+              "bonus": 0,
+              "dice": 0
+            },
+            "accuracy": {
+              "bonus": 0,
+              "dice": 0
+            },
+            "evasion": {
+              "bonus": 0,
+              "dice": 0
+            },
+            "resistance": {
+              "bonus": 0,
+              "dice": 0
+            }
+        },
           "other": {
               "inventoryslots": 0
           }
@@ -348,7 +394,8 @@
       "templates": ["base", "item", "action", "tagged"]
     },
     "weapon": {
-      "templates": ["base", "item", "equippable", "action", "tagged"]
+      "templates": ["base", "item", "equippable", "action", "tagged"],
+      "weaponrange": ""
     },
     "equipment": {
       "templates": ["base", "item", "equippable", "action", "tagged"]

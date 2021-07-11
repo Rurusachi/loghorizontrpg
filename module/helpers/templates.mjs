@@ -13,6 +13,7 @@
     "systems/loghorizontrpg/templates/actor/parts/actor-effects.html",
     "systems/loghorizontrpg/templates/actor/parts/actor-status.html",
     "systems/loghorizontrpg/templates/item/parts/item-combatstats.html",
+    "systems/loghorizontrpg/templates/item/parts/item-attributes.html",
     "systems/loghorizontrpg/templates/item/parts/item-action.html",
   ]);
 };

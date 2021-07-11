@@ -341,18 +341,18 @@ async rollFormula(formula, options={}) {
   }
 
   async toggleEquipped() {
-    //console.log("Toggling equipment");
     const itemData = this.data;
     const actorData = this.actor.data;
 
     const effects = actorData.effects?.filter((e => e.data.origin === `Actor.${actorData._id}.Item.${itemData._id}`));
-
     for ( let e of effects ) {
-          e.disabled = itemData.data.equipped;
+        // If an ActiveConfig sheet is attached the object is too large to expand
+        e._sheet = null;
+        e.disabled = itemData.data.equipped;
     }
 
     const changes = this.actor.updateEmbeddedDocuments("ActiveEffect", effects);
-    const itemupdate = this.update({"data.equipped": !itemData.data.equipped})
+    const itemupdate = this.update({"data.equipped": !itemData.data.equipped});
 
     return itemupdate;
   }
