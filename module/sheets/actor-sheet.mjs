@@ -164,6 +164,9 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
               skills["Other"].push(i);
           }
         }
+        else {
+            skills["Other"].push(i);
+        }
       }
     }
 
