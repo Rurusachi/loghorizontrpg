@@ -34,7 +34,11 @@ export class LogHorizonTRPGItem extends Item {
     }
 
     if (data.hatecost != undefined) {
-        data.hatecost.total = data.hatecost.value + (data.hatecost.addsr ? data.sr.value : 0);
+        if (data.hatecost.value != undefined && data.hatecost.value != "Refer" && parseInt(data.hatecost.value) != NaN) {
+            data.hatecost.total = parseInt(data.hatecost.value) + (data.hatecost.addsr ? data.sr.value : 0);
+        } else {
+            data.hatecost.total = 0;
+        }
     }
     if (data.target != undefined) {
         const targetTypesMulti = config.targetTypesMulti;

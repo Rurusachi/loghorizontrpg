@@ -156,7 +156,7 @@
 
         <div class="resource flexrow flex-group-center">
             <label class="resource-label">Hate Cost:</label>
-            <input type="text" name="data.hatecost.value" value="{{data.hatecost.value}}" data-dtype="Number"/>
+            <input type="text" name="data.hatecost.value" value="{{data.hatecost.value}}" data-dtype="String"/>
             {{#unless (lequal data.sr.max 1)}}
             <input type="checkbox" name="data.hatecost.addsr" data-dtype="Boolean" {{checked data.hatecost.addsr}}>
             +SR

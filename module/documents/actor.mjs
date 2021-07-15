@@ -58,6 +58,11 @@ export class LogHorizonTRPGActor extends Actor {
 
     // attributes
     for (let [key, attribute] of Object.entries(data.attributes)) {
+        if (CONFIG.LOGHORIZONTRPG.attributes[key] == undefined) {
+            delete data.attributes[key];
+            console.log("Found " + key + " in attributes and deleted it");
+            continue;
+        }
         if (attribute.ability == "highest") {
             attribute.mod = Math.max(data.abilities["str"].mod, data.abilities["dex"].mod, data.abilities["pow"].mod, data.abilities["int"].mod)
         } else {

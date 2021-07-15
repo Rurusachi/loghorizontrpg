@@ -14,7 +14,7 @@
         <span><strong>SR:</strong> {{data.sr.value}}/{{data.sr.max}}</span>
         <span><strong>Timing:</strong> {{localize (asIndexMiddle "config.timingTypes.$arg" data.timing)}}</span>
         {{#ifEquals data.target.total 0}}
-        <span><strong>Target:</strong> {{data.target.type}}</span>
+        <span><strong>Target:</strong> {{localize (asIndexMiddle "config.targetTypes.$arg" data.target.type)}}</span>
         {{/ifEquals}}
         {{#ifNotEquals data.target.total 0}}
         {{#ifNotEquals data.target.type "multiple"}}
@@ -25,7 +25,12 @@
         {{/ifEquals}}
         {{/ifNotEquals}}
         <span><strong>Range:</strong> {{data.range.value}}</span>
+        {{#ifEquals data.hatecost.value "Refer"}}
+        <span><strong>Hate:</strong> Refer</span>
+        {{/ifEquals}}
+        {{#ifNotEquals data.hatecost.total 0}}
         <span><strong>Hate:</strong> {{data.hatecost.total}}</span>
+        {{/ifNotEquals}}
         {{#ifNotEquals data.fatecost.value null}}
         <span><strong>Fate:</strong> {{data.fatecost.value}}</span>
         {{/ifNotEquals}}
