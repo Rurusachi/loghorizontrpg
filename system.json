@@ -195,6 +195,38 @@
       "lang": ["en"]
     },
     {
+      "name": "accessories",
+      "label": "Accessories",
+      "path": "./packs/accessories.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "bags",
+      "label": "Bags",
+      "path": "./packs/bags.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "food",
+      "label": "Food",
+      "path": "./packs/food.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "medicine",
+      "label": "Medicine",
+      "path": "./packs/medicine.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
       "name": "equipment-lists",
       "label": "Equipment Lists",
       "path": "./packs/equipment-lists.db",
