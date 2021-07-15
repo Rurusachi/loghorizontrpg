@@ -177,6 +177,30 @@
       "module": "world",
       "entity": "Item",
       "lang": ["en"]
+    },
+    {
+      "name": "armors",
+      "label": "Armors",
+      "path": "./packs/armors.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "shields",
+      "label": "Shields",
+      "path": "./packs/shields.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "equipment-lists",
+      "label": "Equipment Lists",
+      "path": "./packs/equipment-lists.db",
+      "module": "world",
+      "entity": "JournalEntry",
+      "lang": ["en"]
     }
   ],
   "languages": [
