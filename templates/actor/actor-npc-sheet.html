@@ -23,7 +23,7 @@
         </div>
 
         <div class="resource flex-group-center">
-          <label for="data.fate.value" class="resource-label">Fate points</label>
+          <label for="data.fate.value" class="resource-label">Fate Points</label>
           <div class="resource-content flexrow flex-center flex-between flex-group-center">
               <input type="text" name="data.fate.value" value="{{data.fate.value}}" data-dtype="Number"/>
               <span> / </span>
@@ -37,9 +37,15 @@
                 <input type="text" name="data.cr" value="{{data.cr}}" data-dtype="Number"/>
             </div>
         </div>
+    </div>
+    <div class="resources grid grid-4col">
+        <div class="resource flex-group-center">
+            <label for="data.status.combat.barrier" class="resource-label flexlarge align-left"">{{data.status.combat.barrier.label}}</label>
+            <input type="text" name="data.status.combat.barrier.value" value="{{data.status.combat.barrier.value}}" data-dtype="String"/>
+        </div>
 
         <div class="resource flex-group-center">
-          <label for="data.hatemultiplier" class="resource-label">Hate multiplier</label>
+          <label for="data.hatemultiplier" class="resource-label">Hate Multiplier</label>
           <div class="resource-content flexrow flex-center flex-between flex-group-center">
               <input type="text" name="data.hatemultiplier" value="{{data.hatemultiplier}}" data-dtype="Number"/>
           </div>

@@ -15,6 +15,7 @@
             <label class="resource-label">Caster:</label>
             <select name="data.check.caster">
                 {{#select data.check.caster}}
+                    <option value="none"></option>
                     {{#each config.attributes as |name type|}}
                         <option value="{{type}}">{{localize name}}</option>
                     {{/each}}
@@ -56,6 +57,7 @@
             <label class="resource-label">Caster:</label>
             <select name="data.check.caster">
                 {{#select data.check.caster}}
+                    <option value="none"></option>
                     {{#each config.attributes as |name type|}}
                         <option value="{{type}}">{{localize name}}</option>
                     {{/each}}

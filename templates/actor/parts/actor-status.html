@@ -2,10 +2,12 @@
     <div class="status-combat">
         <h2>Combat</h2>
         {{#each data.status.combat as |status key|}}
+        {{#ifNotEquals key "barrier"}}
         <div class="resource flex-group-center">
             <label for="data.status.combat.{{key}}" class="resource-label flexlarge align-left"">{{status.label}}</label>
             <input type="text" name="data.status.combat.{{key}}.value" value="{{status.value}}" data-dtype="String"/>
         </div>
+        {{/ifNotEquals}}
         {{/each}}
     </div>
     <div class="status-life flex-group-center">

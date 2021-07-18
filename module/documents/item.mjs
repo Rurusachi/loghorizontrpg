@@ -121,7 +121,10 @@ export class LogHorizonTRPGItem extends Item {
 
       let checkType = game.i18n.format(config.checkTypes[itemData.check.type]);
       if (["basic", "opposed"].includes(itemData.check.type)){
-          let casterCheck = game.i18n.format(config.attributes[itemData.check.caster]);
+          let casterCheck = ""
+          if (itemData.check.caster != "none") {
+              casterCheck = game.i18n.format(config.attributes[itemData.check.caster]);
+          }
           let targetCheck = "";
           if (itemData.check.type == "basic") {
               targetCheck = game.i18n.format(config.difficultyTypes[itemData.check.target]);
@@ -129,7 +132,12 @@ export class LogHorizonTRPGItem extends Item {
               targetCheck = game.i18n.format(config.attributes[itemData.check.target]);
           }
           if ((itemData.check.bonus != null && itemData.check.bonus != 0) || itemData.check.addsr) {
-              casterCheck = `${casterCheck} + ${itemData.check.bonus + (itemData.check.addsr ? itemData.sr.value : 0)}`;
+              if (casterCheck == "") {
+                  casterCheck = `${itemData.check.bonus + (itemData.check.addsr ? itemData.sr.value : 0)} + 2d6`;
+              }
+              else {
+                  casterCheck = `${casterCheck} + ${itemData.check.bonus + (itemData.check.addsr ? itemData.sr.value : 0)}`;
+              }
           }
 
           if (itemData.check.targetbonus != null && itemData.check.targetbonus != 0) {

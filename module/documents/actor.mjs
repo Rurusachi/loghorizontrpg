@@ -212,11 +212,17 @@ export class LogHorizonTRPGActor extends Actor {
   }
 
   async rollAttributeCheck(attributeId, target=false, options={}) {
-      const label = CONFIG.LOGHORIZONTRPG.attributes[attributeId];
-      const attribute = this.data.data.attributes[attributeId];
+      let label = "";
+      let attribute = Object
+      let parts = [];
+      let data = {};
+      if (attributeId != "none"){
+          label = CONFIG.LOGHORIZONTRPG.attributes[attributeId];
+          attribute = this.data.data.attributes[attributeId];
+          parts = ["@value", "@total"];
+          data = {value: attribute.value, total: attribute.total};
+      }
 
-      const parts = ["@value", "@total"];
-      const data = {value: attribute.value, total: attribute.total};
       if (options.item != undefined && target == false) {
           parts.push("@bonus", "@addsr");
           data["bonus"] = options.item.data.data.check.bonus;
