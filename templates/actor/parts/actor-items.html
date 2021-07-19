@@ -1,7 +1,7 @@
 <div class="grid grid-4col">
     <div class="resource flex-group-center">
       <label for="data.inventory.gold" class="resource-label">Gold</label>
-      <div class="resource-content flexrow flex-center flex-between flex-group-center">
+      <div class="resource-content">
           <input type="text" name="data.inventory.gold" value="{{data.inventory.gold}}" data-dtype="Number"/>
       </div>
     </div>
@@ -12,6 +12,10 @@
           <span> / </span>
           <span>{{data.inventory.max}}</span>
       </div>
+    </div>
+    <div class="resource grid-span-2 flex-group-center">
+      <label for="data.equippabletags" class="resource-label">Equippable Tags</label>
+        <div class="resource-content">{{data.equippabletags}}</div>
     </div>
 </div>
 

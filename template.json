@@ -422,7 +422,8 @@
         "int": {
           "value": 0
         }
-      }
+      },
+      "equippabletags": ""
     },
     "race": {
       "templates": ["base"],

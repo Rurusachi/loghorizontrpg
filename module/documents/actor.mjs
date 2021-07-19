@@ -43,6 +43,13 @@ export class LogHorizonTRPGActor extends Actor {
         ability.mod = Math.floor((ability.base) / 3);
     }
 
+    data.equippabletags = ""
+    const characterClasses = this.items?.filter((s => s.type == "class"));
+    console.log("Logging Classes:");
+    console.log(characterClasses);
+    if (characterClasses.length > 0) {
+        data.equippabletags = characterClasses[0].data.data.equippabletags
+    }
     this._prepareCharacterData(actorData);
     this._prepareNpcData(actorData);
   }
