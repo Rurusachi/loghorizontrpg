@@ -227,6 +227,38 @@
       "lang": ["en"]
     },
     {
+      "name": "scrolls",
+      "label": "Scrolls",
+      "path": "./packs/scrolls.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "gems",
+      "label": "Gems",
+      "path": "./packs/gems.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "toxins",
+      "label": "Toxins",
+      "path": "./packs/toxins.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "charms",
+      "label": "Charms",
+      "path": "./packs/charms.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
       "name": "equipment-lists",
       "label": "Equipment Lists",
       "path": "./packs/equipment-lists.db",
