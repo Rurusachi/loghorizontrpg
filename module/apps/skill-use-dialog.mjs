@@ -38,6 +38,7 @@ export default class SkillUseDialog extends Dialog {
       title: `${item.type.capitalize()}: ${item.name}`,
       note: this._getSkillUseNote(item.data, quantity),
       consumeLimit: limit.type != "None" && (limit.max > 0),
+      consumeItem: item.data.type === "consumable",
       hatecost: hatecost,
       fatecost: fatecost != null ? fatecost : 0,
       canUse: sufficientUses,
@@ -82,8 +83,10 @@ export default class SkillUseDialog extends Dialog {
   static _getSkillUseNote(item, quantity) {
 
     // Zero quantity
-    if ( quantity <= 0 && item.type === "consumable") return "No uses left";
-
+    if (quantity <= 0 && item.type === "consumable") return "No uses left";
+    else if (quantity > 0 && item.type === "consumable") {
+        return `You have ${quantity} ${item.name} left`
+    }
     // Does not use any resource
     if ( item.data.limit.type === "None" ) return "";
 

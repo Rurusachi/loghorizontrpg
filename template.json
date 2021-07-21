@@ -391,17 +391,20 @@
       }
     },
     "item": {
-      "templates": ["base", "item", "action", "tagged"]
+      "templates": ["base", "item", "action", "tagged"],
+      "hasAction": false
     },
     "weapon": {
       "templates": ["base", "item", "equippable", "action", "tagged"],
-      "weaponrange": ""
+      "weaponrange": "",
+      "hasAction": false
     },
     "equipment": {
-      "templates": ["base", "item", "equippable", "action", "tagged"]
+      "templates": ["base", "item", "equippable", "action", "tagged"],
+      "hasAction": false
     },
     "consumable": {
-        "templates": ["base", "item", "action", "tagged"]
+      "templates": ["base", "item", "action", "tagged"]
     },
     "class": {
       "templates": ["base"],

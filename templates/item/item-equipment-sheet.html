@@ -44,6 +44,10 @@
     {{!-- Attributes Tab --}}
     <div class="tab attributes" data-group="primary" data-tab="attributes">
       {{!-- As you add new fields, add them in here! --}}
+      <label class="checkbox">
+          <input type="checkbox" name="data.hasaction" data-dtype="Boolean" {{checked data.hasaction}}>
+          Item has an action
+      </label>
       <div class="resource grid grid-4col align-center">
           <label class="resource-label">Tags:</label>
           <input class="grid-span-2" type="text" name="data.tags" value="{{data.tags}}" data-dtype="String"/>

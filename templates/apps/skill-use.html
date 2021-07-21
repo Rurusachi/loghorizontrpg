@@ -7,7 +7,13 @@
 
     {{#if consumeLimit}}
     <div class="form-group">
-        <label class="checkbox"><input type="checkbox" name="consumeLimit" checked/>Pay 1 usage of this ability?</label>
+        <label class="checkbox"><input type="checkbox" name="consumeLimit" checked/>Consume 1 usage of this ability?</label>
+    </div>
+    {{/if}}
+
+    {{#if consumeItem}}
+    <div class="form-group">
+        <label class="checkbox"><input type="checkbox" name="consumeItem" checked/>Consume this item?</label>
     </div>
     {{/if}}
 

@@ -31,7 +31,7 @@
   </li>
   {{#each weapons as |item id|}}
     <li class="item flexrow" data-item-id="{{item._id}}">
-      <div class="item-name">
+      <div class="item-name rollable">
         <div class="item-image">
           <a class="rollable" data-roll-type="item"><img src="{{item.img}}" title="{{item.name}}" width="24" height="24"/></a>
         </div>
@@ -62,7 +62,7 @@
   </li>
   {{#each equipments as |item id|}}
     <li class="item flexrow" data-item-id="{{item._id}}">
-      <div class="item-name">
+      <div class="item-name rollable">
         <div class="item-image">
           <a class="rollable" data-roll-type="item"><img src="{{item.img}}" title="{{item.name}}" width="24" height="24"/></a>
         </div>
@@ -85,6 +85,7 @@
 <ol class="items-list">
   <li class="item flexrow items-header">
     <div class="item-name">Name</div>
+    <div class="item-timing">Timing</div>
     <div class="item-tags">Tags</div>
     <div class="item-controls">
       <a class="item-control item-create" title="Create item" data-type="consumable"><i class="fas fa-plus"></i> Add item</a>
@@ -92,11 +93,14 @@
   </li>
   {{#each consumables as |item id|}}
     <li class="item flexrow" data-item-id="{{item._id}}">
-      <div class="item-name">
+      <div class="item-name rollable">
         <div class="item-image">
           <a class="rollable" data-roll-type="item"><img src="{{item.img}}" title="{{item.name}}" width="24" height="24"/></a>
         </div>
         <h4>{{item.name}}</h4>
+      </div>
+      <div class="item-timing item-prop">
+          <span>{{localize (asIndexMiddle "config.timingTypes.$arg" item.data.timing)}}</span>
       </div>
       <div class="item-tags item-prop">{{item.data.tags}}</div>
       <div class="item-controls">
@@ -118,7 +122,7 @@
   </li>
   {{#each items as |item id|}}
     <li class="item flexrow" data-item-id="{{item._id}}">
-      <div class="item-name">
+      <div class="item-name rollable">
         <div class="item-image">
           <a class="rollable" data-roll-type="item"><img src="{{item.img}}" title="{{item.name}}" width="24" height="24"/></a>
         </div>

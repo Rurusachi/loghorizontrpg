@@ -120,9 +120,11 @@ export class LogHorizonTRPGItem extends Item {
       let consumeLimit = limit.type != "None";
       let consumeHate = id.hatecost.total > 0;
       let consumeFate = id.fatecost.value > 0;
+      let consumeItem = item.type === "consumable";
       let hateChange = 0;
       let fateChange = 0;
-      const hasAction = item.type === "skill" || item.type === "weapon" || item.type === "equipment" || item.type === "consumable" || item.type === "item"
+      const hasAction = (id?.hasaction == true ?? false) || item.type === "skill" || item.type === "consumable";
+      //const hasAction = item.type === "skill" || item.type === "weapon" || item.type === "equipment" || item.type === "consumable" || item.type === "item"
 
       if (configureDialog && hasAction) {
           const configuration = await SkillUseDialog.create(this);
@@ -132,13 +134,14 @@ export class LogHorizonTRPGItem extends Item {
           consumeLimit = Boolean(configuration.consumeLimit);
           consumeHate = Boolean(configuration.consumeHate);
           consumeFate = Boolean(configuration.consumeFate);
+          consumeItem = Boolean(configuration.consumeItem);
           hateChange = Number(configuration.hateChange);
           fateChange = Number(configuration.fateChange);
 
       }
 
       // Determine whether the item can be used by testing for resource consumption
-      const usage = this._getUsageUpdates({consumeLimit, consumeHate, consumeFate, hateChange, fateChange});
+      const usage = this._getUsageUpdates({consumeLimit, consumeHate, consumeFate, consumeItem, hateChange, fateChange});
       if ( !usage ) return;
       const {actorUpdates, itemUpdates} = usage;
 
@@ -156,7 +159,7 @@ export class LogHorizonTRPGItem extends Item {
       return this.displayCard(rollMode);
   }
 
-  _getUsageUpdates({consumeLimit, consumeHate, consumeFate, hateChange, fateChange}) {
+  _getUsageUpdates({consumeLimit, consumeHate, consumeFate, consumeItem, hateChange, fateChange}) {
 
     // Reference item data
     const id = this.data.data;
@@ -183,6 +186,12 @@ export class LogHorizonTRPGItem extends Item {
         const fatecost = id.fatecost;
         if (this.actor.data.data.fate.value > 0) {
             actorUpdates["data.fate.value"] = Math.max(this.actor.data.data.fate.value - fatecost.value - fateChange, 0);
+        }
+    }
+
+    if ( consumeItem ) {
+        if (id.quantity > 0) {
+            itemUpdates["data.quantity"] = id.quantity - 1;
         }
     }
 
