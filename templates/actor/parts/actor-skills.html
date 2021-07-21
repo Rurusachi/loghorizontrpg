@@ -1,7 +1,7 @@
 <ol class="items-list">
   {{#each skills as |skills tag|}}
     <li class="item flexrow items-header">
-      <div class="item-name">{{tag}} Skills</div>
+      <div class="item-name hideable">{{tag}} Skills</div>
       <div class="item-timing">Timing</div>
       <div class="item-limit">Limit</div>
       <div class="item-tags">Tags</div>
@@ -9,6 +9,7 @@
         <a class="item-control item-create" title="Create item" data-type="skill" data-tags="{{tag}}"><i class="fas fa-plus"></i> Add {{tag}}</a>
       </div>
     </li>
+    <div class="items-in-list {{tag}}">
     {{#each skills as |item id|}}
       <li class="item flexrow" data-item-id="{{item._id}}">
         <div class="item-name rollable">
@@ -32,5 +33,6 @@
         </div>
       </li>
     {{/each}}
+    </div>
   {{/each}}
 </ol>

@@ -200,6 +200,8 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
     // Expand summary on click
     html.find('.item .item-name.rollable h4').click(event => this._onItemSummary(event));
 
+    html.find('.items-list .items-header .item-name.hideable').click(event => this._onItemHeader(event));
+
     // Add Inventory Item
     html.find('.item-create').click(this._onItemCreate.bind(this));
 
@@ -240,6 +242,20 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
       event.preventDefault();
 
       return new RestDialog(this.actor).render(true)
+  }
+
+  _onItemHeader(event) {
+    event.preventDefault();
+    const tag = event.currentTarget.innerText.split(" ")[0];
+    const div = $(event.currentTarget).parents(".items-list").children(`.items-in-list.${tag}`);
+    
+    // Toggle visibility
+    if ( div.hasClass("item-hidden") ) {
+      div.slideDown(200);
+    } else {
+      div.slideUp(200);
+    }
+    div.toggleClass("item-hidden");
   }
 
   _onItemSummary(event) {
