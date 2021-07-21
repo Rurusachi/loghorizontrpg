@@ -1,3 +1,5 @@
+import SkillUseDialog from "../apps/skill-use-dialog.mjs";
+
 /**
  * Extend the basic Item with some very simple modifications.
  * @extends {Item}
@@ -104,7 +106,47 @@ export class LogHorizonTRPGItem extends Item {
 **/
 
   async roll() {
+      const configureDialog = true;
       const item = this.data;
+
+      const id = this.data.data;                // Item system data
+      const actor = this.actor;
+      const ad = actor.data.data;               // Actor system data
+
+      // Reference aspects of the item data necessary for usage
+      const limit = id.limit;              // Limited uses
+
+      // Define follow-up actions resulting from the item usage
+      let consumeLimit = limit.type != "None";
+      let consumeHate = id.hatecost.total > 0;
+      let consumeFate = id.fatecost.value > 0;
+      let hateChange = 0;
+      let fateChange = 0;
+      const hasAction = item.type === "skill" || item.type === "weapon" || item.type === "equipment" || item.type === "consumable" || item.type === "item"
+
+      if (configureDialog && hasAction) {
+          const configuration = await SkillUseDialog.create(this);
+          if (!configuration) return;
+
+          // Determine consumption preferences
+          consumeLimit = Boolean(configuration.consumeLimit);
+          consumeHate = Boolean(configuration.consumeHate);
+          consumeFate = Boolean(configuration.consumeFate);
+          hateChange = Number(configuration.hateChange);
+          fateChange = Number(configuration.fateChange);
+
+      }
+
+      // Determine whether the item can be used by testing for resource consumption
+      const usage = this._getUsageUpdates({consumeLimit, consumeHate, consumeFate, hateChange, fateChange});
+      if ( !usage ) return;
+      const {actorUpdates, itemUpdates} = usage;
+
+      // Commit pending data updates
+      if ( !foundry.utils.isObjectEmpty(itemUpdates) ) await this.update(itemUpdates);
+      //if ( consumeQuantity && (item.data.data.quantity === 0) ) await item.delete();
+      if ( !foundry.utils.isObjectEmpty(actorUpdates) ) await actor.update(actorUpdates);
+
 
       // Initialize chat data.
       const speaker = ChatMessage.getSpeaker({ actor: this.actor });
@@ -113,6 +155,42 @@ export class LogHorizonTRPGItem extends Item {
 
       return this.displayCard(rollMode);
   }
+
+  _getUsageUpdates({consumeLimit, consumeHate, consumeFate, hateChange, fateChange}) {
+
+    // Reference item data
+    const id = this.data.data;
+    const actorUpdates = {};
+    const itemUpdates = {};
+
+    if ( consumeLimit ) {
+        const limit = id.limit;
+        let used = false;
+
+        if (limit.value > 0) {
+          used = true;
+          itemUpdates["data.limit.value"] = limit.value - 1;
+        }
+    }
+
+    if ( consumeHate ) {
+        const hatecost = id.hatecost;
+
+        actorUpdates["data.hate.value"] = Math.max(this.actor.data.data.hate.value + hatecost.total + hateChange, 0);
+    }
+
+    if ( consumeFate ) {
+        const fatecost = id.fatecost;
+        if (this.actor.data.data.fate.value > 0) {
+            actorUpdates["data.fate.value"] = Math.max(this.actor.data.data.fate.value - fatecost.value - fateChange, 0);
+        }
+    }
+
+    // Return the configured usage
+    return {itemUpdates, actorUpdates};
+  }
+
+
 
   async displayCard(rollMode) {
       const token = this.actor.token;

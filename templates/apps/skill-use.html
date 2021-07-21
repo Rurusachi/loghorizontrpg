@@ -1,0 +1,23 @@
+<form id="skill-use-form">
+    <p>{{ title }}</p>
+    <p class="notes">{{note}}</p>
+    {{#each errors}}
+    <p class="notification error">{{this}}</p>
+    {{/each}}
+
+    {{#if consumeLimit}}
+    <div class="form-group">
+        <label class="checkbox"><input type="checkbox" name="consumeLimit" checked/>Pay 1 usage of this ability?</label>
+    </div>
+    {{/if}}
+
+    <div class="form-group">
+        <label class="checkbox"><input type="checkbox" name="consumeHate" checked/>Pay {{hatecost}} Hate?</label>
+        <input type="text" name="hateChange" value="" placeholder="+ hate cost"/>
+    </div>
+
+    <div class="form-group">
+        <label class="checkbox"><input type="checkbox" name="consumeFate" checked/>Pay {{fatecost}} Fate?</label>
+        <input type="text" name="fateChange" value="" placeholder="+ fate cost"/>
+    </div>
+</form>
