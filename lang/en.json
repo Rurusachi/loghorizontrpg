@@ -65,6 +65,8 @@
   "LOGHORIZONTRPG.RestResources": "HP, Fatigue and Fate points",
   "LOGHORIZONTRPG.RestAllTitle": "Restore everything",
 
+
+  "LOGHORIZONTRPG.ActionTimingNone": "-",
   "LOGHORIZONTRPG.ActionTimingConstant": "Constant",
   "LOGHORIZONTRPG.ActionTimingPrePlay": "Pre-Play",
   "LOGHORIZONTRPG.ActionTimingInterlude": "Interlude",
@@ -86,6 +88,7 @@
   "LOGHORIZONTRPG.ActionTimingAction": "Action",
   "LOGHORIZONTRPG.ActionTimingRefer": "Refer",
 
+  "LOGHORIZONTRPG.ActionTargetNone": "-",
   "LOGHORIZONTRPG.ActionTargetSelf": "Self",
   "LOGHORIZONTRPG.ActionTargetSingle": "Single",
   "LOGHORIZONTRPG.ActionTargetMultiple": "Multiple",

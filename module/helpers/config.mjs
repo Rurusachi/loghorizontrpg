@@ -89,6 +89,7 @@ LOGHORIZONTRPG.restOptions = {
 }
 
 LOGHORIZONTRPG.timingTypes = {
+    "none": "LOGHORIZONTRPG.ActionTimingNone",
     "constant": "LOGHORIZONTRPG.ActionTimingConstant",
     "preplay": "LOGHORIZONTRPG.ActionTimingPrePlay",
     "interlude": "LOGHORIZONTRPG.ActionTimingInterlude",
@@ -121,7 +122,8 @@ LOGHORIZONTRPG.difficultyTypes = {
 };
 
 LOGHORIZONTRPG.targetTypes = {
-    "Self": "LOGHORIZONTRPG.ActionTargetSelf",
+    "none": "LOGHORIZONTRPG.ActionTargetNone",
+    "self": "LOGHORIZONTRPG.ActionTargetSelf",
     "single": "LOGHORIZONTRPG.ActionTargetSingle",
     "multiple": "LOGHORIZONTRPG.ActionTargetMultiple",
     "areap": "LOGHORIZONTRPG.ActionTargetAreaP",

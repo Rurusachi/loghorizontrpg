@@ -32,7 +32,9 @@
         <span><strong>Hate:</strong> {{data.hatecost.total}}</span>
         {{/ifNotEquals}}
         {{#ifNotEquals data.fatecost.value null}}
+        {{#ifNotEquals data.fatecost.value 0}}
         <span><strong>Fate:</strong> {{data.fatecost.value}}</span>
+        {{/ifNotEquals}}
         {{/ifNotEquals}}
         {{#ifNotEquals data.limit.type "None"}}
         <span><strong>Limit:</strong> {{data.limit.value}} / {{data.limit.max}} {{localize (asIndexMiddle "config.limitTypes.$arg" data.limit.type)}}</span>
