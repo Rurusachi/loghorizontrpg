@@ -163,6 +163,70 @@
       "lang": ["en"]
     },
     {
+      "name": "human-skills",
+      "label": "Human Skills",
+      "path": "./packs/human-skills.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "elf-skills",
+      "label": "Elf Skills",
+      "path": "./packs/elf-skills.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "dwarf-skills",
+      "label": "Dwarf Skills",
+      "path": "./packs/dwarf-skills.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "half-alv-skills",
+      "label": "Half-Alv Skills",
+      "path": "./packs/half-alv-skills.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "werecat-skills",
+      "label": "Werecat Skills",
+      "path": "./packs/werecat-skills.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "wolf-fang-skills",
+      "label": "Wolf Fang Skills",
+      "path": "./packs/wolf-fang-skills.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "fox-tail-skills",
+      "label": "Fox Tail Skills",
+      "path": "./packs/fox-tail-skills.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
+      "name": "race-of-ritual-skills",
+      "label": "Race of Ritual Skills",
+      "path": "./packs/race-of-ritual-skills.db",
+      "module": "world",
+      "entity": "Item",
+      "lang": ["en"]
+    },
+    {
       "name": "races",
       "label": "Races",
       "path": "./packs/races.db",
