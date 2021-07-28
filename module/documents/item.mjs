@@ -19,6 +19,7 @@ export class LogHorizonTRPGItem extends Item {
     const itemData = this.data;
     const data = itemData.data;
     const config = CONFIG.LOGHORIZONTRPG;
+    const labels = this.labels = {};
     // Make separate methods for each Actor type (character, npc, etc.) to keep
     // things organized.
     // abilities
@@ -50,6 +51,14 @@ export class LogHorizonTRPGItem extends Item {
             data.target.total = 0;
         }
     }
+    if (this.hasAction) {
+        labels.check = `Check: ${this.getCheckString}`;
+        labels.target = `Target: ${this.getTargetString}`;
+        labels.range = `Range: ${data.range.value}`;
+        labels.hatecost = data.hatecost.total != 0 ? `Hate: ${data.hatecost.total}`: "";
+        labels.fatecost = data.fatecost.value != 0 ? `Fate: ${data.fatecost.value}` : "";
+    }
+
   }
   /**
    * Prepare a data object which is passed to any Roll formulas which are created related to this Item
@@ -123,7 +132,7 @@ export class LogHorizonTRPGItem extends Item {
       let consumeItem = item.type === "consumable";
       let hateChange = 0;
       let fateChange = 0;
-      const hasAction = (id?.hasaction == true ?? false) || item.type === "skill" || item.type === "consumable";
+      const hasAction = this.hasAction;
       //const hasAction = item.type === "skill" || item.type === "weapon" || item.type === "equipment" || item.type === "consumable" || item.type === "item"
 
       if (configureDialog && hasAction) {
@@ -206,36 +215,8 @@ export class LogHorizonTRPGItem extends Item {
       const config = CONFIG.LOGHORIZONTRPG;
       const itemData = this.data.data;
 
-      let checkType = game.i18n.format(config.checkTypes[itemData.check.type]);
-      if (["basic", "opposed"].includes(itemData.check.type)){
-          let casterCheck = ""
-          if (itemData.check.caster != "none") {
-              casterCheck = game.i18n.format(config.attributes[itemData.check.caster]);
-          }
-          let targetCheck = "";
-          if (itemData.check.type == "basic") {
-              targetCheck = game.i18n.format(config.difficultyTypes[itemData.check.target]);
-          } else {
-              targetCheck = game.i18n.format(config.attributes[itemData.check.target]);
-          }
-          if ((itemData.check.bonus != null && itemData.check.bonus != 0) || itemData.check.addsr) {
-              if (casterCheck == "") {
-                  casterCheck = `${itemData.check.bonus + (itemData.check.addsr ? itemData.sr.value : 0)} + 2d6`;
-              }
-              else {
-                  casterCheck = `${casterCheck} + ${itemData.check.bonus + (itemData.check.addsr ? itemData.sr.value : 0)}`;
-              }
-          }
-
-          if (itemData.check.targetbonus != null && itemData.check.targetbonus != 0) {
-              targetCheck = `${targetCheck} + ${itemData.check.targetbonus}`;
-          }
-          if (itemData.check.target == "static") {
-              targetCheck = `${itemData.check.targetbonus}`;
-          }
-
-          checkType = game.i18n.format("LOGHORIZONTRPG.ActionCheckVs", {type: checkType, caster: casterCheck, target: targetCheck});
-      }
+      const checkType = this.getCheckString;
+      const targetType = this.getTargetString;
 
       const templateData = {
       actor: this.actor,
@@ -248,6 +229,7 @@ export class LogHorizonTRPGItem extends Item {
       hasTargetCheck: this.hasTargetCheck,
       hasSecondFormula: this.hasSecondFormula,
       checkTypeMessage: checkType,
+      targetTypeMessage: targetType,
       config: CONFIG.LOGHORIZONTRPG
     };
     const html = await renderTemplate("systems/loghorizontrpg/templates/chat/item-card.html", templateData);
@@ -279,6 +261,16 @@ export class LogHorizonTRPGItem extends Item {
     const props = [];
     const fn = this[`_${this.data.type}ChatData`];
     if ( fn ) fn.bind(this)(data, labels, props);
+
+    if (this.hasAction) {
+      props.push(
+        labels.check,
+        labels.target,
+        labels.range,
+        labels.hatecost,
+        labels.fatecost
+      );
+    }
 
     data.properties = props.filter(p => !!p);
     return data;
@@ -404,7 +396,9 @@ async rollFormula(formula, options={}) {
         }
     }
 
-    const roll = new Roll(finalFormula, data);
+    const finalData = mergeObject(this.getRollData(), data);
+
+    const roll = new Roll(finalFormula, finalData);
     try {
         roll.roll();
         roll.toMessage({
@@ -437,6 +431,10 @@ async rollFormula(formula, options={}) {
 
   get hasSecondFormula() {
     return this.data.data.secondformula.value != "";
+  }
+
+  get hasAction() {
+      return (this.data.data?.hasaction == true ?? false) || this.type === "skill" || this.type === "consumable";
   }
 
   async toggleEquipped() {
@@ -475,5 +473,61 @@ async rollFormula(formula, options={}) {
       if ( !targets.length && game.user.character ) targets = targets.concat(game.user.character.getActiveTokens());
       if ( !targets.length ) ui.notifications.warn("No token selected");
       return targets;
+  }
+
+  get getTargetString() {
+      const itemData = this.data.data;
+      const config = CONFIG.LOGHORIZONTRPG;
+      if (itemData.target.total == 0) {
+          return game.i18n.format(config.targetTypes[itemData.target.type]);
+      }
+      else if (itemData.target.type != "multiple") {
+          const typesplit = game.i18n.format(config.targetTypes[itemData.target.type]).split(" ");
+          return game.i18n.format("LOGHORIZONTRPG.ActionTargetString", {type1: typesplit[0], number: number, type2: typesplit[1]});
+      }
+      else {
+          return itemData.target.total;
+      }
+  }
+
+  get getCheckString() {
+      const itemData = this.data.data;
+      const config = CONFIG.LOGHORIZONTRPG;
+
+      if (!this.hasAction) {
+          return "";
+      }
+
+      let checkType = game.i18n.format(config.checkTypes[itemData.check.type]);
+      if (["basic", "opposed"].includes(itemData.check.type)){
+          let casterCheck = ""
+          if (itemData.check.caster != "none") {
+              casterCheck = game.i18n.format(config.attributes[itemData.check.caster]);
+          }
+          let targetCheck = "";
+          if (itemData.check.type == "basic") {
+              targetCheck = game.i18n.format(config.difficultyTypes[itemData.check.target]);
+          } else {
+              targetCheck = game.i18n.format(config.attributes[itemData.check.target]);
+          }
+          if ((itemData.check.bonus != null && itemData.check.bonus != 0) || itemData.check.addsr) {
+              if (casterCheck == "") {
+                  casterCheck = `${itemData.check.bonus + (itemData.check.addsr ? itemData.sr.value : 0)} + 2d6`;
+              }
+              else {
+                  casterCheck = `${casterCheck} + ${itemData.check.bonus + (itemData.check.addsr ? itemData.sr.value : 0)}`;
+              }
+          }
+
+          if (itemData.check.targetbonus != null && itemData.check.targetbonus != 0) {
+              targetCheck = `${targetCheck} + ${itemData.check.targetbonus}`;
+          }
+          if (itemData.check.target == "static") {
+              targetCheck = `${itemData.check.targetbonus}`;
+          }
+
+          checkType = game.i18n.format("LOGHORIZONTRPG.ActionCheckVs", {type: checkType, caster: casterCheck, target: targetCheck});
+      }
+      return checkType;
   }
 }

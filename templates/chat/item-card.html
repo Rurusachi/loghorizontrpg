@@ -13,17 +13,7 @@
     <div class="card-content grid grid-2col">
         <span><strong>SR:</strong> {{data.sr.value}}/{{data.sr.max}}</span>
         <span><strong>Timing:</strong> {{localize (asIndexMiddle "config.timingTypes.$arg" data.timing)}}</span>
-        {{#ifEquals data.target.total 0}}
-        <span><strong>Target:</strong> {{localize (asIndexMiddle "config.targetTypes.$arg" data.target.type)}}</span>
-        {{/ifEquals}}
-        {{#ifNotEquals data.target.total 0}}
-        {{#ifNotEquals data.target.type "multiple"}}
-        <span><strong>Target:</strong> {{localizeTargetType data.target.type data.target.total}}</span>
-        {{/ifNotEquals}}
-        {{#ifEquals data.target.type "multiple"}}
-        <span><strong>Target:</strong> {{data.target.total}}</span>
-        {{/ifEquals}}
-        {{/ifNotEquals}}
+        <span><strong>Target:</strong> {{targetTypeMessage}}</span>
         <span><strong>Range:</strong> {{data.range.value}}</span>
         {{#ifEquals data.hatecost.value "Refer"}}
         <span><strong>Hate:</strong> Refer</span>
@@ -67,8 +57,5 @@
     </div>
 
     <footer class="card-footer">
-        {{#each data.properties}}
-        <span>{{this}}</span>
-        {{/each}}
     </footer>
 </div>
