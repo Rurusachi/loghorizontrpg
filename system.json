@@ -366,8 +366,8 @@
   "gridUnits": "sq.",
   "primaryTokenAttribute": "hp",
   "secondaryTokenAttribute": "hate",
-  "url": "",
-  "manifest": "",
+  "url": "https://github.com/Rurusachi/loghorizontrpg",
+  "manifest": "https://raw.githubusercontent.com/Rurusachi/loghorizontrpg/main/system.json",
   "download": "",
   "license": "LICENSE.txt"
 }
