@@ -368,6 +368,6 @@
   "secondaryTokenAttribute": "hate",
   "url": "https://github.com/Rurusachi/loghorizontrpg",
   "manifest": "https://raw.githubusercontent.com/Rurusachi/loghorizontrpg/main/system.json",
-  "download": "",
+  "download": "https://github.com/Rurusachi/loghorizontrpg/archive/refs/tags/v0.1.0.zip",
   "license": "LICENSE.txt"
 }
