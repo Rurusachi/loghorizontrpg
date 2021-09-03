@@ -8,6 +8,7 @@ import { LogHorizonTRPGItemSheet } from "./sheets/item-sheet.mjs";
 import { preloadHandlebarsTemplates } from "./helpers/templates.mjs";
 import { LOGHORIZONTRPG } from "./helpers/config.mjs";
 import { measureDistances } from "./helpers/canvas.mjs";
+import { ValidSpec } from "./ActiveEffects.mjs";
 
 
 import RestDialog from "./apps/rest.mjs";
@@ -48,6 +49,8 @@ Hooks.once('init', async function() {
   Actors.registerSheet("loghorizontrpg", LogHorizonTRPGActorSheet, { makeDefault: true });
   Items.unregisterSheet("core", ItemSheet);
   Items.registerSheet("loghorizontrpg", LogHorizonTRPGItemSheet, { makeDefault: true });
+
+  ValidSpec.createValidMods();
 
   // Preload Handlebars templates.
   return preloadHandlebarsTemplates();

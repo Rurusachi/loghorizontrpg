@@ -193,14 +193,14 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
       item.sheet.render(true);
     });
 
-    // -------------------------------------------------------------
-    // Everything below here is only needed if the sheet is editable
-    if (!this.isEditable) return;
-
     // Expand summary on click
     html.find('.item .item-name.rollable h4').click(event => this._onItemSummary(event));
 
     html.find('.items-list .items-header .item-name.hideable').click(event => this._onItemHeader(event));
+
+    // -------------------------------------------------------------
+    // Everything below here is only needed if the sheet is editable
+    if (!this.isEditable) return;
 
     // Add Inventory Item
     html.find('.item-create').click(this._onItemCreate.bind(this));
@@ -248,7 +248,7 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
     event.preventDefault();
     const tag = event.currentTarget.innerText.split(" ")[0];
     const div = $(event.currentTarget).parents(".items-list").children(`.items-in-list.${tag}`);
-    
+
     // Toggle visibility
     if ( div.hasClass("item-hidden") ) {
       div.slideDown(200);
@@ -269,7 +269,6 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
       let summary = li.children(".item-summary");
       summary.slideUp(200, () => summary.remove());
     } else {
-      console.log(chatData);
       let div = $(`<div class="item-summary">${chatData.description}</div>`);
       let props = $(`<div class="item-properties"></div>`);
       chatData.properties.forEach(p => props.append(`<span class="tag">${p}</span>`));

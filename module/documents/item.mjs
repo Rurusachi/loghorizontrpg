@@ -53,10 +53,13 @@ export class LogHorizonTRPGItem extends Item {
     }
     if (this.hasAction) {
         labels.check = `Check: ${this.getCheckString}`;
-        labels.target = `Target: ${this.getTargetString}`;
+        labels.target = data.target != undefined ? `Target: ${this.getTargetString}` : "";
         labels.range = `Range: ${data.range.value}`;
         labels.hatecost = data.hatecost.total != 0 ? `Hate: ${data.hatecost.total}`: "";
-        labels.fatecost = data.fatecost.value != 0 ? `Fate: ${data.fatecost.value}` : "";
+        labels.fatecost = data.fatecost.value != 0 && data.fatecost.value != undefined ? `Fate: ${data.fatecost.value}` : "";
+        if (data.sr != undefined) {
+          labels.sr = `SR: ${data.sr.value}/${data.sr.max}`;
+        }
     }
 
   }
@@ -270,6 +273,9 @@ export class LogHorizonTRPGItem extends Item {
         labels.hatecost,
         labels.fatecost
       );
+      if (labels.sr != undefined) {
+          props.push(labels.sr);
+      }
     }
 
     data.properties = props.filter(p => !!p);
@@ -478,12 +484,13 @@ async rollFormula(formula, options={}) {
   get getTargetString() {
       const itemData = this.data.data;
       const config = CONFIG.LOGHORIZONTRPG;
+
       if (itemData.target.total == 0) {
           return game.i18n.format(config.targetTypes[itemData.target.type]);
       }
       else if (itemData.target.type != "multiple") {
           const typesplit = game.i18n.format(config.targetTypes[itemData.target.type]).split(" ");
-          return game.i18n.format("LOGHORIZONTRPG.ActionTargetString", {type1: typesplit[0], number: number, type2: typesplit[1]});
+          return game.i18n.format("LOGHORIZONTRPG.ActionTargetString", {type1: typesplit[0], number: itemData.target.value, type2: typesplit[1]});
       }
       else {
           return itemData.target.total;
