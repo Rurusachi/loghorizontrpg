@@ -188,7 +188,7 @@ export class LogHorizonTRPGItem extends Item {
         }
     }
 
-    if ( consumeHate ) {
+    if ( consumeHate && this.actor.data.data.hate != undefined) {
         const hatecost = id.hatecost;
 
         actorUpdates["data.hate.value"] = Math.max(this.actor.data.data.hate.value + hatecost.total + hateChange, 0);
