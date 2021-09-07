@@ -146,7 +146,7 @@
                     <span>{{attribute.mod}}</span>
                 </div>
                 <div>
-                    <span class="attribute-mod rollable">{{numberFormat attribute.total decimals=0 sign=true}}</span>
+                    <span class="attribute-mod rollable"> {{numberFormat attribute.total decimals=0 sign=true}} {{#if attribute.value}} + {{attribute.value}}{{/if}} {{#if attribute.dice}} + {{attribute.dice}}d6{{/if}}</span>
                 </div>
             </div>
             {{/each}}
