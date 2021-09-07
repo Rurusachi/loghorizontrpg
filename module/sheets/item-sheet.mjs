@@ -12,8 +12,77 @@ export class LogHorizonTRPGItemSheet extends ItemSheet {
       classes: ["loghorizontrpg", "sheet", "item"],
       width: 520,
       height: 480,
+      dragDrop: [{dragSelector: ".item-list .item", dropSelector: null}],
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "description" }]
     });
+  }
+
+  /* -------------------------------------------- */
+  /*  Drag and Drop                               */
+  /* -------------------------------------------- */
+
+  /** @override */
+  _canDragStart(selector) {
+    return this.isEditable;
+  }
+
+  /** @override */
+  _canDragDrop(selector) {
+    return this.isEditable;
+  }
+
+  /** @override */
+  _onDragStart(event) {
+    const li = event.currentTarget;
+    if ( event.target.classList.contains("entity-link") ) return;
+
+    console.log(this);
+    console.log(li);
+    // Create drag data
+    const dragData = {
+      actorId: this.actor?.id,
+      itemId: this.item.id
+    };
+
+    // Active Effect
+    if ( li.dataset.effectId ) {
+      const effect = this.item.effects.get(li.dataset.effectId);
+      dragData.type = "ActiveEffect";
+      dragData.data = effect.data;
+    }
+
+    // Set data transfer
+    event.dataTransfer.setData("text/plain", JSON.stringify(dragData));
+  }
+
+  /** @override */
+  async _onDrop(event) {
+    console.log("_onDrop");
+    console.log(event);
+    // Try to extract the data
+    let data;
+    try {
+      data = JSON.parse(event.dataTransfer.getData('text/plain'));
+    } catch (err) {
+      return false;
+    }
+    console.log(data);
+
+    if (data.type == "ActiveEffect") {
+      return this._onDropActiveEffect(event, data);
+    }
+    return false;
+  }
+
+  async _onDropActiveEffect(event, data) {
+    console.log("_onDropActiveEffect: enter");
+    const item = this.item;
+    if ( !this.isEditable || !data.data || item.isOwned ) return;
+    console.log("_onDropActiveEffect: editable");
+    let sameItem = (data.itemId === item.id);
+    if ( sameItem ) return;
+    console.log("_onDropActiveEffect: not same item");
+    return ActiveEffect.create(data.data, {parent: item})
   }
 
   /** @override */
