@@ -55,6 +55,9 @@ Hooks.once('init', async function() {
   const originalNextRound = Combat.prototype.nextRound;
   Combat.prototype.nextRound = () => {const value = originalNextRound.apply(game.combat); Hooks.callAll("nextRound", value); return value};
 
+  const originalStartCombat = Combat.prototype.startCombat;
+  Combat.prototype.startCombat = () => {const value = originalStartCombat.apply(game.combat); Hooks.callAll("startCombat", value); return value};
+
   // Preload Handlebars templates.
   return preloadHandlebarsTemplates();
 });
@@ -64,12 +67,21 @@ Hooks.on("nextRound", function(combat) {
     console.log("Resetting limit/round skills");
     result.combatants.forEach((item, i) => {
         try {
-            item.actor.rest(["round"]);
+            item.actor?.rest(["round"]);
         } catch (e) {
             console.log(e);
         }
     });
 
+  });
+});
+
+Hooks.on("startCombat", function(combat) {
+  combat.then(result => {
+    console.log("Creating Setup and Cleanup combatants");
+    const newCombatants = result.createEmbeddedDocuments("Combatant", [{name: "Setup", initiative: 100},{name: "Cleanup", initiative: -1}]);
+    console.log(result);
+    console.log(newCombatants);
   });
 });
 
