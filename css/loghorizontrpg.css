@@ -487,3 +487,7 @@
     border-radius: 3px;
     background: rgba(0, 0, 0, 0.05);
 }
+
+.limitwidth {
+    max-width : 100px;
+}
