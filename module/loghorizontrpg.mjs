@@ -59,6 +59,20 @@ Hooks.once('init', async function() {
   return preloadHandlebarsTemplates();
 });
 
+Hooks.on("nextRound", function(combat) {
+  combat.then(result => {
+    console.log("Resetting limit/round skills");
+    result.combatants.forEach((item, i) => {
+        try {
+            item.actor.rest(["round"]);
+        } catch (e) {
+            console.log(e);
+        }
+    });
+
+  });
+});
+
 Hooks.on("canvasInit", function() {
   SquareGrid.prototype.measureDistances = measureDistances;
 });
