@@ -52,6 +52,9 @@ Hooks.once('init', async function() {
 
   ValidSpec.createValidMods();
 
+  const originalNextRound = Combat.prototype.nextRound;
+  Combat.prototype.nextRound = () => {const value = originalNextRound.apply(game.combat); Hooks.callAll("nextRound", value); return value};
+
   // Preload Handlebars templates.
   return preloadHandlebarsTemplates();
 });
