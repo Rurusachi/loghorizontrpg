@@ -205,7 +205,7 @@ export class LogHorizonTRPGActor extends Actor {
       const actionList = this.items?.filter((s => s.data.data.limit != undefined));
       for ( let s of actionList ) {
           if (options.includes(s.data.data.limit.type) || all) {
-              s.update({"data.limit.value": s.data.data.limit.max})
+              await s.update({"data.limit.value": s.data.data.limit.max})
           }
       }
 
@@ -222,7 +222,7 @@ export class LogHorizonTRPGActor extends Actor {
       if (options.includes("fate") || all) {
           updates["data.fate.value"] = actorData.fate.max;
       }
-      return this.update(updates);
+      return await this.update(updates);
   }
 
   async rollAttributeCheck(attributeId, target=false, options={}) {

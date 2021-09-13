@@ -239,7 +239,7 @@ export class LogHorizonTRPGItem extends Item {
 
 
     const chatData = {
-      user: game.user._id,
+      user: game.user.id,
       type: CONST.CHAT_MESSAGE_TYPES.OTHER,
       content: html,
       flavor: this.data.data.chatFlavor || this.name,
@@ -447,15 +447,15 @@ async rollFormula(formula, options={}) {
     const itemData = this.data;
     const actorData = this.actor.data;
 
-    const effects = actorData.effects?.filter((e => e.data.origin === `Actor.${actorData._id}.Item.${itemData._id}`));
+    const effects = actorData.effects?.filter((e => e.data.origin === `Actor.${actorData.id}.Item.${itemData.id}`));
     for ( let e of effects ) {
         // If an ActiveConfig sheet is attached the object is too large to expand
         e._sheet = null;
         e.disabled = itemData.data.equipped;
     }
 
-    const changes = this.actor.updateEmbeddedDocuments("ActiveEffect", effects);
-    const itemupdate = this.update({"data.equipped": !itemData.data.equipped});
+    const changes = await this.actor.updateEmbeddedDocuments("ActiveEffect", effects);
+    const itemupdate = await this.update({"data.equipped": !itemData.data.equipped});
 
     return itemupdate;
   }
