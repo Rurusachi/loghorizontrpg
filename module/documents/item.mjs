@@ -25,10 +25,10 @@ export class LogHorizonTRPGItem extends Item {
     // abilities
 
     if (data.limit != undefined && data.limit.type != "None") {
-        if (data.limit.addsr == "x") {
+        if (data.limit.addsr == "x" && data.sr?.value != undefined) {
             data.limit.max = data.sr.value * data.limit.bonus;
         }
-        else if (data.limit.addsr == "+") {
+        else if (data.limit.addsr == "+" && data.sr?.value != undefined) {
             data.limit.max = data.sr.value + data.limit.bonus;
         }
         else {
@@ -38,7 +38,7 @@ export class LogHorizonTRPGItem extends Item {
 
     if (data.hatecost != undefined) {
         if (data.hatecost.value != undefined && data.hatecost.value != "Refer" && parseInt(data.hatecost.value) != NaN) {
-            data.hatecost.total = parseInt(data.hatecost.value) + (data.hatecost.addsr ? data.sr.value : 0);
+            data.hatecost.total = parseInt(data.hatecost.value) + (data.hatecost.addsr && data.sr?.value != undefined ? data.sr.value : 0);
         } else {
             data.hatecost.total = 0;
         }
@@ -46,7 +46,7 @@ export class LogHorizonTRPGItem extends Item {
     if (data.target != undefined) {
         const targetTypesMulti = config.targetTypesMulti;
         if (targetTypesMulti.includes(data.target.type)) {
-            data.target.total = data.target.value + (data.target.addsr ? data.sr.value : 0);
+            data.target.total = data.target.value + (data.target.addsr && data.sr?.value != undefined ? data.sr.value : 0);
         } else {
             data.target.total = 0;
         }

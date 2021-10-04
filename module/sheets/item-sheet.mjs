@@ -71,6 +71,14 @@ export class LogHorizonTRPGItemSheet extends ItemSheet {
     if (data.type == "ActiveEffect") {
       return this._onDropActiveEffect(event, data);
     }
+    if (data.type == "Item") {
+      const theItem = game.items.get(data.id);
+      console.log(theItem);
+      if (theItem.data.data.magicgrade != undefined) {
+          return this._onDropEnchantment(event, theItem);
+      }
+      return false;
+    }
     return false;
   }
 
@@ -83,6 +91,68 @@ export class LogHorizonTRPGItemSheet extends ItemSheet {
     if ( sameItem ) return;
     console.log("_onDropActiveEffect: not same item");
     return ActiveEffect.create(data.data, {parent: item})
+  }
+
+  async _onDropEnchantment(event, data) {
+    console.log("_onDropEnchantment: enter");
+    const item = this.item;
+    const enchantmentData = data.data;
+    console.log(enchantmentData);
+    console.log(item);
+    if ( !this.isEditable || !data.data) return;
+    console.log("_onDropEnchantment: editable");
+    let sameItem = (data.id === item.id);
+    if ( sameItem ) return;
+    console.log("_onDropEnchantment: not same item");
+
+    const changes = []
+    for (let [key, combatstat] of Object.entries(enchantmentData.data.combatstats)) {
+        if (combatstat?.bonus != undefined) {
+            changes[`data.combatstats.${key}.bonus`] = combatstat.bonus + item.data.data.combatstats[key].bonus
+            //item.data.data.combatstats[key].bonus += combatstat.bonus;
+        }
+    }
+    //console.log(changes);
+    for (let [key, attribute] of Object.entries(enchantmentData.data.attributes)) {
+        if (attribute?.bonus != undefined) {
+            changes[`data.attributes.${key}.bonus`] = attribute.bonus + item.data.data.attributes[key].bonus
+            //item.data.data.attributes[key].bonus += attribute.bonus;
+        }
+        if (attribute?.dice != undefined) {
+            changes[`data.attributes.${key}.dice`] = attribute.dice + item.data.data.attributes[key].dice
+            //item.data.data.attributes[key].dice += attribute.dice;
+        }
+    }
+    if (enchantmentData.data.other?.inventoryslots != undefined) {
+        changes[`data.other.inventoryslots`] = enchantmentData.data.other.inventoryslots + item.data.data.other.inventoryslots;
+        //item.data.data.other.inventoryslots += enchantmentData.data.other.inventoryslots;
+    }
+    changes[`name`] =  `${data.name} ${item.name}`;
+    changes[`data.tags`] =  `${item.data.data.tags}, [M${enchantmentData.data.magicgrade}], ${enchantmentData.data.tags}`;
+    changes[`data.description`] = item.data.data.description + "<p>&nbsp;</p>" + enchantmentData.data.description;
+
+    // Action data
+    changes[`data.check`] = enchantmentData.data.check;
+    changes[`data.limit`] = enchantmentData.data.limit;
+    changes[`data.timing`] = enchantmentData.data.timing;
+    changes[`data.range`] = enchantmentData.data.range;
+    changes[`data.target`] = enchantmentData.data.target;
+    changes[`data.hatecost`] = enchantmentData.data.hatecost;
+    changes[`data.fatecost`] = enchantmentData.data.fatecost;
+    changes[`data.formula`] = enchantmentData.data.formula;
+    changes[`data.secondformula`] = enchantmentData.data.secondformula;
+
+    //item.name = data.name + item.name;
+    console.log(changes);
+    if (!item.isOwned) {
+        console.log("enterEffects");
+        for (const effect of enchantmentData.effects) {
+            console.log(effect);
+            await ActiveEffect.create(effect.data, {parent: item});
+        }
+        console.log("leaveEffects");
+    }
+    return item.update(changes);
   }
 
   /** @override */

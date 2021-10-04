@@ -256,7 +256,7 @@
     }
   },
   "Item": {
-    "types": ["item", "weapon", "equipment", "consumable", "class", "race", "skill"],
+    "types": ["item", "weapon", "equipment", "consumable", "class", "race", "skill", "enchantment"],
     "templates": {
       "base": {
         "description": ""
@@ -274,25 +274,25 @@
           "equipped": false,
           "combatstats": {
               "patk": {
-                  "bonus": ""
+                  "bonus": 0
               },
               "matk": {
-                  "bonus": ""
+                  "bonus": 0
               },
               "pdef": {
-                  "bonus": ""
+                  "bonus": 0
               },
               "mdef": {
-                  "bonus": ""
+                  "bonus": 0
               },
               "initiative": {
-                  "bonus": ""
+                  "bonus": 0
               },
               "speed": {
-                  "bonus": ""
+                  "bonus": 0
               },
               "recovery": {
-                  "bonus": ""
+                  "bonus": 0
               }
           },
           "attributes": {
@@ -458,6 +458,10 @@
           "value": 1,
           "max": 1
       }
+    },
+    "enchantment": {
+      "templates": ["base", "action", "equippable", "tagged"],
+      "magicgrade": 1
     }
   }
 }
