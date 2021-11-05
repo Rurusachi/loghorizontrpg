@@ -7,6 +7,13 @@ import { applyLhrpgEffects, ValidSpec } from "../ActiveEffects.mjs";
  */
 export class LogHorizonTRPGActor extends Actor {
 
+    // Add basic skills on creation maybe?
+//  /** @inheritdoc */
+//  async _preCreate(data, options, userId) {
+//    await super._preCreate(data, options, userId);
+//    // Add baseskills?
+//  }
+
   /** @override */
   applyActiveEffects() {
     applyLhrpgEffects.bind(this)(ValidSpec.baseSpecsObj, {}, false);
@@ -20,7 +27,7 @@ export class LogHorizonTRPGActor extends Actor {
     // prepareDerivedData().
     super.prepareData();
 
-    applyLhrpgEffects.bind(this)(ValidSpec.derivedSpecsObj, ValidSpec.baseSpecsObj, true);
+    applyLhrpgEffects.bind(this)(ValidSpec.derivedSpecsObj, ValidSpec.baseSpecsObj, false);
   }
 
   /** @override */
@@ -70,6 +77,31 @@ export class LogHorizonTRPGActor extends Actor {
     // Make modifications to data here. For example:
     const data = actorData.data;
 
+    const itemList = this.items?.filter((s => s.data.data?.equipped == true));
+    //console.log(data);
+    for ( let i of itemList ) {
+        //console.log(i);
+        for (let [key, combatstat] of Object.entries(i.data.data.combatstats)) {
+            if (combatstat?.bonus != undefined) {
+                //console.log(key);
+                //console.log(combatstat);
+                data.combatstats[key].bonus += combatstat.bonus;
+            }
+        }
+        for (let [key, attribute] of Object.entries(i.data.data.attributes)) {
+            if (attribute?.bonus != undefined) {
+                data.attributes[key].bonus += attribute.bonus;
+            }
+            if (attribute?.dice != undefined) {
+                data.attributes[key].dice += attribute.dice;
+            }
+        }
+        if (i.data.data.other?.inventoryslots != undefined) {
+            data.inventory.max += i.data.data.other.inventoryslots
+        }
+    }
+
+
     // attributes
     for (let [key, attribute] of Object.entries(data.attributes)) {
         if (CONFIG.LOGHORIZONTRPG.attributes[key] == undefined) {
@@ -104,6 +136,8 @@ export class LogHorizonTRPGActor extends Actor {
             combatstat.total = combatstat.bonus + combatstat.value;
         }
     }
+
+
 
     // Max HP calculation
     data.hp.maxbase = data.hp.base + (data.hp.mod * (data.cr -1));
@@ -205,7 +239,7 @@ export class LogHorizonTRPGActor extends Actor {
       const actionList = this.items?.filter((s => s.data.data.limit != undefined));
       for ( let s of actionList ) {
           if (options.includes(s.data.data.limit.type) || all) {
-              s.update({"data.limit.value": s.data.data.limit.max})
+              await s.update({"data.limit.value": s.data.data.limit.max})
           }
       }
 
@@ -222,7 +256,7 @@ export class LogHorizonTRPGActor extends Actor {
       if (options.includes("fate") || all) {
           updates["data.fate.value"] = actorData.fate.max;
       }
-      return this.update(updates);
+      return await this.update(updates);
   }
 
   async rollAttributeCheck(attributeId, target=false, options={}) {

@@ -36,7 +36,7 @@ Hooks.once('init', async function() {
    * @type {String}
    */
   CONFIG.Combat.initiative = {
-    formula: "2d6 + @combatstats.initiative.total",
+    formula: "@combatstats.initiative.total",
     decimals: 2
   };
 
@@ -52,8 +52,37 @@ Hooks.once('init', async function() {
 
   ValidSpec.createValidMods();
 
+  const originalNextRound = Combat.prototype.nextRound;
+  Combat.prototype.nextRound = () => {const value = originalNextRound.apply(game.combat); Hooks.callAll("nextRound", value); return value};
+
+  const originalStartCombat = Combat.prototype.startCombat;
+  Combat.prototype.startCombat = () => {const value = originalStartCombat.apply(game.combat); Hooks.callAll("startCombat", value); return value};
+
   // Preload Handlebars templates.
   return preloadHandlebarsTemplates();
+});
+
+Hooks.on("nextRound", function(combat) {
+  combat.then(result => {
+    console.log("Resetting limit/round skills");
+    result.combatants.forEach((item, i) => {
+        try {
+            item.actor?.rest(["round"]);
+        } catch (e) {
+            console.log(e);
+        }
+    });
+
+  });
+});
+
+Hooks.on("startCombat", function(combat) {
+  combat.then(result => {
+    console.log("Creating Setup and Cleanup combatants");
+    const newCombatants = result.createEmbeddedDocuments("Combatant", [{name: "Setup", initiative: 100},{name: "Cleanup", initiative: -1}]);
+    console.log(result);
+    console.log(newCombatants);
+  });
 });
 
 Hooks.on("canvasInit", function() {
@@ -129,6 +158,14 @@ Handlebars.registerHelper('or', function(arg1, arg2) {
 
 Handlebars.registerHelper('lequal', function(arg1, arg2) {
     return (arg1 <= arg2);
+});
+
+Handlebars.registerHelper('greaterthan', function(arg1, arg2) {
+    return (arg1 > arg2);
+});
+
+Handlebars.registerHelper('add', function(arg1, arg2) {
+    return (arg1 + arg2);
 });
 
 Handlebars.registerHelper('localizeTargetType', function(type, number) {

@@ -25,10 +25,10 @@ export class LogHorizonTRPGItem extends Item {
     // abilities
 
     if (data.limit != undefined && data.limit.type != "None") {
-        if (data.limit.addsr == "x") {
+        if (data.limit.addsr == "x" && data.sr?.value != undefined) {
             data.limit.max = data.sr.value * data.limit.bonus;
         }
-        else if (data.limit.addsr == "+") {
+        else if (data.limit.addsr == "+" && data.sr?.value != undefined) {
             data.limit.max = data.sr.value + data.limit.bonus;
         }
         else {
@@ -38,7 +38,7 @@ export class LogHorizonTRPGItem extends Item {
 
     if (data.hatecost != undefined) {
         if (data.hatecost.value != undefined && data.hatecost.value != "Refer" && parseInt(data.hatecost.value) != NaN) {
-            data.hatecost.total = parseInt(data.hatecost.value) + (data.hatecost.addsr ? data.sr.value : 0);
+            data.hatecost.total = parseInt(data.hatecost.value) + (data.hatecost.addsr && data.sr?.value != undefined ? data.sr.value : 0);
         } else {
             data.hatecost.total = 0;
         }
@@ -46,7 +46,7 @@ export class LogHorizonTRPGItem extends Item {
     if (data.target != undefined) {
         const targetTypesMulti = config.targetTypesMulti;
         if (targetTypesMulti.includes(data.target.type)) {
-            data.target.total = data.target.value + (data.target.addsr ? data.sr.value : 0);
+            data.target.total = data.target.value + (data.target.addsr && data.sr?.value != undefined ? data.sr.value : 0);
         } else {
             data.target.total = 0;
         }
@@ -188,7 +188,7 @@ export class LogHorizonTRPGItem extends Item {
         }
     }
 
-    if ( consumeHate ) {
+    if ( consumeHate && this.actor.data.data.hate != undefined) {
         const hatecost = id.hatecost;
 
         actorUpdates["data.hate.value"] = Math.max(this.actor.data.data.hate.value + hatecost.total + hateChange, 0);
@@ -239,7 +239,7 @@ export class LogHorizonTRPGItem extends Item {
 
 
     const chatData = {
-      user: game.user._id,
+      user: game.user.id,
       type: CONST.CHAT_MESSAGE_TYPES.OTHER,
       content: html,
       flavor: this.data.data.chatFlavor || this.name,
@@ -447,15 +447,15 @@ async rollFormula(formula, options={}) {
     const itemData = this.data;
     const actorData = this.actor.data;
 
-    const effects = actorData.effects?.filter((e => e.data.origin === `Actor.${actorData._id}.Item.${itemData._id}`));
+    const effects = actorData.effects?.filter((e => e.data.origin === `Actor.${actorData.id}.Item.${itemData.id}`));
     for ( let e of effects ) {
         // If an ActiveConfig sheet is attached the object is too large to expand
         e._sheet = null;
         e.disabled = itemData.data.equipped;
     }
 
-    const changes = this.actor.updateEmbeddedDocuments("ActiveEffect", effects);
-    const itemupdate = this.update({"data.equipped": !itemData.data.equipped});
+    const changes = await this.actor.updateEmbeddedDocuments("ActiveEffect", effects);
+    const itemupdate = await this.update({"data.equipped": !itemData.data.equipped});
 
     return itemupdate;
   }

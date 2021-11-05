@@ -23,6 +23,31 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
     return `systems/loghorizontrpg/templates/actor/actor-${this.actor.data.type}-sheet.html`;
   }
 
+  /** @override */
+  async _onDropItemCreate(itemData) {
+    console.log(itemData);
+    if ( itemData.type === "class" ) {
+        const actor = this.actor;
+        const skills = itemData.data.skills;
+        await actor.createEmbeddedDocuments("Item", skills, {parent: actor})
+    }
+    // Default drop handling if levels were not added
+    return super._onDropItemCreate(itemData);
+  }
+
+  async _onDropClass(event, data) {
+    console.log("_onDropClass: enter");
+    const actor = this.actor;
+    if ( !this.isEditable || !data.data ) return;
+    console.log("_onDropClass: editable");
+    let sameItem = (data.itemId === item.id);
+    if ( sameItem ) return;
+    console.log("_onDropClass: not same item");
+
+    const skills = item.data.data.skills;
+    return await actor.createEmbeddedDocuments("Item", skills, {parent: actor})
+  }
+
   /* -------------------------------------------- */
 
   /** @override */
@@ -128,7 +153,7 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
     for (let i of context.items) {
       i.img = i.img || DEFAULT_TOKEN;
       // Append to gear.
-      if (i.type === 'item') {
+      if (i.type === 'item' ||i.type === 'enchantment') {
         items.push(i);
       }
       else if (i.type === 'weapon') {
@@ -228,7 +253,7 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
     html.find('.rollable').click(this._onRoll.bind(this));
 
     // Drag events for macros.
-    if (this.actor.owner) {
+    if (this.actor.isOwner) {
       let handler = ev => this._onDragStart(ev);
       html.find('li.item').each((i, li) => {
         if (li.classList.contains("inventory-header")) return;
