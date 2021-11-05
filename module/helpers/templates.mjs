@@ -15,5 +15,6 @@
     "systems/loghorizontrpg/templates/item/parts/item-combatstats.html",
     "systems/loghorizontrpg/templates/item/parts/item-attributes.html",
     "systems/loghorizontrpg/templates/item/parts/item-action.html",
+    "systems/loghorizontrpg/templates/item/parts/item-startingskills.html",
   ]);
 };

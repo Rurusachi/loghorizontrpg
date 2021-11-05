@@ -427,6 +427,7 @@
           "value": 0
         }
       },
+      "skills": [],
       "equippabletags": ""
     },
     "race": {
@@ -461,7 +462,8 @@
     },
     "enchantment": {
       "templates": ["base", "action", "equippable", "tagged"],
-      "magicgrade": 1
+      "magicgrade": 1,
+      "itemtype": ""
     }
   }
 }

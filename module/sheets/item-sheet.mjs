@@ -74,12 +74,32 @@ export class LogHorizonTRPGItemSheet extends ItemSheet {
     if (data.type == "Item") {
       const theItem = game.items.get(data.id);
       console.log(theItem);
+      console.log(this);
       if (theItem.data.data.magicgrade != undefined) {
           return this._onDropEnchantment(event, theItem);
+      }
+      if (this.item.type == "class" && theItem.type == "skill") {
+          return this._onDropSkill(event, theItem);
       }
       return false;
     }
     return false;
+  }
+
+  async _onDropSkill(event, data) {
+    console.log("_onDropSkill: enter");
+    const item = this.item;
+    if ( !this.isEditable || !data.data || item.isOwned ) return;
+    console.log("_onDropSkill: editable");
+    let sameItem = (data.itemId === item.id);
+    if ( sameItem ) return;
+    console.log("_onDropSkill: not same item");
+
+    let skills = duplicate(item.data.data.skills);
+    skills.push(new Item(data.data));
+    return item.update({['data.skills']: skills});
+    //return Item.create(data.data, {parent: item});
+    //return ActiveEffect.create(data.data, {parent: item})
   }
 
   async _onDropActiveEffect(event, data) {
@@ -184,6 +204,10 @@ export class LogHorizonTRPGItemSheet extends ItemSheet {
       context.rollData = actor.getRollData();
     }
 
+    if (context.item.type == "class") {
+        this._prepareSkills(context)
+    }
+
     context.effects = prepareActiveEffectCategories(this.item.effects);
 
     // Add the actor's data to context.data for easier access, as well as flags.
@@ -193,14 +217,74 @@ export class LogHorizonTRPGItemSheet extends ItemSheet {
     return context;
   }
 
+  _prepareSkills(context) {
+      const skills = {
+        "Combat": [],
+        "General": [],
+        "Basic": [],
+        "Other": []
+      };
+
+      for (let i of context.item.data.data.skills) {
+        i.img = i.img || DEFAULT_TOKEN;
+        if (i.type === 'skill') {
+          if (i.data.tags) {
+            if (i.data.tags.includes("General")) {
+                skills["General"].push(i);
+            }
+            else if (i.data.tags.includes("Combat")) {
+                skills["Combat"].push(i);
+            }
+            else if (i.data.tags.includes("Basic")) {
+                skills["Basic"].push(i);
+            }
+            else {
+                skills["Other"].push(i);
+            }
+          }
+          else {
+              skills["Other"].push(i);
+          }
+        }
+      }
+
+      context.skills = skills;
+      console.log(context.skills);
+  }
+
   /* -------------------------------------------- */
 
   /** @override */
   activateListeners(html) {
     super.activateListeners(html);
 
+    html.find('.item-edit').click(ev => {
+      const li = $(ev.currentTarget).parents(".item");
+      //const item = this.item.data.data.skills.get(li.data("itemId"));
+      const skill = this.item.data.data.skills.find(i => i._id == li.data("itemId"));
+      console.log(skill);
+      skill.sheet.render(true);
+    });
+
     // Everything below here is only needed if the sheet is editable
     if (!this.isEditable) return;
+
+    // Add Inventory Item
+    //html.find('.item-create').click(this._onItemCreate.bind(this));
+
+    // Delete Inventory Item
+    html.find('.item-delete').click(ev => {
+      const li = $(ev.currentTarget).parents(".item");
+      if (this.item.isOwned) return ui.notifications.warn("Cannot delete skills from owned class");
+      //const skill = this.item.data.data.skills.get(li.data("itemId"));
+      console.log(this);
+      console.log(li.data("itemId"));
+      const skills = this.item.data.data.skills.filter(i => i._id != li.data("itemId"));
+      console.log(skills);
+      //skill.delete();
+      this.item.update({['data.skills']: skills});
+      //li.slideUp(200, () => this.render(false));
+    });
 
     html.find(".effect-control").click(ev => {
         if ( this.item.isOwned ) return ui.notifications.warn("Managing Active Effects within an Owned Item is not currently supported")
@@ -208,5 +292,32 @@ export class LogHorizonTRPGItemSheet extends ItemSheet {
       });
 
     // Roll handlers, click handlers, etc. would go here.
+  }
+
+  async _onItemCreate(event) {
+    event.preventDefault();
+    const header = event.currentTarget;
+    // Get the type of item to create.
+    const type = header.dataset.type;
+    // Grab any data associated with this control.
+    const data = duplicate(header.dataset);
+    // Initialize a default name.
+    const name = `New ${type.capitalize()}`;
+    // Prepare the item object.
+    const itemData = {
+      name: name,
+      type: type,
+      data: data
+    };
+    // Remove the type from the dataset since it's in the itemData.type prop.
+    delete itemData.data["type"];
+    // Finally, create the item!
+
+
+    let skills = duplicate(this.item.data.data.skills);
+    skills.push(new Item(itemData));
+    return await this.item.update({['data.skills']: skills});
+
+    //return await Item.create(itemData, {parent: this.actor});
   }
 }

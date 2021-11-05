@@ -23,6 +23,31 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
     return `systems/loghorizontrpg/templates/actor/actor-${this.actor.data.type}-sheet.html`;
   }
 
+  /** @override */
+  async _onDropItemCreate(itemData) {
+    console.log(itemData);
+    if ( itemData.type === "class" ) {
+        const actor = this.actor;
+        const skills = itemData.data.skills;
+        await actor.createEmbeddedDocuments("Item", skills, {parent: actor})
+    }
+    // Default drop handling if levels were not added
+    return super._onDropItemCreate(itemData);
+  }
+
+  async _onDropClass(event, data) {
+    console.log("_onDropClass: enter");
+    const actor = this.actor;
+    if ( !this.isEditable || !data.data ) return;
+    console.log("_onDropClass: editable");
+    let sameItem = (data.itemId === item.id);
+    if ( sameItem ) return;
+    console.log("_onDropClass: not same item");
+
+    const skills = item.data.data.skills;
+    return await actor.createEmbeddedDocuments("Item", skills, {parent: actor})
+  }
+
   /* -------------------------------------------- */
 
   /** @override */
