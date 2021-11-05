@@ -2,7 +2,7 @@
   "name": "loghorizontrpg",
   "title": "LogHorizonTRPG",
   "description": "The Log Horizon TRPG system for FoundryVTT",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "minimumCoreVersion": "0.8.3",
   "compatibleCoreVersion": "0.8.8",
   "author": "Rurusachi",
@@ -367,7 +367,7 @@
   "primaryTokenAttribute": "hp",
   "secondaryTokenAttribute": "hate",
   "url": "https://github.com/Rurusachi/loghorizontrpg",
-  "manifest": "https://raw.githubusercontent.com/Rurusachi/loghorizontrpg/main/system.json",
-  "download": "https://github.com/Rurusachi/loghorizontrpg/archive/refs/tags/v0.1.0.zip",
+  "manifest": "https://github.com/Rurusachi/loghorizontrpg/releases/latest/download/system.json",
+  "download": "https://github.com/Rurusachi/loghorizontrpg/releases/download/v0.2.0/lhrpg-v0.2.0.zip",
   "license": "LICENSE.txt"
 }
