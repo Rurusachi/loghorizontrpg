@@ -211,6 +211,13 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
   activateListeners(html) {
     super.activateListeners(html);
 
+    html.keypress(
+      function(event){
+        if (event.which == '13') {
+          event.preventDefault();
+        }
+    });
+
     // Render the item sheet for viewing/editing prior to the editable check.
     html.find('.item-edit').click(ev => {
       const li = $(ev.currentTarget).parents(".item");
@@ -246,6 +253,11 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
 
     html.find('.rest').click(this._onRest.bind(this));
 
+    // Numeric changes
+    const inputs = html.find("input");
+    inputs.focus(ev => ev.currentTarget.select());
+    inputs.addBack().find('[data-dtype="Number"]').change(this._onChangeInputDelta.bind(this));
+
     // Active Effect management
     html.find(".effect-control").click(ev => onManageActiveEffect(ev, this.actor));
 
@@ -267,6 +279,22 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
       event.preventDefault();
 
       return new RestDialog(this.actor).render(true)
+  }
+
+  /**
+ * Handle input changes to numeric form fields, allowing them to accept delta-typed inputs
+ * @param {Event} event  Triggering event.
+ * @private
+ */
+  _onChangeInputDelta(event) {
+    const input = event.target;
+    const value = input.value;
+    if (["+", "-"].includes(value[0])) {
+      let delta = parseFloat(value);
+      input.value = getProperty(this.actor.data, input.name) + delta;
+    } else if (value[0] === "=") {
+      input.value = value.slice(1);
+    }
   }
 
   _onItemHeader(event) {
