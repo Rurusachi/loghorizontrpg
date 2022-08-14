@@ -58,6 +58,19 @@ Hooks.once('init', async function() {
   const originalStartCombat = Combat.prototype.startCombat;
   Combat.prototype.startCombat = () => {const value = originalStartCombat.apply(game.combat); Hooks.callAll("startCombat", value); return value};
 
+  // Sort combatants by Initiative > (Player before NPC) > Name > Id
+  Combat.prototype._sortCombatants = (a, b) => {
+    const ia = Number.isNumeric(a.initiative) ? a.initiative : -9999;
+    const ib = Number.isNumeric(b.initiative) ? b.initiative : -9999;
+    let ci = ib - ia;
+    if ( ci !== 0 ) return ci;
+    if (!a.isNPC && b.isNPC) return -1; // a is player
+    if (a.isNPC && !b.isNPC) return 1; // b is player
+    let cn = a.name.localeCompare(b.name);
+    if ( cn !== 0 ) return cn;
+    return a.id - b.id;
+  };
+
   // Preload Handlebars templates.
   return preloadHandlebarsTemplates();
 });
