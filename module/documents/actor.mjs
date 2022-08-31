@@ -52,18 +52,53 @@ export class LogHorizonTRPGActor extends Actor {
 
     // Make separate methods for each Actor type (character, npc, etc.) to keep
     // things organized.
+
+    // race (Technically allows for multiple races)
+    const raceList = this.items?.filter((s => s.type === "race"));
+    for (let i of raceList) {
+        // hp
+        data.hp.base += i.data.data.hp.value;
+        // fate
+        data.fate.max += i.data.data.fate.value;
+        // abilities
+        for (let [key, ability] of Object.entries(i.data.data.abilities)) {
+            if (ability?.value != undefined) {
+                data.abilities[key].bonus += ability.value;
+            }
+        }
+    }
+    
+    
+    const Tags = new Set();
+    
+    // class (Technically allows for multiple races)
+    const classList = this.items?.filter((s => s.type === "class"));
+    for (let i of classList) {
+        // hp
+        data.hp.base += i.data.data.hp.value;
+        data.hp.mod += i.data.data.hp.modifier;
+        
+        // abilities
+        for (let [key, ability] of Object.entries(i.data.data.abilities)) {
+            if (ability?.value != undefined) {
+                data.abilities[key].bonus += ability.value;
+            }
+        }
+        
+        // equippabletags
+        for (let tag of i.data.data.equippabletags.split(" ")) {
+            Tags.add(tag);
+        }
+    }
+    data.equippabletags = Array.from(Tags).join(" ");
+    
+    
     // abilities
     for (let [key, ability] of Object.entries(data.abilities)) {
         ability.base = ability.value + ability.bonus + (actorData.type === 'character' ? (1 * (data.cr -1)) : 0); // adds cr if player
         ability.mod = Math.floor((ability.base) / 3);
     }
 
-    data.equippabletags = ""
-    const characterClasses = this.items?.filter((s => s.type == "class"));
-
-    if (characterClasses.length > 0) {
-        data.equippabletags = characterClasses[0].data.data.equippabletags
-    }
     this._prepareCharacterData(actorData);
     this._prepareNpcData(actorData);
   }
@@ -77,14 +112,11 @@ export class LogHorizonTRPGActor extends Actor {
     // Make modifications to data here. For example:
     const data = actorData.data;
 
+    // equipment
     const itemList = this.items?.filter((s => s.data.data?.equipped == true));
-    //console.log(data);
     for ( let i of itemList ) {
-        //console.log(i);
         for (let [key, combatstat] of Object.entries(i.data.data.combatstats)) {
             if (combatstat?.bonus != undefined) {
-                //console.log(key);
-                //console.log(combatstat);
                 data.combatstats[key].bonus += combatstat.bonus;
             }
         }
@@ -101,12 +133,10 @@ export class LogHorizonTRPGActor extends Actor {
         }
     }
 
-
     // attributes
     for (let [key, attribute] of Object.entries(data.attributes)) {
         if (CONFIG.LOGHORIZONTRPG.attributes[key] == undefined) {
-            delete data.attributes[key];
-            console.log("Found " + key + " in attributes and deleted it");
+            console.log("Unexpected attribute found: " + key);
             continue;
         }
         if (attribute.ability == "highest") {
