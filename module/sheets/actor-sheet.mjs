@@ -363,7 +363,7 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
    * @param {Event} event   The originating click event
    * @private
    */
-  _onRoll(event) {
+  async _onRoll(event) {
     event.preventDefault();
     const element = event.currentTarget;
     const dataset = element.dataset;
@@ -373,7 +373,7 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
       if (dataset.rollType == 'item') {
         const itemId = element.closest('.item').dataset.itemId;
         const item = this.actor.items.get(itemId);
-        if (item) return item.roll();
+        if (item) return await item.roll();
       }
       if (dataset.rollType == 'attribute') {
           this.actor.rollAttributeCheck(dataset.attribute);
@@ -383,7 +383,7 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
     // Handle rolls that supply the formula directly.
     if (dataset.roll) {
       let label = dataset.label ? `[ability] ${dataset.label}` : '';
-      let roll = new Roll(dataset.roll, this.actor.getRollData()).roll();
+      let roll = await new Roll(dataset.roll, this.actor.getRollData()).roll();
       roll.toMessage({
         speaker: ChatMessage.getSpeaker({ actor: this.actor }),
         flavor: label,

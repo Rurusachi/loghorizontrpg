@@ -298,6 +298,7 @@ export class LogHorizonTRPGItem extends Item {
     const message =  game.messages.get(messageId);
     const action = button.dataset.action;
 
+    // You must be owner, GM, or rolling a target check
     const isTargetted = action === "targetcheck";
     if ( !( isTargetted || game.user.isGM || message.isAuthor ) ) return;
 
@@ -406,7 +407,7 @@ async rollFormula(formula, options={}) {
 
     const roll = new Roll(finalFormula, finalData);
     try {
-        roll.roll();
+        await roll.roll();
         roll.toMessage({
           speaker: options.speaker || ChatMessage.getSpeaker({actor: this}),
           flavor: `${this.name} - Formula`,
@@ -461,7 +462,6 @@ async rollFormula(formula, options={}) {
   }
 
   static async _getChatCardActor(card) {
-
     // Case 1 - a synthetic actor from a Token
     if ( card.dataset.tokenId ) {
       const token = await fromUuid(card.dataset.tokenId);
