@@ -86,8 +86,10 @@ export class LogHorizonTRPGActor extends Actor {
         }
         
         // equippabletags
-        for (let tag of i.data.data.equippabletags.split(" ")) {
-            Tags.add(tag);
+        if (typeof i.data.data.equippabletags === "string") {
+            for (let tag of i.data.data.equippabletags.split(" ")) {   
+                Tags.add(tag);
+            }
         }
     }
     data.equippabletags = Array.from(Tags).join(" ");
