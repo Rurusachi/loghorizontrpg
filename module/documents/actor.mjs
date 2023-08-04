@@ -340,7 +340,7 @@ export class LogHorizonTRPGActor extends Actor {
 
       const roll = new Roll(formula, data);
       try {
-          roll.roll();
+          await roll.roll();
           roll.toMessage({
               speaker: options.speaker || ChatMessage.getSpeaker({actor: this}),
               flavor: `${this.name} - ${game.i18n.localize(label)} Check`,
