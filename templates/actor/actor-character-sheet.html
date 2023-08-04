@@ -8,9 +8,14 @@
               <div class="flex-group-center limitwidth">
                   <button class="rounded rest">Rest</button>
               </div>
+              <div class="flex-group-center limitwidth">
+                  <button class="rounded edit-mode">Edit mode</button>
+              </div>
           </div>
           <div class="header-fields grid-span-5">
-              <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></h1>
+                <div class="grid grid-5col">
+                    <h1 class="charname grid-span-5"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></h1>
+                </div>
               {{!-- The grid classes are defined in scss/global/_grid.scss. To use,
                   use both the "grid" and "grid-Ncol" class where "N" can be any number
                   from 1 to 12 and will create that number of columns.  --}}
@@ -48,7 +53,7 @@
                   <div class="resources grid grid-4col">
                       <div class="resource flex-group-center">
                           <label for="data.status.combat.barrier" class="resource-label flexlarge align-left"">{{data.status.combat.barrier.label}}</label>
-                          <input type="text" name="data.status.combat.barrier.value" value="{{data.status.combat.barrier.value}}" data-dtype="String"/>
+                          <input type="text" name="data.status.combat.barrier.value" value="{{data.status.combat.barrier.value}}" data-dtype="Number"/>
                       </div>
 
                       <div class="resource flex-group-center">
@@ -90,90 +95,23 @@
 
     {{!-- Owned Features Tab --}}
     <div class="tab features" data-group="primary" data-tab="features">
-      <section class="grid grid-2col">
-        <aside class="sidebar">
-
-          {{!-- The grid classes are defined in scss/global/_grid.scss. To use,
-          use both the "grid" and "grid-Ncol" class where "N" can be any number
-          from 1 to 12 and will create that number of columns.  --}}
-
-          <div class="abilities flexcol">
-              <div class="flexrow flex-group-center">
-                  <label class="resource-text flex-group-center">Abilities</label>
-                  <span></span>
-                  <span>Base</span>
-                  <span>Mod</span>
-              </div>
-              {{#each data.abilities as |ability key|}}
-              <div class="ability flexrow flex-group-center">
-                <div>
-                    <label for="data.abilities.{{key}}.value" class="resource-label rollable flexlarge align-left" data-roll="2d6+@abilities.{{key}}.mod" data-label="{{ability.label}}">{{ability.label}}</label>
-                </div>
-                  <div>
-                <input type="text" name="data.abilities.{{key}}.value" value="{{ability.value}}" data-dtype="Number"/>
-            </div>
-              <div>
-                <span>{{ability.base}}</span>
-            </div>
-              <div>
-                <span class="ability-mod"">{{numberFormat ability.mod decimals=0 sign=true}}</span>
-            </div>
-              </div>
-              {{/each}}
-          </div>
-
-              <label class="resource-text">Other Stats</label>
-              <div class="combatstats flexcol">
-                  {{#each data.combatstats as |combatstat key|}}
-                  <div class="combatstat flexrow flex-group-center">
-                    <label for="data.combatstats.{{key}}.value" class="resource-label flexlarge align-left"">{{combatstat.label}}</label>
-                    <input type="text" name="data.combatstats.{{key}}.value" value="{{combatstat.value}}" data-dtype="Number"/>
-                    <span class="combatstat-total">{{numberFormat combatstat.total decimals=0}}</span>
-                  </div>
-                  {{/each}}
-              </div>
-      </aside>
-
-      <aside class="sidebar">
-          <div class="attributes flexcol">
-              <div class="flexrow flex-group-center">
-                  <label class="resource-text">Attributes</label>
-                  <span></span>
-                  <span>Mod</span>
-                  <span>Total</span>
-              </div>
-            {{#each data.attributes as |attribute key|}}
-            <div class="attribute flexrow flex-group-center">
-                <div class="flex-group-left">
-                    <label for="data.attributes.{{key}}.value" class="resource-label rollable flexlarge align-left" data-roll-type="attribute" data-attribute="{{key}}">{{attribute.label}}</label>
-                </div>
-                <div>
-                    <input type="text" name="data.attributes.{{key}}.value" value="{{attribute.value}}" data-dtype="String"/>
-                </div>
-                <div>
-                    <span>{{attribute.mod}}</span>
-                </div>
-                <div>
-                    <span class="attribute-mod rollable"> {{numberFormat attribute.total decimals=0 sign=true}} {{#if attribute.value}} + {{attribute.value}}{{/if}} {{#if attribute.dice}} + {{attribute.dice}}d6{{/if}}</span>
-                </div>
-            </div>
-            {{/each}}
-          </div>
-      </aside>
+      <section>
+        {{> "systems/loghorizontrpg/templates/actor/parts/actor-attributes-abilities.html"}}
     </section>
 
         {{!-- For the main features list, span the right two columns --}}
-        <section class="main grid grid-3col">
-          {{!-- This is a Handlebars partial. They're stored in the `/parts` folder next to this sheet, and defined in module/helpers/templates.mjs --}}
-          <div class="">
-              {{> "systems/loghorizontrpg/templates/actor/parts/actor-features.html"}}
-          </div>
-          <div class="grid-span-2">
+        <section class="main">
+          <div>
               <h1 class="flex-group-center">Status</h1>
               {{> "systems/loghorizontrpg/templates/actor/parts/actor-status.html"}}
           </div>
         </section>
 
+        <section>
+            <div>
+                {{> "systems/loghorizontrpg/templates/actor/parts/actor-features.html"}}
+            </div>
+        </section>
     </div>
 
     {{!-- Biography Tab --}}

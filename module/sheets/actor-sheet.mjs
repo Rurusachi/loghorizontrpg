@@ -84,6 +84,7 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
     // Prepare active effects
     context.effects = prepareActiveEffectCategories(this.actor.effects);
 
+    context.edit_mode = this.edit_mode;
     return context;
   }
 
@@ -252,7 +253,7 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
     });
 
     html.find('.rest').click(this._onRest.bind(this));
-
+    html.find('.edit-mode').click(this._onEditMode.bind(this));
     // Numeric changes
     const inputs = html.find("input");
     inputs.focus(ev => ev.currentTarget.select());
@@ -279,6 +280,19 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
       event.preventDefault();
 
       return new RestDialog(this.actor).render(true)
+  }
+
+  async _onEditMode(event) {
+      event.preventDefault();
+
+      const divs = $(event.currentTarget).parents(`.${this.actor.type}`).find(".edit-mode-only");
+      //console.log(divs);
+      this.edit_mode = this.edit_mode == undefined ? true : !this.edit_mode;
+      if (this.edit_mode) {
+        divs.show()
+      } else {
+        divs.hide()
+      }
   }
 
   /**

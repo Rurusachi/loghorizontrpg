@@ -1,0 +1,12 @@
+<div>
+    <div>
+        <label for="data.abilities.{{key}}.value" class="resource-label rollable flexlarge align-left" data-roll="2d6+@abilities.{{key}}.mod" data-label="{{ability.label}}">{{ability.label}}</label>
+        <span>Base: {{ability.base}}</span>
+        <span class="ability-mod">Mod: {{numberFormat ability.mod decimals=0 sign=true}}</span>
+    </div>
+    <div class="edit-mode-only" {{#unless edit_mode}} style="display: none;" {{/unless}}>
+        <input  type="text" name="data.abilities.{{key}}.value" value="{{ability.value}}" data-dtype="Number"/>
+    </div>
+    <div>
+    </div>
+</div>

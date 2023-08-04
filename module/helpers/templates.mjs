@@ -7,6 +7,11 @@
   return loadTemplates([
 
     // Actor partials.
+    "systems/loghorizontrpg/templates/actor/parts/actor-ability.html",
+    "systems/loghorizontrpg/templates/actor/parts/actor-combatstat.html",
+    "systems/loghorizontrpg/templates/actor/parts/actor-attribute.html",
+    "systems/loghorizontrpg/templates/actor/parts/actor-attributes-abilities-editable.html",
+    "systems/loghorizontrpg/templates/actor/parts/actor-attributes-abilities.html",
     "systems/loghorizontrpg/templates/actor/parts/actor-features.html",
     "systems/loghorizontrpg/templates/actor/parts/actor-items.html",
     "systems/loghorizontrpg/templates/actor/parts/actor-skills.html",

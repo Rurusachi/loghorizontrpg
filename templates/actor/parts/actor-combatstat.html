@@ -1,0 +1,11 @@
+<div>
+    <div>
+        <label for="data.combatstats.{{key}}.total" class="resource-label flexlarge align-left" data-label="{{combatstat.label}}">{{combatstat.label}}</label>
+        <span>{{numberFormat combatstat.total decimals=0}}</span>
+    </div>
+    <div class="edit-mode-only" {{#unless edit_mode}} style="display: none;" {{/unless}}>
+        <input  type="text" name="data.combatstats.{{key}}.value" value="{{combatstat.value}}" data-dtype="Number"/>
+    </div>
+    <div>
+    </div>
+</div>

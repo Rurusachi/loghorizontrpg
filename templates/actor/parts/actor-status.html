@@ -1,53 +1,58 @@
-<div class="status flexrow">
-    <div class="status-combat">
+<div class="status flexcol">
+    <div class="status-combat grid grid-5col">
         <h2>Combat</h2>
         {{#each data.status.combat as |status key|}}
         {{#ifNotEquals key "barrier"}}
-        <div class="resource flex-group-center">
-            <label for="data.status.combat.{{key}}" class="resource-label flexlarge align-left"">{{status.label}}</label>
+        <div class="resource flex-group-center grid-span-2">
+            <label for="data.status.combat.{{key}}" class="resource-label flexlarge align-left">{{status.label}}</label>
             <input type="text" name="data.status.combat.{{key}}.value" value="{{status.value}}" data-dtype="String"/>
         </div>
         {{/ifNotEquals}}
         {{/each}}
     </div>
-    <div class="status-life flex-group-center">
-        <h2>Life</h2>
-        <div class="resource flex-group-center">
-            <label for="data.status.life.weakness" class="resource-label flexlarge align-left"">{{data.status.life.weakness.label}}</label>
+    <div class="status-life flex-group-left grid grid-10col">
+        <h2 class="grid-span-2">Life</h2>
+        <div class="resource flex-group-center grid-span-3">
+            <label for="data.status.life.weakness" class="resource-label flexlarge align-left">{{data.status.life.weakness.label}}</label>
             <input type="text" name="data.status.life.weakness.value" value="{{data.status.life.weakness.value}}" data-dtype="String"/>
         </div>
-        {{#each data.status.life as |status key|}}
-        {{#ifNotInArray key "decay,pursuit,weakness"}}
-        <label class="checkbox grid grid-4col">
-            <input type="checkbox" name="data.status.life.{{key}}.value" data-dtype="Boolean" {{checked (asIndexMiddle "data.status.life.$arg.value" key)}}>
-            {{status.label}}
-        </label>
-        {{/ifNotInArray}}
-        {{/each}}
+        <div class=""></div>
+        <div class="grid-span-4 grid grid-3col">
+            {{#each data.status.life as |status key|}}
+            {{#ifNotInArray key "decay,pursuit,weakness"}}
+            <label class="checkbox flex-group-center flexcol">
+                <input type="checkbox" name="data.status.life.{{key}}.value" data-dtype="Boolean" {{checked (asIndexMiddle "data.status.life.$arg.value" key)}}>
+                {{status.label}}
+            </label>
+            {{/ifNotInArray}}
+            {{/each}}
+        </div>
     </div>
-    <div class="status-bad flex-group-center">
-        <h2>Bad</h2>
-        <div class="resource flex-group-center">
-            <label for="data.status.bad.decay" class="resource-label flexlarge align-left"">{{data.status.bad.decay.label}}</label>
+    <div class="status-bad flex-group-left grid grid-10col">
+        <h2 class="grid-span-2">Bad</h2>
+        <div class="resource flex-group-center grid-span-2">
+            <label for="data.status.bad.decay" class="resource-label flexlarge align-left">{{data.status.bad.decay.label}}</label>
             <input type="text" name="data.status.bad.decay.value" value="{{data.status.bad.decay.value}}" data-dtype="String"/>
         </div>
-        <div class="resource flex-group-center">
-            <label for="data.status.bad.pursuit" class="resource-label flexlarge align-left"">{{data.status.bad.pursuit.label}}</label>
+        <div class="resource flex-group-center grid-span-2">
+            <label for="data.status.bad.pursuit" class="resource-label flexlarge align-left">{{data.status.bad.pursuit.label}}</label>
             <input type="text" name="data.status.bad.pursuit.value" value="{{data.status.bad.pursuit.value}}" data-dtype="String"/>
         </div>
-        {{#each data.status.bad as |status key|}}
-        {{#ifNotInArray key "decay,pursuit,weakness"}}
-        <label class="checkbox grid grid-4col">
-            <input type="checkbox" name="data.status.bad.{{key}}.value" data-dtype="Boolean" {{checked (asIndexMiddle "data.status.bad.$arg.value" key)}}>
-            {{status.label}}
-        </label>
-        {{/ifNotInArray}}
-        {{/each}}
+        <div class="grid-span-3 grid grid-3col">
+            {{#each data.status.bad as |status key|}}
+            {{#ifNotInArray key "decay,pursuit,weakness"}}
+            <label class="checkbox flex-group-center flexcol">
+                <input type="checkbox" name="data.status.bad.{{key}}.value" data-dtype="Boolean" {{checked (asIndexMiddle "data.status.bad.$arg.value" key)}}>
+                {{status.label}}
+            </label>
+            {{/ifNotInArray}}
+            {{/each}}
+        </div>
     </div>
-    <div class="status-other flex-group-center">
+    <div class="status-other flex-group-left grid grid-5col">
         <h2>Other</h2>
-        <div class="resource flex-group-center">
-            <label for="data.status.other.other" class="resource-label flexlarge align-left"">{{data.status.other.other.label}}</label>
+        <div class="resource flex-group-center grid-span-3">
+            <label for="data.status.other.other" class="resource-label flexlarge align-left">{{data.status.other.other.label}}</label>
             <input type="text" name="data.status.other.other.value" value="{{data.status.other.other.value}}" data-dtype="String"/>
         </div>
     </div>
