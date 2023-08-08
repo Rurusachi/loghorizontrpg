@@ -25,53 +25,53 @@
                       and it will add a small amount of padding, a border, and will
                       center all of its child elements content and text. --}}
                       <div class="resource flex-group-center">
-                          <label for="data.hp.value" class="resource-label">Health</label>
+                          <label for="system.hp.value" class="resource-label">Health</label>
                           <div class="resource-content flexrow flex-center flex-between flex-group-center">
-                              <input type="text" name="data.hp.value" value="{{data.hp.value}}" data-dtype="Number"/>
+                              <input type="text" name="system.hp.value" value="{{system.hp.value}}" data-dtype="Number"/>
                               <span> / </span>
-                              <span> {{data.hp.max}} </span>
+                              <span> {{system.hp.max}} </span>
                           </div>
                       </div>
 
                       <div class="resource flex-group-center">
-                          <label for="data.fate.value" class="resource-label">Fate points</label>
+                          <label for="system.fate.value" class="resource-label">Fate points</label>
                           <div class="resource-content flexrow flex-center flex-between flex-group-center">
-                              <input type="text" name="data.fate.value" value="{{data.fate.value}}" data-dtype="Number"/>
+                              <input type="text" name="system.fate.value" value="{{system.fate.value}}" data-dtype="Number"/>
                               <span> / </span>
-                              <span>{{data.fate.max}}</span>
+                              <span>{{system.fate.max}}</span>
                           </div>
                       </div>
 
                       <div class="resource flex-group-center">
-                          <label for="data.cr" class="resource-label">Character Rank</label>
+                          <label for="system.cr" class="resource-label">Character Rank</label>
                           <div class="resource-content flexrow flex-center flex-between flex-group-center">
-                              <input type="text" name="data.cr" value="{{data.cr}}" data-dtype="Number"/>
+                              <input type="text" name="system.cr" value="{{system.cr}}" data-dtype="Number"/>
                           </div>
                       </div>
                   </div>
 
                   <div class="resources grid grid-4col">
                       <div class="resource flex-group-center">
-                          <label for="data.status.combat.barrier" class="resource-label flexlarge align-left"">{{data.status.combat.barrier.label}}</label>
-                          <input type="text" name="data.status.combat.barrier.value" value="{{data.status.combat.barrier.value}}" data-dtype="Number"/>
+                          <label for="system.status.combat.barrier" class="resource-label flexlarge align-left">{{system.status.combat.barrier.label}}</label>
+                          <input type="text" name="system.status.combat.barrier.value" value="{{system.status.combat.barrier.value}}" data-dtype="Number"/>
                       </div>
 
                       <div class="resource flex-group-center">
-                          <label for="data.hp.temp" class="resource-label flexlarge align-left"">Temp. HP</label>
-                          <input type="text" name="data.hp.temp" value="{{data.hp.temp}}" data-dtype="Number"/>
+                          <label for="system.hp.temp" class="resource-label flexlarge align-left">Temp. HP</label>
+                          <input type="text" name="system.hp.temp" value="{{system.hp.temp}}" data-dtype="Number"/>
                       </div>
 
                       <div class="resource flex-group-center">
-                          <label for="data.fatigue.value" class="resource-label">Fatigue</label>
+                          <label for="system.fatigue.value" class="resource-label">Fatigue</label>
                           <div class="resource-content flexrow flex-center flex-between flex-group-center">
-                              <input type="text" name="data.fatigue.value" value="{{data.fatigue.value}}" data-dtype="Number"/>
+                              <input type="text" name="system.fatigue.value" value="{{system.fatigue.value}}" data-dtype="Number"/>
                           </div>
                       </div>
 
                       <div class="resource flex-group-center">
-                          <label for="data.hate.value" class="resource-label">Hate</label>
+                          <label for="system.hate.value" class="resource-label">Hate</label>
                           <div class="resource-content flexrow flex-center flex-between flex-group-center">
-                              <input type="text" name="data.hate.value" value="{{data.hate.value}}" data-dtype="Number"/>
+                              <input type="text" name="system.hate.value" value="{{system.hate.value}}" data-dtype="Number"/>
                           </div>
                       </div>
 
@@ -117,7 +117,7 @@
     {{!-- Biography Tab --}}
     <div class="tab biography" data-group="primary" data-tab="description">
       {{!-- If you want TinyMCE editors to output inline rolls when rendered, you need to pass the actor's roll data to the rollData property. --}}
-      {{editor content=data.biography target="data.biography" rollData=rollData button=true owner=owner editable=editable}}
+      {{editor enrichedBiography target="system.biography" button=true editable=editable}}
     </div>
 
     {{!-- Owned Items Tab --}}

@@ -2,19 +2,19 @@
     <div class="resource grid grid-3col flex-group-center">
         <div class="form-group select">
             <label class="resource-label">Check:</label>
-            <select name="data.check.type">
-                {{#select data.check.type}}
+            <select name="system.check.type">
+                {{#select system.check.type}}
                     {{#each config.checkTypes as |name type|}}
                         <option value="{{type}}">{{localize name}}</option>
                     {{/each}}
                 {{/select}}
             </select>
         </div>
-        {{#ifEquals data.check.type "basic"}}
+        {{#ifEquals system.check.type "basic"}}
         <div class="form-group select">
             <label class="resource-label">Caster:</label>
-            <select name="data.check.caster">
-                {{#select data.check.caster}}
+            <select name="system.check.caster">
+                {{#select system.check.caster}}
                     <option value="none"></option>
                     {{#each config.attributes as |name type|}}
                         <option value="{{type}}">{{localize name}}</option>
@@ -24,18 +24,18 @@
         </div>
         <div class="resource flexrow flex-group-center">
             <span>+</span>
-            <input type="text" name="data.check.bonus" value="{{data.check.bonus}}" data-dtype="Number"/>
-            {{#unless (lequal data.sr.max 1)}}
+            <input type="text" name="system.check.bonus" value="{{system.check.bonus}}" data-dtype="Number"/>
+            {{#unless (lequal system.sr.max 1)}}
             <label class="checkbox">
-                <input type="checkbox" name="data.check.addsr" data-dtype="Boolean" {{checked data.check.addsr}}>
+                <input type="checkbox" name="system.check.addsr" data-dtype="Boolean" {{checked system.check.addsr}}>
                 + SR
             </label>
             {{/unless}}
         </div>
         <div class="form-group select">
             <label class="resource-label">Target:</label>
-            <select name="data.check.target">
-                {{#select data.check.target}}
+            <select name="system.check.target">
+                {{#select system.check.target}}
                     {{#each config.difficultyTypes as |name type|}}
                         <option value="{{type}}">{{localize name}}</option>
                     {{/each}}
@@ -43,20 +43,20 @@
             </select>
         </div>
         <div class="resource flexrow flex-group-center">
-            {{#ifEquals data.check.target "value"}}
+            {{#ifEquals system.check.target "value"}}
             <span>=</span>
             {{/ifEquals}}
-            {{#ifNotEquals data.check.target "value"}}
+            {{#ifNotEquals system.check.target "value"}}
             <span>+</span>
             {{/ifNotEquals}}
-            <input type="text" name="data.check.targetbonus" value="{{data.check.targetbonus}}" data-dtype="String"/>
+            <input type="text" name="system.check.targetbonus" value="{{system.check.targetbonus}}" data-dtype="String"/>
         </div>
         {{/ifEquals}}
-        {{#ifEquals data.check.type "opposed"}}
+        {{#ifEquals system.check.type "opposed"}}
         <div class="form-group select">
             <label class="resource-label">Caster:</label>
-            <select name="data.check.caster">
-                {{#select data.check.caster}}
+            <select name="system.check.caster">
+                {{#select system.check.caster}}
                     <option value="none"></option>
                     {{#each config.attributes as |name type|}}
                         <option value="{{type}}">{{localize name}}</option>
@@ -66,18 +66,18 @@
         </div>
         <div class="resource flexrow flex-group-center">
             <span>+</span>
-            <input type="text" name="data.check.bonus" value="{{data.check.bonus}}" data-dtype="Number"/>
-            {{#unless (lequal data.sr.max 1)}}
+            <input type="text" name="system.check.bonus" value="{{system.check.bonus}}" data-dtype="Number"/>
+            {{#unless (lequal system.sr.max 1)}}
             <label class="checkbox">
-                <input type="checkbox" name="data.check.addsr" data-dtype="Boolean" {{checked data.check.addsr}}>
+                <input type="checkbox" name="system.check.addsr" data-dtype="Boolean" {{checked system.check.addsr}}>
                 + SR
             </label>
             {{/unless}}
         </div>
         <div class="form-group select flexrow flex-group-center">
             <label class="resource-label">Target:</label>
-            <select name="data.check.target">
-                {{#select data.check.target}}
+            <select name="system.check.target">
+                {{#select system.check.target}}
                 {{#each config.attributes as |name type|}}
                 <option value="{{type}}">{{localize name}}</option>
                 {{/each}}
@@ -86,32 +86,32 @@
         </div>
         <div class="resource flexrow flex-group-center">
             <span>+</span>
-            <input type="text" name="data.check.targetbonus" value="{{data.check.targetbonus}}" data-dtype="String"/>
+            <input type="text" name="system.check.targetbonus" value="{{system.check.targetbonus}}" data-dtype="String"/>
         </div>
         {{/ifEquals}}
     </div>
     <div class="resource grid grid-2col">
         <div class="resource flexrow flex-group-center">
             <label class="resource-label">Limit:</label>
-            {{#ifNotEquals data.limit.type "None"}}
-            <input type="text" name="data.limit.value" value="{{data.limit.value}}" data-dtype="Number"/>
+            {{#ifNotEquals system.limit.type "None"}}
+            <input type="text" name="system.limit.value" value="{{system.limit.value}}" data-dtype="Number"/>
             <span> / </span>
-            <input type="text" name="data.limit.bonus" value="{{data.limit.bonus}}" data-dtype="Number"/>
-            {{#unless (lequal data.sr.max 1)}}
-            <select name="data.limit.addsr">
-                {{#select data.limit.addsr}}
+            <input type="text" name="system.limit.bonus" value="{{system.limit.bonus}}" data-dtype="Number"/>
+            {{#unless (lequal system.sr.max 1)}}
+            <select name="system.limit.addsr">
+                {{#select system.limit.addsr}}
                         <option value="none"></option>
                         <option value="+">+SR</option>
                         <option value="x">xSR</option>
                 {{/select}}
             </select>
             {{/unless}}
-            <span>{{data.limit.max}}</span>
+            <span>{{system.limit.max}}</span>
             <span> / </span>
             {{/ifNotEquals}}
             <div class="form-group select">
-                <select name="data.limit.type">
-                    {{#select data.limit.type}}
+                <select name="system.limit.type">
+                    {{#select system.limit.type}}
                         {{#each config.limitTypes as |name type|}}
                             <option value="{{type}}">{{localize name}}</option>
                         {{/each}}
@@ -122,8 +122,8 @@
         <div class="resource flexrow flex-group-center">
             <label class="resource-label">Timing:</label>
             <div class="form-group select">
-                <select name="data.timing">
-                    {{#select data.timing}}
+                <select name="system.timing">
+                    {{#select system.timing}}
                         {{#each config.timingTypes as |name type|}}
                             <option value="{{type}}">{{localize name}}</option>
                         {{/each}}
@@ -134,23 +134,23 @@
 
         <div class="resource flexrow flex-group-center">
             <label class="resource-label">Range:</label>
-            <input type="text" name="data.range.value" value="{{data.range.value}}" data-dtype="String"/>
+            <input type="text" name="system.range.value" value="{{system.range.value}}" data-dtype="String"/>
         </div>
         <div class="resource flexrow flex-group-center">
             <label class="resource-label">Target:</label>
             <div class="form-group select">
-                <select name="data.target.type">
-                    {{#select data.target.type}}
+                <select name="system.target.type">
+                    {{#select system.target.type}}
                         {{#each config.targetTypes as |name type|}}
                             <option value="{{type}}">{{localize name}}</option>
                         {{/each}}
                     {{/select}}
                 </select>
             </div>
-            {{#ifInArray data.target.type config.targetTypesMulti}}
-            <input type="text" name="data.target.value" value="{{data.target.value}}" data-dtype="Number"/>
-            {{#unless (lequal data.sr.max 1)}}
-            <input type="checkbox" name="data.target.addsr" data-dtype="Boolean" {{checked data.target.addsr}}>
+            {{#ifInArray system.target.type config.targetTypesMulti}}
+            <input type="text" name="system.target.value" value="{{system.target.value}}" data-dtype="Number"/>
+            {{#unless (lequal system.sr.max 1)}}
+            <input type="checkbox" name="system.target.addsr" data-dtype="Boolean" {{checked system.target.addsr}}>
             +SR
             {{/unless}}
             {{/ifInArray}}
@@ -158,30 +158,30 @@
 
         <div class="resource flexrow flex-group-center">
             <label class="resource-label">Hate Cost:</label>
-            <input type="text" name="data.hatecost.value" value="{{data.hatecost.value}}" data-dtype="String"/>
-            {{#unless (lequal data.sr.max 1)}}
-            <input type="checkbox" name="data.hatecost.addsr" data-dtype="Boolean" {{checked data.hatecost.addsr}}>
+            <input type="text" name="system.hatecost.value" value="{{system.hatecost.value}}" data-dtype="String"/>
+            {{#unless (lequal system.sr.max 1)}}
+            <input type="checkbox" name="system.hatecost.addsr" data-dtype="Boolean" {{checked system.hatecost.addsr}}>
             +SR
             {{/unless}}
         </div>
         <div class="resource flexrow flex-group-center">
             <label class="resource-label">Fate Cost:</label>
-            <input type="text" name="data.fatecost.value" value="{{data.fatecost.value}}" data-dtype="Number"/>
+            <input type="text" name="system.fatecost.value" value="{{system.fatecost.value}}" data-dtype="Number"/>
         </div>
     </div>
     <div class="resource flexrow flex-group-center">
         <label class="resource-label">Damage/Healing formula:</label>
-        <input type="text" name="data.formula.value" value="{{data.formula.value}}" data-dtype="String"/>
+        <input type="text" name="system.formula.value" value="{{system.formula.value}}" data-dtype="String"/>
     </div>
     <div class="resource">
         <div class="grid grid-3col">
             {{#each config.actionBonus as |name key|}}
-            {{#unless (and (or (eq key "sr") (eq key "srd")) (lequal ../data.sr.max 1))}}
+            {{#unless (and (or (eq key "sr") (eq key "srd")) (lequal ../system.sr.max 1))}}
             <div class="flexrow flex-group-center outlined">
-                <input type="text" name="data.formula.bonusmultiplier.{{key}}" value="{{asIndexMiddle "data.formula.bonusmultiplier.$arg" key}}" data-dtype="Number"/>
+                <input type="text" name="system.formula.bonusmultiplier.{{key}}" value="{{asIndexMiddle "system.formula.bonusmultiplier.$arg" key}}" data-dtype="Number"/>
                 <span>x</span>
                 <label class="checkbox">
-                    <input type="checkbox" name="data.formula.bonus.{{key}}" data-dtype="Boolean" {{checked (asIndexMiddle "data.formula.bonus.$arg" key)}}>
+                    <input type="checkbox" name="system.formula.bonus.{{key}}" data-dtype="Boolean" {{checked (asIndexMiddle "system.formula.bonus.$arg" key)}}>
                     {{localize name}}
                 </label>
             </div>
@@ -191,17 +191,17 @@
     </div>
     <div class="resource flexrow flex-group-center">
         <label class="resource-label">Second formula:</label>
-        <input type="text" name="data.secondformula.value" value="{{data.secondformula.value}}" data-dtype="String"/>
+        <input type="text" name="system.secondformula.value" value="{{system.secondformula.value}}" data-dtype="String"/>
     </div>
     <div class="resource">
         <div class="grid grid-3col">
             {{#each config.actionBonus as |name key|}}
-            {{#unless (and (or (eq key "sr") (eq key "srd")) (lequal ../data.sr.max 1))}}
+            {{#unless (and (or (eq key "sr") (eq key "srd")) (lequal ../system.sr.max 1))}}
             <div class=" flexrow flex-group-center outlined">
-                <input type="text" name="data.secondformula.bonusmultiplier.{{key}}" value="{{asIndexMiddle "data.secondformula.bonusmultiplier.$arg" key}}" data-dtype="Number"/>
+                <input type="text" name="system.secondformula.bonusmultiplier.{{key}}" value="{{asIndexMiddle "system.secondformula.bonusmultiplier.$arg" key}}" data-dtype="Number"/>
                 <span>x</span>
                 <label class="checkbox">
-                    <input type="checkbox" name="data.secondformula.bonus.{{key}}" data-dtype="Boolean" {{checked (asIndexMiddle "data.secondformula.bonus.$arg" key)}}>
+                    <input type="checkbox" name="system.secondformula.bonus.{{key}}" data-dtype="Boolean" {{checked (asIndexMiddle "system.secondformula.bonus.$arg" key)}}>
                     {{localize name}}
                 </label>
             </div>

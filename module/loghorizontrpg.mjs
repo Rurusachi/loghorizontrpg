@@ -71,6 +71,10 @@ Hooks.once('init', async function() {
     return a.id - b.id;
   };
 
+  // ActiveEffect transfer setting
+  CONFIG.ActiveEffect.legacyTransferral = false;
+
+
   // Preload Handlebars templates.
   return preloadHandlebarsTemplates();
 });

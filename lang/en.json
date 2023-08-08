@@ -149,5 +149,11 @@
   "LOGHORIZONTRPG.EffectEdit": "Edit Effect",
   "LOGHORIZONTRPG.EffectDelete": "Delete Effect",
 
-  "LOGHORIZONTRPG.Add": "Add"
+  "LOGHORIZONTRPG.Add": "Add",
+
+  "LOGHORIZONTRPG.HitCheck": "Hit Check",
+  "LOGHORIZONTRPG.DefenseCheck": "Defense Check",
+  "LOGHORIZONTRPG.EvasionCheck": "Evasion Check",
+  "LOGHORIZONTRPG.RestistanceCheck": "Resistance Check"
+
 }

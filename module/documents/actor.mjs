@@ -46,8 +46,8 @@ export class LogHorizonTRPGActor extends Actor {
    * is queried and has a roll executed directly from it).
    */
   prepareDerivedData() {
-    const actorData = this.data;
-    const data = actorData.data;
+    const actorData = this;
+    const data = actorData.system;
     const flags = actorData.flags.loghorizontrpg || {};
 
     // Make separate methods for each Actor type (character, npc, etc.) to keep
@@ -57,11 +57,11 @@ export class LogHorizonTRPGActor extends Actor {
     const raceList = this.items?.filter((s => s.type === "race"));
     for (let i of raceList) {
         // hp
-        data.hp.base += i.data.data.hp.value;
+        data.hp.base += i.system.hp.value;
         // fate
-        data.fate.max += i.data.data.fate.value;
+        data.fate.max += i.system.fate.value;
         // abilities
-        for (let [key, ability] of Object.entries(i.data.data.abilities)) {
+        for (let [key, ability] of Object.entries(i.system.abilities)) {
             if (ability?.value != undefined) {
                 data.abilities[key].bonus += ability.value;
             }
@@ -75,19 +75,19 @@ export class LogHorizonTRPGActor extends Actor {
     const classList = this.items?.filter((s => s.type === "class"));
     for (let i of classList) {
         // hp
-        data.hp.base += i.data.data.hp.value;
-        data.hp.mod += i.data.data.hp.modifier;
+        data.hp.base += i.system.hp.value;
+        data.hp.mod += i.system.hp.modifier;
         
         // abilities
-        for (let [key, ability] of Object.entries(i.data.data.abilities)) {
+        for (let [key, ability] of Object.entries(i.system.abilities)) {
             if (ability?.value != undefined) {
                 data.abilities[key].bonus += ability.value;
             }
         }
         
         // equippabletags
-        if (typeof i.data.data.equippabletags === "string") {
-            for (let tag of i.data.data.equippabletags.split(" ")) {   
+        if (typeof i.system.equippabletags === "string") {
+            for (let tag of i.system.equippabletags.split(" ")) {   
                 Tags.add(tag);
             }
         }
@@ -112,17 +112,17 @@ export class LogHorizonTRPGActor extends Actor {
     if (actorData.type !== 'character') return;
 
     // Make modifications to data here. For example:
-    const data = actorData.data;
+    const data = actorData.system;
 
     // equipment
-    const itemList = this.items?.filter((s => s.data.data?.equipped == true));
+    const itemList = this.items?.filter((s => s.system?.equipped == true));
     for ( let i of itemList ) {
-        for (let [key, combatstat] of Object.entries(i.data.data.combatstats)) {
+        for (let [key, combatstat] of Object.entries(i.system.combatstats)) {
             if (combatstat?.bonus != undefined) {
                 data.combatstats[key].bonus += combatstat.bonus;
             }
         }
-        for (let [key, attribute] of Object.entries(i.data.data.attributes)) {
+        for (let [key, attribute] of Object.entries(i.system.attributes)) {
             if (attribute?.bonus != undefined) {
                 data.attributes[key].bonus += attribute.bonus;
             }
@@ -130,8 +130,8 @@ export class LogHorizonTRPGActor extends Actor {
                 data.attributes[key].dice += attribute.dice;
             }
         }
-        if (i.data.data.other?.inventoryslots != undefined) {
-            data.inventory.max += i.data.data.other.inventoryslots
+        if (i.system.other?.inventoryslots != undefined) {
+            data.inventory.max += i.system.other.inventoryslots
         }
     }
 
@@ -185,7 +185,7 @@ export class LogHorizonTRPGActor extends Actor {
     if (actorData.type !== 'npc') return;
 
     // Make modifications to data here. For example:
-    const data = actorData.data;
+    const data = actorData.system;
 
     // attributes
     for (let [key, attribute] of Object.entries(data.attributes)) {
@@ -240,7 +240,7 @@ export class LogHorizonTRPGActor extends Actor {
    * Prepare character roll data.
    */
   _getCharacterRollData(data) {
-    if (this.data.type !== 'character') return;
+    if (this.type !== 'character') return;
 
     // Copy the ability scores to the top level, so that rolls can use
     // formulas like `@str.mod + 4`.
@@ -251,7 +251,7 @@ export class LogHorizonTRPGActor extends Actor {
    * Prepare NPC roll data.
    */
   _getNpcRollData(data) {
-    if (this.data.type !== 'npc') return;
+    if (this.type !== 'npc') return;
 
     // Process additional NPC data here.
   }
@@ -261,17 +261,17 @@ export class LogHorizonTRPGActor extends Actor {
   }
 
   async rest(options) {
-      const actorData = this.data.data;
+      const actorData = this.system;
 
       let all = false;
       if (options.includes("all")) {
           all = true;
       }
 
-      const actionList = this.items?.filter((s => s.data.data.limit != undefined));
+      const actionList = this.items?.filter((s => s.system.limit != undefined));
       for ( let s of actionList ) {
-          if (options.includes(s.data.data.limit.type) || all) {
-              await s.update({"data.limit.value": s.data.data.limit.max})
+          if (options.includes(s.system.limit.type) || all) {
+              await s.update({"data.limit.value": s.system.limit.max})
           }
       }
 
@@ -298,19 +298,19 @@ export class LogHorizonTRPGActor extends Actor {
       let data = {};
       if (attributeId != "none"){
           label = CONFIG.LOGHORIZONTRPG.attributes[attributeId];
-          attribute = this.data.data.attributes[attributeId];
+          attribute = this.system.attributes[attributeId];
           parts = ["@value", "@total"];
           data = {value: attribute.value, total: attribute.total};
       }
 
       if (options.item != undefined && target == false) {
           parts.push("@bonus", "@addsr");
-          data["bonus"] = options.item.data.data.check.bonus;
-          data["addsr"] = (options.item.data.data.check.addsr ? `${options.item.data.data.sr.value}[SR]` : 0);
+          data["bonus"] = options.item.system.check.bonus;
+          data["addsr"] = (options.item.system.check.addsr ? `${options.item.system.sr.value}[SR]` : 0);
       }
       else if (options.item != undefined && target == true) {
           parts.push("@bonus");
-          data["bonus"] = options.item.data.data.check.targetbonus;
+          data["bonus"] = options.item.system.check.targetbonus;
       }
 
       if (attribute.dice) {

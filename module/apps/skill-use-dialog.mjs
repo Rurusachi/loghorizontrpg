@@ -24,8 +24,8 @@ export default class SkillUseDialog extends Dialog {
     if ( !item.isOwned ) throw new Error("You cannot display a skill usage dialog for an unowned item");
 
     // Prepare data
-    const actorData = item.actor.data.data;
-    const itemData = item.data.data;
+    const actorData = item.actor.system;
+    const itemData = item.system;
     const limit = itemData.limit
     const hatecost = itemData.hatecost.total;
     const fatecost = itemData.fatecost.value;
@@ -34,11 +34,11 @@ export default class SkillUseDialog extends Dialog {
 
     // Prepare dialog form data
     const data = {
-      item: item.data,
+      item: item,
       title: `${item.type.capitalize()}: ${item.name}`,
-      note: this._getSkillUseNote(item.data, quantity),
+      note: this._getSkillUseNote(item, quantity),
       consumeLimit: limit.type != "None" && (limit.max > 0),
-      consumeItem: item.data.type === "consumable",
+      consumeItem: item.type === "consumable",
       hatecost: hatecost,
       fatecost: fatecost != null ? fatecost : 0,
       canUse: sufficientUses,
@@ -61,7 +61,7 @@ export default class SkillUseDialog extends Dialog {
             label: label,
             callback: html => {
               const fd = new FormDataExtended(html[0].querySelector("form"));
-              resolve(fd.toObject());
+              resolve(fd.object);
             }
           }
         },
@@ -88,11 +88,11 @@ export default class SkillUseDialog extends Dialog {
         return `You have ${quantity} ${item.name} left`
     }
     // Does not use any resource
-    if ( item.data.limit.type === "None" ) return "";
+    if ( item.system.limit.type === "None" ) return "";
 
     // Other Items
     else {
-      return `${item.type.capitalize()} has ${item.data.limit.value} of ${item.data.limit.max} per ${game.i18n.localize(CONFIG.LOGHORIZONTRPG.limitTypes[item.data.limit.type])} left`
+      return `${item.type.capitalize()} has ${item.system.limit.value} of ${item.system.limit.max} per ${game.i18n.localize(CONFIG.LOGHORIZONTRPG.limitTypes[item.system.limit.type])} left`
     }
   }
 }

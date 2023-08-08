@@ -1,9 +1,9 @@
-export let _characterSpec = { data: {}, flags: {} };
+export let _characterSpec = { system: {}, flags: {} };
 export class ValidSpec {
     constructor(fs, sv, forcedMode = -1) {
         this._fieldSpec = fs;
         this._sampleValue = sv;
-        this._label = fs;
+        this._name = fs;
         this._forcedMode = forcedMode;
     }
     get fieldSpec() { return this._fieldSpec; }
@@ -11,30 +11,30 @@ export class ValidSpec {
     set fieldSpec(spec) { this._fieldSpec = spec; }
     get sampleValue() { return this._sampleValue; }
     set sampleValue(value) { this._sampleValue = value; }
-    get label() { return this._label; }
-    set label(label) { this._label = label; }
+    get name() { return this._name; }
+    set name(name) { this._name = name; }
     get forcedMode() { return this._forcedMode; }
     set forcedMode(mode) { this._forcedMode = mode; }
     static createValidMods(characterSpec = game.system.model.Actor.character) {
-        _characterSpec["data"] = duplicate(characterSpec);
+        _characterSpec["system"] = duplicate(characterSpec);
         let baseValues = flattenObject(_characterSpec);
         if (game.modules.get("gm-notes")?.active) {
             baseValues["flags.gm-notes.notes"] = "";
         }
         const ACTIVE_EFFECT_MODES = CONST.ACTIVE_EFFECT_MODES;
         var specials = {
-            "data.hp.max": [0, -1],
-            "data.hp.basemax": [0, -1],
-            "data.hp.min": [0, -1],
-            "data.fate.max": [0, -1],
-            "data.abilities.str.mod": [0, ACTIVE_EFFECT_MODES.CUSTOM],
-            "data.abilities.str.base": [0, ACTIVE_EFFECT_MODES.CUSTOM],
-            "data.abilities.dex.mod": [0, ACTIVE_EFFECT_MODES.CUSTOM],
-            "data.abilities.dex.base": [0, ACTIVE_EFFECT_MODES.CUSTOM],
-            "data.abilities.pow.mod": [0, ACTIVE_EFFECT_MODES.CUSTOM],
-            "data.abilities.pow.base": [0, ACTIVE_EFFECT_MODES.CUSTOM],
-            "data.abilities.int.mod": [0, ACTIVE_EFFECT_MODES.CUSTOM],
-            "data.abilities.int.base": [0, ACTIVE_EFFECT_MODES.CUSTOM]
+            "system.hp.max": [0, -1],
+            "system.hp.basemax": [0, -1],
+            "system.hp.min": [0, -1],
+            "system.fate.max": [0, -1],
+            "system.abilities.str.mod": [0, ACTIVE_EFFECT_MODES.CUSTOM],
+            "system.abilities.str.base": [0, ACTIVE_EFFECT_MODES.CUSTOM],
+            "system.abilities.dex.mod": [0, ACTIVE_EFFECT_MODES.CUSTOM],
+            "system.abilities.dex.base": [0, ACTIVE_EFFECT_MODES.CUSTOM],
+            "system.abilities.pow.mod": [0, ACTIVE_EFFECT_MODES.CUSTOM],
+            "system.abilities.pow.base": [0, ACTIVE_EFFECT_MODES.CUSTOM],
+            "system.abilities.int.mod": [0, ACTIVE_EFFECT_MODES.CUSTOM],
+            "system.abilities.int.base": [0, ACTIVE_EFFECT_MODES.CUSTOM]
         };
         Object.keys(specials).forEach(key => {
             delete baseValues[key];
@@ -48,19 +48,19 @@ export class ValidSpec {
             return validSpec;
         });
 
-        Object.keys(_characterSpec.data.abilities).forEach(ablKey => {
-            let abl = _characterSpec.data.abilities[ablKey];
-            this.derivedSpecs.push(new ValidSpec(`data.abilities.${ablKey}.mod`, 0));
-            this.derivedSpecs.push(new ValidSpec(`data.abilities.${ablKey}.base`, 0));
+        Object.keys(_characterSpec.system.abilities).forEach(ablKey => {
+            let abl = _characterSpec.system.abilities[ablKey];
+            this.derivedSpecs.push(new ValidSpec(`system.abilities.${ablKey}.mod`, 0));
+            this.derivedSpecs.push(new ValidSpec(`system.abilities.${ablKey}.base`, 0));
         });
-        Object.keys(_characterSpec.data.attributes).forEach(attrKey => {
-            let skl = _characterSpec.data.attributes[attrKey];
-            this.derivedSpecs.push(new ValidSpec(`data.attributes.${attrKey}.total`, 0));
-            this.derivedSpecs.push(new ValidSpec(`data.attributes.${attrKey}.mod`, 0));
+        Object.keys(_characterSpec.system.attributes).forEach(attrKey => {
+            let skl = _characterSpec.system.attributes[attrKey];
+            this.derivedSpecs.push(new ValidSpec(`system.attributes.${attrKey}.total`, 0));
+            this.derivedSpecs.push(new ValidSpec(`system.attributes.${attrKey}.mod`, 0));
         });
-        Object.keys(_characterSpec.data.combatstats).forEach(cmbKey => {
-            let skl = _characterSpec.data.combatstats[cmbKey];
-            this.derivedSpecs.push(new ValidSpec(`data.combatstats.${cmbKey}.total`, 0));
+        Object.keys(_characterSpec.system.combatstats).forEach(cmbKey => {
+            let skl = _characterSpec.system.combatstats[cmbKey];
+            this.derivedSpecs.push(new ValidSpec(`system.combatstats.${cmbKey}.total`, 0));
         });
         Object.entries(specials).forEach(special => {
             let validSpec = new ValidSpec(special[0], special[1][0], special[1][1]);
@@ -86,13 +86,14 @@ ValidSpec.derivedSpecs = [];
 
 export function applyLhrpgEffects(specList, completedSpecs, allowAllSpecs) {
     const overrides = {};
-    if (!this.effects || this.effects.size === 0)
+    let effects = this.appliedEffects;
+    if (!effects || effects.size === 0)
         return this.overrides || {};
     // Organize non-disabled effects by their application priority
-    const changes = this.effects.reduce((changes, effect) => {
-        if (effect.data.disabled)
+    const changes = effects.reduce((changes, effect) => {
+        if (effect.disabled)
             return changes;
-        return changes.concat(effect.data.changes
+        return changes.concat(effect.changes
             .filter(c => { return !completedSpecs[c.key] && (allowAllSpecs || specList[c.key] !== undefined); })
             .map(c => {
             c = duplicate(c);
@@ -104,13 +105,14 @@ export function applyLhrpgEffects(specList, completedSpecs, allowAllSpecs) {
     changes.sort((a, b) => a.priority - b.priority);
     // Apply all changes
     for (let c of changes) {
-        if (typeof c.value === "string" && c.value.includes("@data.")) {
-            c.value = c.value.replace(/@data./g, "@");
+        if (typeof c.value === "string" && c.value.includes("@system.")) {
+            c.value = c.value.replace(/@system./g, "@");
         }
         if (c.mode !== CONST.ACTIVE_EFFECT_MODES.CUSTOM) {
             if (typeof specList[c.key]?.sampleValue === "number" && typeof c.value === "string") {
-                let sourceData = this.getEmbeddedDocument("Item", c.effect.data.origin.split(".")[3])?.getRollData() ?? this.getRollData();
+                let sourceData = c.effect.parent?.getRollData() ?? this.getRollData();
                 let value = replaceAtFields(c.value, sourceData);
+                console.log(c.effect);
                 try { // Roll parser no longer accepts some expressions it used to so we will try and avoid using it
                     //@ts-ignore - this will throw an error if there are roll expressions
                     c.value = Roll.safeEval(value);
@@ -146,7 +148,7 @@ export function replaceAtFields(value, context, maxIterations = 4) {
     do {
         count += 1;
         for (let match of result.match(re) || []) {
-            result = result.replace(match.replace("@data.", "@"), getProperty(context, match.slice(1)));
+            result = result.replace(match.replace("@system.", "@"), getProperty(context, match.slice(1)));
         }
     } while (count < maxIterations && result.includes("@"));
     return result;

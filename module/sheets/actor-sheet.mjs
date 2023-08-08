@@ -20,7 +20,7 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
 
   /** @override */
   get template() {
-    return `systems/loghorizontrpg/templates/actor/actor-${this.actor.data.type}-sheet.html`;
+    return `systems/loghorizontrpg/templates/actor/actor-${this.actor.type}-sheet.html`;
   }
 
   /** @override */
@@ -28,7 +28,15 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
     console.log(itemData);
     if ( itemData.type === "class" ) {
         const actor = this.actor;
-        const skills = itemData.data.skills;
+        
+        const skillIds = itemData.system.skills;
+        let skills = [];
+        for (const x of skillIds) {
+          let skill = await fromUuid(x.uuid);
+          skills.push(skill);
+        }
+        console.log(skills);
+        
         await actor.createEmbeddedDocuments("Item", skills, {parent: actor})
     }
     // Default drop handling if levels were not added
@@ -37,6 +45,7 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
 
   async _onDropClass(event, data) {
     console.log("_onDropClass: enter");
+    console.log(data)
     const actor = this.actor;
     if ( !this.isEditable || !data.data ) return;
     console.log("_onDropClass: editable");
@@ -44,14 +53,20 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
     if ( sameItem ) return;
     console.log("_onDropClass: not same item");
 
-    const skills = item.data.data.skills;
+    const skillIds = item.system.skills;
+    let skills = {};
+    for (const x of skillIds) {
+      let skill = await fromUuid(x.uuid);
+      skills.push(skill);
+    }
+    console.log(skills);
     return await actor.createEmbeddedDocuments("Item", skills, {parent: actor})
   }
 
   /* -------------------------------------------- */
 
   /** @override */
-  getData() {
+  async getData() {
     // Retrieve the data structure from the base sheet. You can inspect or log
     // the context variable to see the structure, but some key properties for
     // sheets are the actor object, the data object, whether or not it's
@@ -59,30 +74,33 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
     const context = super.getData();
 
     // Use a safe clone of the actor data for further operations.
-    const actorData = context.actor.data;
+    const actor = context.actor;
     context.config = CONFIG.LOGHORIZONTRPG;
 
     // Add the actor's data to context.data for easier access, as well as flags.
-    context.data = actorData.data;
-    context.flags = actorData.flags;
+    context.system = actor.system;
+    context.flags = actor.flags;
 
     // Prepare character data and items.
-    if (actorData.type == 'character') {
+    if (actor.type == 'character') {
       this._prepareItems(context);
       this._prepareCharacterData(context);
     }
 
     // Prepare NPC data and items.
-    if (actorData.type == 'npc') {
+    if (actor.type == 'npc') {
       this._prepareItems(context);
       this._prepareNpcData(context);
     }
 
     // Add roll data for TinyMCE editors.
-    context.rollData = context.actor.getRollData();
+    context.rollData = actor.getRollData();
+    // Enrich description text for editor
+
+    context.enrichedBiography = await TextEditor.enrichHTML(context.system.biography, {async: true});
 
     // Prepare active effects
-    context.effects = prepareActiveEffectCategories(this.actor.effects);
+    context.effects = prepareActiveEffectCategories(Array.from(this.actor.allApplicableEffects()), this);
 
     context.edit_mode = this.edit_mode;
     return context;
@@ -100,31 +118,31 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
   }
   _prepareNpcData(context) {
       this._prepareActorData(context);
-      for (let [k, v] of Object.entries(context.data.difficulties)) {
+      for (let [k, v] of Object.entries(context.system.difficulties)) {
           v.label = game.i18n.localize(CONFIG.LOGHORIZONTRPG.difficultyTypes[k]) ?? k;
       }
   }
   _prepareActorData(context) {
-      for (let [k, v] of Object.entries(context.data.abilities)) {
+      for (let [k, v] of Object.entries(context.system.abilities)) {
           v.label = game.i18n.localize(CONFIG.LOGHORIZONTRPG.abilities[k]) ?? k;
       }
-      for (let [k, v] of Object.entries(context.data.attributes)) {
+      for (let [k, v] of Object.entries(context.system.attributes)) {
           v.label = game.i18n.localize(CONFIG.LOGHORIZONTRPG.attributes[k]) ?? k;
       }
-      for (let [k, v] of Object.entries(context.data.combatstats)) {
+      for (let [k, v] of Object.entries(context.system.combatstats)) {
           v.label = game.i18n.localize(CONFIG.LOGHORIZONTRPG.combatstats[k]) ?? k;
       }
       // Status
-      for (let [k, v] of Object.entries(context.data.status.combat)) {
+      for (let [k, v] of Object.entries(context.system.status.combat)) {
           v.label = game.i18n.localize(CONFIG.LOGHORIZONTRPG.status[k]) ?? k;
       }
-      for (let [k, v] of Object.entries(context.data.status.life)) {
+      for (let [k, v] of Object.entries(context.system.status.life)) {
           v.label = game.i18n.localize(CONFIG.LOGHORIZONTRPG.status[k]) ?? k;
       }
-      for (let [k, v] of Object.entries(context.data.status.bad)) {
+      for (let [k, v] of Object.entries(context.system.status.bad)) {
           v.label = game.i18n.localize(CONFIG.LOGHORIZONTRPG.status[k]) ?? k;
       }
-      for (let [k, v] of Object.entries(context.data.status.other)) {
+      for (let [k, v] of Object.entries(context.system.status.other)) {
           v.label = game.i18n.localize(CONFIG.LOGHORIZONTRPG.status[k]) ?? k;
       }
   }
@@ -176,14 +194,14 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
       }
       // Append to skills.
       else if (i.type === 'skill') {
-        if (i.data.tags) {
-          if (i.data.tags.includes("General")) {
+        if (i.system.tags) {
+          if (i.system.tags.includes("General")) {
               skills["General"].push(i);
           }
-          else if (i.data.tags.includes("Combat")) {
+          else if (i.system.tags.includes("Combat")) {
               skills["Combat"].push(i);
           }
-          else if (i.data.tags.includes("Basic")) {
+          else if (i.system.tags.includes("Basic")) {
               skills["Basic"].push(i);
           }
           else {
@@ -260,7 +278,7 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
     inputs.addBack().find('[data-dtype="Number"]').change(this._onChangeInputDelta.bind(this));
 
     // Active Effect management
-    html.find(".effect-control").click(ev => onManageActiveEffect(ev, this.actor));
+    html.find(".effect-control").click(async ev => {await onManageActiveEffect(ev, this.actor); this.render()});
 
     // Rollable abilities.
     html.find('.rollable').click(this._onRoll.bind(this));
@@ -305,7 +323,7 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
     const value = input.value;
     if (["+", "-"].includes(value[0])) {
       let delta = parseFloat(value);
-      input.value = getProperty(this.actor.data, input.name) + delta;
+      input.value = getProperty(this.actor, input.name) + delta;
     } else if (value[0] === "=") {
       input.value = value.slice(1);
     }
@@ -325,11 +343,12 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
     div.toggleClass("item-hidden");
   }
 
-  _onItemSummary(event) {
+  async _onItemSummary(event) {
     event.preventDefault();
     let li = $(event.currentTarget).parents(".item"),
         item = this.actor.items.get(li.data("item-id")),
-        chatData = item.getChatData({secrets: this.actor.isOwner});
+        chatData = await item.getChatData({secrets: this.actor.isOwner});
+        console.log(chatData);
 
     // Toggle summary
     if ( li.hasClass("expanded") ) {

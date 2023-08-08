@@ -11,7 +11,7 @@
     </li>
     <div class="items-in-list {{tag}}">
     {{#each skills as |item id|}}
-      <li class="item flexrow" data-item-id="{{item._id}}">
+      <li class="item flexrow" data-item-id="{{item.uuid}}">
         <div class="item-name rollable">
           <div class="item-image">
             <a class="rollable" data-roll-type="item"><img src="{{item.img}}" title="{{item.name}}" width="24" height="24"/></a>
@@ -19,14 +19,14 @@
           <h4>{{item.name}}</h4>
         </div>
         <div class="item-timing item-prop">
-            <span>{{localize (asIndexMiddle "config.timingTypes.$arg" item.data.timing)}}</span>
+            <span>{{localize (asIndexMiddle "config.timingTypes.$arg" item.system.timing)}}</span>
         </div>
         <div class="item-limit item-prop">
-            {{#ifNotEquals item.data.limit.type "None"}}
-              <span>{{item.data.limit.value}} / {{item.data.limit.max}} {{localize (asIndexMiddle "config.limitTypes.$arg" data.limit.type)}}</span>
+            {{#ifNotEquals item.system.limit.type "None"}}
+              <span>{{item.system.limit.value}} / {{item.system.limit.max}} {{localize (asIndexMiddle "config.limitTypes.$arg" system.limit.type)}}</span>
             {{/ifNotEquals}}
         </div>
-        <div class="item-tags item-prop">{{item.data.tags}}</div>
+        <div class="item-tags item-prop">{{item.system.tags}}</div>
         <div class="item-controls">
           <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
         </div>

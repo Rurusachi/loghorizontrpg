@@ -36,12 +36,12 @@
 
         <label class="label">Check: {{checkTypeMessage}}</label>
         {{#if hasCasterCheck}}
-        <button data-action="castercheck" data-attribute="{{data.check.caster}}">Caster Check</button>
+        <button data-action="castercheck" data-attribute="{{data.check.caster}}">{{localize "LOGHORIZONTRPG.HitCheck"}}</button>
         {{/if}}
 
         {{#if hasTargetCheck}}
         <button data-action="targetcheck" data-attribute="{{data.check.target}}">
-            Target Check
+            {{localize "LOGHORIZONTRPG.DefenseCheck"}}
         </button>
         {{/if}}
 
