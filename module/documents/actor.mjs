@@ -68,9 +68,9 @@ export class LogHorizonTRPGActor extends Actor {
         }
     }
 
-    console.log(data.tags);
 
     if (typeof data.tags === "string"){
+        console.log(this);
         console.log("STRING TAG!!");
     }
     

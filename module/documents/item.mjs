@@ -64,6 +64,7 @@ export class LogHorizonTRPGItem extends Item {
 
         
     if (typeof data.tags === "string"){
+      console.log(this);
       console.log("STRING TAG!!");
     }
 

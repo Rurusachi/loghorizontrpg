@@ -22,6 +22,15 @@
       "path": "lang/en.json"
     }
   ],
+  "packs": [
+    {
+      "name": "system-info",
+      "label": "System Info",
+      "system": "loghorizontrpg",
+      "path": "packs/system-info",
+      "type": "JournalEntry"
+    }
+  ],
   "gridDistance": 1,
   "gridUnits": "sq.",
   "primaryTokenAttribute": "hp",

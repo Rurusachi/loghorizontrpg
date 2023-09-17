@@ -112,7 +112,7 @@ export function applyLhrpgEffects(specList, completedSpecs, allowAllSpecs) {
             if (typeof specList[c.key]?.sampleValue === "number" && typeof c.value === "string") {
                 let sourceData = c.effect.parent?.getRollData() ?? this.getRollData();
                 let value = replaceAtFields(c.value, sourceData);
-                console.log(c.effect);
+                
                 try { // Roll parser no longer accepts some expressions it used to so we will try and avoid using it
                     //@ts-ignore - this will throw an error if there are roll expressions
                     c.value = Roll.safeEval(value);

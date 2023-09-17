@@ -31,7 +31,7 @@ Hooks.once('init', async function() {
   game.settings.register("loghorizontrpg", "systemMigrationVersion", {
     name: "System Migration Version",
     scope: "world",
-    config: false,
+    config: true,
     type: String,
     default: ""
   });
@@ -89,35 +89,62 @@ Hooks.once('init', async function() {
 
 Hooks.once('ready', async function() {
 
-  // Determine whether to migrate (based on 5e system code)
+  
   if ( !game.user.isGM ) return;
+
+  const compendium = game.modules.get("loghorizontrpg-compendium")
+  if (compendium === undefined) {
+    ui.notifications.warn(`"Log Horizon Compendium module" not installed. Go to this system's github page for more information (https://github.com/Rurusachi/loghorizontrpg)`, {permanent: true});
+    showLatestVersionInfo();
+  } else if (compendium.active === false) {
+    ui.notifications.warn(`"Log Horizon Compendium" module not enabled. It can be enabled in Manage Modules`, {permanent: true});
+  }
+
+  // Determine whether to migrate (based on 5e system code)
   const cv = game.settings.get("loghorizontrpg", "systemMigrationVersion") 
   const totalDocuments = game.actors.size + game.scenes.size + game.items.size;
   if ( !cv && totalDocuments === 0 ) return game.settings.set("loghorizontrpg", "systemMigrationVersion", game.system.version); // Set version if new world
   if ( cv && !isNewerVersion(game.system.flags.needsMigrationVersion, cv) ) return; // Only migrate if version is older than needsMigrationVersion
   
+  // Show info about new version
+  showLatestVersionInfo();
   // Migrate
   ui.notifications.info(`Migrating world from version ${cv} to version ${game.system.version}`, {permanent: true});
-  await migrateWorld();
-  console.log(game.actors);
+  await migrateWorld(cv);
 });
 
-async function migrateWorld() {
+async function showLatestVersionInfo() {
+  try {
+    const infopage = await fromUuid("Compendium.loghorizontrpg.system-info.JournalEntry.yy2znlPUR5mO59Rl");
+    infopage.show();
+  } catch (error) {
+    console.log(error);
+  }
+}
 
-  // Migrate actor tags
-  await migrateAllActors()
-  console.log("Migrated all actors");
+async function migrateWorld(fromVersion) {
 
-  // Migrate item tags
-  await migrateAllItems()
-  console.log("Migrated all items");
+  // Migrate tags and effects if v0.4.0 or older
+  if (!fromVersion || !isNewerVersion(fromVersion, "0.4.0")) {
+    // Migrate actor tags
+    await migrateAllActorTags();
+    console.log("Migrated all actors");
+  
+    // Migrate item tags
+    await migrateAllItemTags();
+    console.log("Migrated all items");
+  
+    // Migrate effect origins
+    await migrateAllEffectOrigins();
+    console.log("Migrated all effects");
+  }
 
   // Migration finished
   game.settings.set("loghorizontrpg", "systemMigrationVersion", game.system.version);
   ui.notifications.info(`Migrated world to version ${game.system.version}`, {permanent: true});
 }
 
-async function migrateAllActors() {
+async function migrateAllActorTags() {
   for (const actor of game.actors) {
     const tags = actor.system?.tags;
     if (typeof tags === "string") {
@@ -132,10 +159,66 @@ async function migrateAllActors() {
       console.log(tagsList);
       await actor.update({"system.tags": tagsList})
     }
+
+    // Migrate owned item tags
+    for (const item of actor.items) {
+      const tags = item.system?.tags;
+      if (typeof tags === "string") {
+        console.log(`Migrating tags for ${item.name}`);
+        
+        let tagsList;
+        if (typeof tags === "string") {
+            tagsList = tags.split(",").map(s => s.trim());
+        } else {
+            tagsList = tags;
+        }
+        console.log(tagsList);
+        await item.update({"system.tags": tagsList})
+      }
+    }
+  }
+
+  for (const scene of game.scenes) {
+    for (const token of scene.tokens) {
+      if (token.isLinked) continue // Skip linked tokens (Should already be migrated)
+      console.log("Migrating tags for unlinked token");
+      const actor = token.actor
+      
+      const tags = actor.system?.tags;
+      if (typeof tags === "string") {
+        console.log(`Migrating tags for ${actor.name}`);
+        
+        let tagsList;
+        if (typeof tags === "string") {
+            tagsList = tags.split(",").map(s => s.trim());
+        } else {
+            tagsList = tags;
+        }
+        console.log(tagsList);
+        await actor.update({"system.tags": tagsList})
+      }
+
+      // Migrate owned item tags
+      for (const item of actor.items) {
+        const tags = item.system?.tags;
+        if (typeof tags === "string") {
+          console.log(`Migrating tags for ${item.name}`);
+          
+          let tagsList;
+          if (typeof tags === "string") {
+              tagsList = tags.split(",").map(s => s.trim());
+          } else {
+              tagsList = tags;
+          }
+          console.log(tagsList);
+          await item.update({"system.tags": tagsList})
+        }
+      }
+    }
   }
 }
 
-async function migrateAllItems() {
+async function migrateAllItemTags() {
   for (const item of game.items) {
     const tags = item.system?.tags;
     if (typeof tags === "string") {
@@ -149,6 +232,88 @@ async function migrateAllItems() {
       }
       console.log(tagsList);
       await item.update({"system.tags": tagsList})
+    }
+  }
+}
+
+
+async function migrateAllEffectOrigins() {
+  for (const item of game.items) {
+    for (const effect of item.effects) {
+      console.log(effect);
+      const oldOrigin = effect.origin
+      if (oldOrigin === null) {
+        console.log("NULL ORIGIN");
+        continue
+      }
+      const newOrigin = oldOrigin.replace("loghorizontrpg.", "loghorizontrpg-compendium.")
+      console.log(newOrigin);
+      await effect.update({"origin": newOrigin})
+    }
+  }
+
+  
+  for (const actor of game.actors) {
+    
+    for (const effect of actor.effects) {
+      console.log(effect);
+      const oldOrigin = effect.origin;
+      if (oldOrigin === null) {
+        console.log("NULL ORIGIN");
+        continue
+      }
+      const newOrigin = oldOrigin.replace("loghorizontrpg.", "loghorizontrpg-compendium.")
+      console.log(newOrigin);
+      await effect.update({"origin": newOrigin})
+    }
+
+    // Migrate owned item's effects
+    for (const item of actor.items) {
+      for (const effect of item.effects) {
+        console.log(effect);
+        const oldOrigin = effect.origin
+        if (oldOrigin === null) {
+          console.log("NULL ORIGIN");
+          continue
+        }
+        const newOrigin = oldOrigin.replace("loghorizontrpg.", "loghorizontrpg-compendium.")
+        console.log(newOrigin);
+        await effect.update({"origin": newOrigin})
+      }
+    }
+  }
+
+  for (const scene of game.scenes) {
+    for (const token of scene.tokens) {
+      if (token.isLinked) continue // Skip linked tokens (Should already be migrated)
+      console.log("Migrating effects for unlinked token");
+      const actor = token.actor
+      for (const effect of actor.effects) {
+        console.log(effect);
+        const oldOrigin = effect.origin;
+        if (oldOrigin === null) {
+          console.log("NULL ORIGIN");
+          continue
+        }
+        const newOrigin = oldOrigin.replace("loghorizontrpg.", "loghorizontrpg-compendium.")
+        console.log(newOrigin);
+        await effect.update({"origin": newOrigin})
+      }
+  
+      // Migrate owned item's effects
+      for (const item of actor.items) {
+        for (const effect of item.effects) {
+          console.log(effect);
+          const oldOrigin = effect.origin
+          if (oldOrigin === null) {
+            console.log("NULL ORIGIN");
+            continue
+          }
+          const newOrigin = oldOrigin.replace("loghorizontrpg.", "loghorizontrpg-compendium.")
+          console.log(newOrigin);
+          await effect.update({"origin": newOrigin})
+        }
+      }
     }
   }
 }
