@@ -47,7 +47,7 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
     console.log("_onDropClass: enter");
     console.log(data)
     const actor = this.actor;
-    if ( !this.isEditable || !data.data ) return;
+    if ( !this.isEditable || !data ) return;
     console.log("_onDropClass: editable");
     let sameItem = (data.itemId === item.id);
     if ( sameItem ) return;

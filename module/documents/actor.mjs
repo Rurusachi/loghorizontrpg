@@ -271,22 +271,22 @@ export class LogHorizonTRPGActor extends Actor {
       const actionList = this.items?.filter((s => s.system.limit != undefined));
       for ( let s of actionList ) {
           if (options.includes(s.system.limit.type) || all) {
-              await s.update({"data.limit.value": s.system.limit.max})
+              await s.update({"system.limit.value": s.system.limit.max})
           }
       }
 
       const updates = {};
       if (options.includes("hp") || all) {
-          updates["data.hp.value"] = actorData.hp.maxbase;
+          updates["system.hp.value"] = actorData.hp.maxbase;
       }
       if (options.includes("fatigue") || all) {
-          updates["data.fatigue.value"] = actorData.fatigue.min;
+          updates["system.fatigue.value"] = actorData.fatigue.min;
       }
       if (options.includes("hate") || all) {
-          updates["data.hate.value"] = actorData.hate.min;
+          updates["system.hate.value"] = actorData.hate.min;
       }
       if (options.includes("fate") || all) {
-          updates["data.fate.value"] = actorData.fate.max;
+          updates["system.fate.value"] = actorData.fate.max;
       }
       return await this.update(updates);
   }

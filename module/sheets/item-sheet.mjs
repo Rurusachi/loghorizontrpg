@@ -1,4 +1,5 @@
 import {onManageActiveEffect, prepareActiveEffectCategories} from "../helpers/effects.mjs";
+import TagEditorDialog from "../apps/tag-editor.mjs";
 
 /**
  * Extend the basic ItemSheet with some very simple modifications
@@ -32,7 +33,7 @@ export class LogHorizonTRPGItemSheet extends ItemSheet {
   }
 
   /** @override */
-  _onDragStart(event) {
+  async _onDragStart(event) {
     const li = event.currentTarget;
     if ( event.target.classList.contains("entity-link") ) return;
 
@@ -41,7 +42,7 @@ export class LogHorizonTRPGItemSheet extends ItemSheet {
 
     // Active Effect
     if ( li.dataset.effectId ) {
-      const effect = this.item.effects.get(li.dataset.effectId);
+      const effect = await fromUuid(li.dataset.effectId);
       dragData = effect.toDragData();
     }
 
@@ -172,62 +173,62 @@ export class LogHorizonTRPGItemSheet extends ItemSheet {
     }, {parent: this.item});
   }
 
-  async _onDropEnchantment(event, data) {
+  async _onDropEnchantment(event, droppedItem) {
     console.log("_onDropEnchantment: enter");
     const item = this.item;
-    const enchantmentData = data.data;
+    const enchantmentData = droppedItem;
     console.log(enchantmentData);
     console.log(item);
-    if ( !this.isEditable || !data.data) return;
+    console.log(item.validationFailures)
+    if ( !this.isEditable || !droppedItem) return;
     console.log("_onDropEnchantment: editable");
-    let sameItem = (data.id === item.id);
+    let sameItem = (droppedItem.uuid === item.uuid);
     if ( sameItem ) return;
     console.log("_onDropEnchantment: not same item");
 
-    const changes = []
-    for (let [key, combatstat] of Object.entries(enchantmentData.data.combatstats)) {
+    const changes = {};
+    for (let [key, combatstat] of Object.entries(enchantmentData.system.combatstats)) {
         if (combatstat?.bonus != undefined) {
-            changes[`data.combatstats.${key}.bonus`] = combatstat.bonus + item.data.data.combatstats[key].bonus
-            //item.data.data.combatstats[key].bonus += combatstat.bonus;
+            changes[`system.combatstats.${key}.bonus`] = combatstat.bonus + item.system.combatstats[key].bonus
         }
     }
     //console.log(changes);
-    for (let [key, attribute] of Object.entries(enchantmentData.data.attributes)) {
+    for (let [key, attribute] of Object.entries(enchantmentData.system.attributes)) {
         if (attribute?.bonus != undefined) {
-            changes[`data.attributes.${key}.bonus`] = attribute.bonus + item.data.data.attributes[key].bonus
-            //item.data.data.attributes[key].bonus += attribute.bonus;
+            changes[`system.attributes.${key}.bonus`] = attribute.bonus + item.system.attributes[key].bonus
         }
         if (attribute?.dice != undefined) {
-            changes[`data.attributes.${key}.dice`] = attribute.dice + item.data.data.attributes[key].dice
-            //item.data.data.attributes[key].dice += attribute.dice;
+            changes[`system.attributes.${key}.dice`] = attribute.dice + item.system.attributes[key].dice
         }
     }
-    if (enchantmentData.data.other?.inventoryslots != undefined) {
-        changes[`data.other.inventoryslots`] = enchantmentData.data.other.inventoryslots + item.data.data.other.inventoryslots;
-        //item.data.data.other.inventoryslots += enchantmentData.data.other.inventoryslots;
+    if (enchantmentData.system.other?.inventoryslots != undefined) {
+        changes[`system.other.inventoryslots`] = enchantmentData.system.other.inventoryslots + item.system.other.inventoryslots;
     }
-    changes[`name`] =  `${data.name} ${item.name}`;
-    changes[`data.tags`] =  `${item.system.tags}, [M${enchantmentData.data.magicgrade}], ${enchantmentData.data.tags}`;
-    changes[`data.description`] = item.system.description + "<p>&nbsp;</p>" + enchantmentData.data.description;
+    changes[`name`] =  `${droppedItem.name} ${item.name}`;
+    //changes[`system.tags`] =  `${item.system.tags}, [M${enchantmentData.system.magicgrade}], ${enchantmentData.system.tags}`;
+    let newTags = item.system.tags.concat(enchantmentData.system.tags);
+    newTags.push(`M${enchantmentData.system.magicgrade}`);
+    console.log(newTags);
+    changes[`system.tags`] = newTags;
+    changes[`system.description`] = item.system.description + "<p>&nbsp;</p>" + enchantmentData.system.description;
 
     // Action data
-    changes[`data.check`] = enchantmentData.data.check;
-    changes[`data.limit`] = enchantmentData.data.limit;
-    changes[`data.timing`] = enchantmentData.data.timing;
-    changes[`data.range`] = enchantmentData.data.range;
-    changes[`data.target`] = enchantmentData.data.target;
-    changes[`data.hatecost`] = enchantmentData.data.hatecost;
-    changes[`data.fatecost`] = enchantmentData.data.fatecost;
-    changes[`data.formula`] = enchantmentData.data.formula;
-    changes[`data.secondformula`] = enchantmentData.data.secondformula;
+    changes[`system.check`] = enchantmentData.system.check;
+    changes[`system.limit`] = enchantmentData.system.limit;
+    changes[`system.timing`] = enchantmentData.system.timing;
+    changes[`system.range`] = enchantmentData.system.range;
+    changes[`system.target`] = enchantmentData.system.target;
+    changes[`system.hatecost`] = enchantmentData.system.hatecost;
+    changes[`system.fatecost`] = enchantmentData.system.fatecost;
+    changes[`system.formula`] = enchantmentData.system.formula;
+    changes[`system.secondformula`] = enchantmentData.system.secondformula;
 
-    //item.name = data.name + item.name;
     console.log(changes);
     if (true || !item.isOwned) {
         console.log("enterEffects");
         for (const effect of enchantmentData.effects) {
             console.log(effect);
-            await ActiveEffect.create(effect.data, {parent: item});
+            await ActiveEffect.create(effect, {parent: item});
         }
         console.log("leaveEffects");
     }
@@ -269,7 +270,7 @@ export class LogHorizonTRPGItemSheet extends ItemSheet {
     
     context.effects = prepareActiveEffectCategories(this.item.effects, this);
     
-    // Add the actor's data to context.system for easier access, as well as flags.
+    // Add the item's data to context.system for easier access, as well as flags.
     context.system = item.system;
     context.flags = item.flags;
 
@@ -347,7 +348,7 @@ export class LogHorizonTRPGItemSheet extends ItemSheet {
       const skills = this.item.system.skills.filter(i => i.uuid != li.data("itemId"));
       console.log(skills);
       //skill.delete();
-      this.item.update({['data.skills']: skills});
+      this.item.update({['system.skills']: skills});
       //li.slideUp(200, () => this.render(false));
     });
 
@@ -378,7 +379,7 @@ export class LogHorizonTRPGItemSheet extends ItemSheet {
 
     let skills = duplicate(this.item.system.skills);
     skills.push(new Item(itemData));
-    return await this.item.update({['data.skills']: skills});
+    return await this.item.update({['system.skills']: skills});
 
     //return await Item.create(itemData, {parent: this.actor});
   }
