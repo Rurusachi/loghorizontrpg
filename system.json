@@ -29,5 +29,8 @@
   "url": "https://github.com/Rurusachi/loghorizontrpg",
   "manifest": "https://github.com/Rurusachi/loghorizontrpg/releases/latest/download/system.json",
   "download": "",
-  "license": "LICENSE.txt"
+  "license": "LICENSE.txt",
+  "flags": {
+    "needsMigrationVersion": "0.5.0"
+  }
 }

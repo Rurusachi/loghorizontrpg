@@ -8,13 +8,14 @@ export class LogHorizonTRPGItem extends Item {
   /**
    * Augment the basic Item data model with additional dynamic data.
    */
+
   prepareData() {
     // As with the actor class, items are documents that can have their data
     // preparation methods overridden (such as prepareBaseData()).
     super.prepareData();
 
-
   }
+
   prepareDerivedData() {
     const data = this.system;
     const config = CONFIG.LOGHORIZONTRPG;
@@ -59,6 +60,11 @@ export class LogHorizonTRPGItem extends Item {
         if (data.sr != undefined) {
           labels.sr = `SR: ${data.sr.value}/${data.sr.max}`;
         }
+    }
+
+        
+    if (typeof data.tags === "string"){
+      console.log("STRING TAG!!");
     }
 
   }

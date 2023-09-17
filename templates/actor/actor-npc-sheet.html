@@ -57,9 +57,9 @@
         </div>
 
         <div class="resource flex-group-center grid-span-2">
-          <label for="system.tags" class="resource-label">Tags</label>
+          <label for="system.tags" class="resource-label tag-edit">Tags</label>
           <div class="resource-content flexrow flex-center flex-between flex-group-center">
-              <input type="text" name="system.tags" value="{{system.tags}}" data-dtype="String"/>
+              <label>{{#each system.tags as |tag key|}}<label class="tag">{{tag}}</label>{{/each}}</label>
           </div>
         </div>
 

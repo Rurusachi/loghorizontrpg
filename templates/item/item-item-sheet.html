@@ -49,8 +49,8 @@
           Item has an action
       </label>
       <div class="resource grid grid-4col align-center">
-          <label class="resource-label">Tags:</label>
-          <input class="grid-span-2" type="text" name="system.tags" value="{{system.tags}}" data-dtype="String"/>
+          <label class="resource-label tag-edit">Tags:</label>
+          <label class="grid-span-2">{{#each system.tags as |tag key|}}<label class="tag">{{tag}}</label>{{/each}}</label>
       </div>
     </div>
 

@@ -28,6 +28,14 @@ Hooks.once('init', async function() {
     rollItemMacro
   };
 
+  game.settings.register("loghorizontrpg", "systemMigrationVersion", {
+    name: "System Migration Version",
+    scope: "world",
+    config: false,
+    type: String,
+    default: ""
+  });
+
   // Add custom constants for configuration.
   CONFIG.LOGHORIZONTRPG = LOGHORIZONTRPG;
 
@@ -78,6 +86,72 @@ Hooks.once('init', async function() {
   // Preload Handlebars templates.
   return preloadHandlebarsTemplates();
 });
+
+Hooks.once('ready', async function() {
+
+  // Determine whether to migrate (based on 5e system code)
+  if ( !game.user.isGM ) return;
+  const cv = game.settings.get("loghorizontrpg", "systemMigrationVersion") 
+  const totalDocuments = game.actors.size + game.scenes.size + game.items.size;
+  if ( !cv && totalDocuments === 0 ) return game.settings.set("loghorizontrpg", "systemMigrationVersion", game.system.version); // Set version if new world
+  if ( cv && !isNewerVersion(game.system.flags.needsMigrationVersion, cv) ) return; // Only migrate if version is older than needsMigrationVersion
+  
+  // Migrate
+  ui.notifications.info(`Migrating world from version ${cv} to version ${game.system.version}`, {permanent: true});
+  await migrateWorld();
+  console.log(game.actors);
+});
+
+async function migrateWorld() {
+
+  // Migrate actor tags
+  await migrateAllActors()
+  console.log("Migrated all actors");
+
+  // Migrate item tags
+  await migrateAllItems()
+  console.log("Migrated all items");
+
+  // Migration finished
+  game.settings.set("loghorizontrpg", "systemMigrationVersion", game.system.version);
+  ui.notifications.info(`Migrated world to version ${game.system.version}`, {permanent: true});
+}
+
+async function migrateAllActors() {
+  for (const actor of game.actors) {
+    const tags = actor.system?.tags;
+    if (typeof tags === "string") {
+      console.log(`Migrating tags for ${actor.name}`);
+      
+      let tagsList;
+      if (typeof tags === "string") {
+          tagsList = tags.split(",").map(s => s.trim());
+      } else {
+          tagsList = tags;
+      }
+      console.log(tagsList);
+      await actor.update({"system.tags": tagsList})
+    }
+  }
+}
+
+async function migrateAllItems() {
+  for (const item of game.items) {
+    const tags = item.system?.tags;
+    if (typeof tags === "string") {
+      console.log(`Migrating tags for ${item.name}`);
+      
+      let tagsList;
+      if (typeof tags === "string") {
+          tagsList = tags.split(",").map(s => s.trim());
+      } else {
+          tagsList = tags;
+      }
+      console.log(tagsList);
+      await item.update({"system.tags": tagsList})
+    }
+  }
+}
 
 Hooks.on("nextRound", function(combat) {
   combat.then(result => {

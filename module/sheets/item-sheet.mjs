@@ -355,6 +355,15 @@ export class LogHorizonTRPGItemSheet extends ItemSheet {
     html.find(".effect-control").click(async ev => {await onManageActiveEffect(ev, this.item); this.render()});
 
     // Roll handlers, click handlers, etc. would go here.
+
+    // Edit tags
+    html.find('.tag-edit').click(this._onTagsEdit.bind(this));
+  }
+
+  async _onTagsEdit(event) {
+    event.preventDefault();
+
+    return new TagEditorDialog(this.item).render(true)
   }
 
   async _onItemCreate(event) {

@@ -1,5 +1,6 @@
 import {onManageActiveEffect, prepareActiveEffectCategories} from "../helpers/effects.mjs";
 import RestDialog from "../apps/rest.mjs";
+import TagEditorDialog from "../apps/tag-editor.mjs";
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -292,6 +293,15 @@ export class LogHorizonTRPGActorSheet extends ActorSheet {
         li.addEventListener("dragstart", handler, false);
       });
     }
+    
+    // Edit tags
+    html.find('.tag-edit').click(this._onTagsEdit.bind(this));
+  }
+
+  async _onTagsEdit(event) {
+    event.preventDefault();
+
+    return new TagEditorDialog(this.actor).render(true)
   }
 
   async _onRest(event) {
