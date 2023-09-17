@@ -8,3 +8,5 @@ npm-debug.log
 
 # Foundry
 *.lock
+packs/
+*.code-workspace

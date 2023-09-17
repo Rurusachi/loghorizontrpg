@@ -1,0 +1,29 @@
+<form class="dialog-content" onsubmit="event.preventDefault();">
+    <h3>Tag Editor: {{name}}</h3>
+
+    
+    <div class="tag-list">
+        {{#each tags as |tag id|}}
+        <div class="">
+            <input type="text" name="{{id}}" value="{{tag}}" data-dtype="String"/>
+        </div>
+        {{/each}}
+    </div>
+    
+    
+    <div class="dialog-buttons">
+        <div class="dialog-buttons">
+            <button type="button" class="addTag" name="addTagButton">Add tag</button>
+        </div>
+        <button type="submit" name="submit" value="1">
+            <i class="fas fa-bed"></i>
+            Confirm
+        </button>
+        {{#each buttons as |button id|}}
+        <button class="dialog-button {{button.class}}" data-button="{{id}}">
+            {{{button.icon}}}
+            {{{button.label}}}
+        </button>
+        {{/each}}
+    </div>
+</form>

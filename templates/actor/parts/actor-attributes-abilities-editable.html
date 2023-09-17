@@ -12,13 +12,13 @@
                   <span>Base</span>
                   <span>Mod</span>
               </div>
-              {{#each data.abilities as |ability key|}}
+              {{#each system.abilities as |ability key|}}
               <div class="ability flexrow flex-group-center">
                 <div>
-                    <label for="data.abilities.{{key}}.value" class="resource-label rollable flexlarge align-left" data-roll="2d6+@abilities.{{key}}.mod" data-label="{{ability.label}}">{{ability.label}}</label>
+                    <label for="system.abilities.{{key}}.value" class="resource-label rollable flexlarge align-left" data-roll="2d6+@abilities.{{key}}.mod" data-label="{{ability.label}}">{{ability.label}}</label>
                 </div>
                   <div class="edit-mode-only" {{#unless ../edit_mode}} style="display: none;" {{/unless}}>
-                <input  type="text" name="data.abilities.{{key}}.value" value="{{ability.value}}" data-dtype="Number"/>
+                <input  type="text" name="system.abilities.{{key}}.value" value="{{ability.value}}" data-dtype="Number"/>
             </div>
               <div>
                 <span>{{ability.base}}</span>
@@ -32,10 +32,10 @@
 
               <label class="resource-text">Other Stats</label>
               <div class="combatstats flexcol">
-                  {{#each data.combatstats as |combatstat key|}}
+                  {{#each system.combatstats as |combatstat key|}}
                   <div class="combatstat flexrow flex-group-center">
-                    <label for="data.combatstats.{{key}}.value" class="resource-label flexlarge align-left"">{{combatstat.label}}</label>
-                    <input class="edit-mode-only" {{#unless ../edit_mode}} style="display: none;" {{/unless}} type="text" name="data.combatstats.{{key}}.value" value="{{combatstat.value}}" data-dtype="Number"/>
+                    <label for="system.combatstats.{{key}}.value" class="resource-label flexlarge align-left"">{{combatstat.label}}</label>
+                    <input class="edit-mode-only" {{#unless ../edit_mode}} style="display: none;" {{/unless}} type="text" name="system.combatstats.{{key}}.value" value="{{combatstat.value}}" data-dtype="Number"/>
                     <span class="combatstat-total">{{numberFormat combatstat.total decimals=0}}</span>
                   </div>
                   {{/each}}
@@ -50,13 +50,13 @@
                   <span class="edit-mode-only" {{#unless edit_mode}} style="display: none;" {{/unless}}>Mod</span>
                   <span>Total</span>
               </div>
-            {{#each data.attributes as |attribute key|}}
+            {{#each system.attributes as |attribute key|}}
             <div class="attribute flexrow flex-group-center">
                 <div class="flex-group-left">
-                    <label for="data.attributes.{{key}}.value" class="resource-label rollable flexlarge align-left" data-roll-type="attribute" data-attribute="{{key}}">{{attribute.label}}</label>
+                    <label for="system.attributes.{{key}}.value" class="resource-label rollable flexlarge align-left" data-roll-type="attribute" data-attribute="{{key}}">{{attribute.label}}</label>
                 </div>
                 <div class="edit-mode-only" {{#unless ../edit_mode}} style="display: none;" {{/unless}}>
-                    <input type="text" name="data.attributes.{{key}}.value" value="{{attribute.value}}" data-dtype="String"/>
+                    <input type="text" name="system.attributes.{{key}}.value" value="{{attribute.value}}" data-dtype="String"/>
                 </div>
                 <div class="edit-mode-only" {{#unless ../edit_mode}} style="display: none;" {{/unless}}>
                     <span>{{attribute.mod}}</span>

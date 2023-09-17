@@ -8,16 +8,16 @@ export class LogHorizonTRPGItem extends Item {
   /**
    * Augment the basic Item data model with additional dynamic data.
    */
+
   prepareData() {
     // As with the actor class, items are documents that can have their data
     // preparation methods overridden (such as prepareBaseData()).
     super.prepareData();
 
-
   }
+
   prepareDerivedData() {
-    const itemData = this.data;
-    const data = itemData.data;
+    const data = this.system;
     const config = CONFIG.LOGHORIZONTRPG;
     const labels = this.labels = {};
     // Make separate methods for each Actor type (character, npc, etc.) to keep
@@ -62,6 +62,12 @@ export class LogHorizonTRPGItem extends Item {
         }
     }
 
+        
+    if (typeof data.tags === "string"){
+      console.log(this);
+      console.log("STRING TAG!!");
+    }
+
   }
   /**
    * Prepare a data object which is passed to any Roll formulas which are created related to this Item
@@ -71,7 +77,7 @@ export class LogHorizonTRPGItem extends Item {
     // If present, return the actor's roll data.
     if ( !this.actor ) return null;
     const rollData = this.actor.getRollData();
-    rollData.item = foundry.utils.deepClone(this.data.data);
+    rollData.item = foundry.utils.deepClone(this.system);
 
 
     return rollData;
@@ -92,7 +98,7 @@ export class LogHorizonTRPGItem extends Item {
     const label = `[${item.type}] ${item.name}`;
 
     // If there's no roll data, send a chat message.
-    if (!this.data.data.formula) {
+    if (!this.system.formula) {
       ChatMessage.create({
         speaker: speaker,
         rollMode: rollMode,
@@ -119,11 +125,11 @@ export class LogHorizonTRPGItem extends Item {
 
   async roll() {
       const configureDialog = true;
-      const item = this.data;
+      const item = this;
 
-      const id = this.data.data;                // Item system data
+      const id = this.system;                // Item system data
       const actor = this.actor;
-      const ad = actor.data.data;               // Actor system data
+      const ad = actor.system;               // Actor system data
 
       // Reference aspects of the item data necessary for usage
       const limit = id.limit;              // Limited uses
@@ -158,9 +164,9 @@ export class LogHorizonTRPGItem extends Item {
       const {actorUpdates, itemUpdates} = usage;
 
       // Commit pending data updates
-      if ( !foundry.utils.isObjectEmpty(itemUpdates) ) await this.update(itemUpdates);
-      //if ( consumeQuantity && (item.data.data.quantity === 0) ) await item.delete();
-      if ( !foundry.utils.isObjectEmpty(actorUpdates) ) await actor.update(actorUpdates);
+      if ( !foundry.utils.isEmpty(itemUpdates) ) await this.update(itemUpdates);
+      //if ( consumeQuantity && (item.system.quantity === 0) ) await item.delete();
+      if ( !foundry.utils.isEmpty(actorUpdates) ) await actor.update(actorUpdates);
 
 
       // Initialize chat data.
@@ -174,7 +180,7 @@ export class LogHorizonTRPGItem extends Item {
   _getUsageUpdates({consumeLimit, consumeHate, consumeFate, consumeItem, hateChange, fateChange}) {
 
     // Reference item data
-    const id = this.data.data;
+    const id = this.system;
     const actorUpdates = {};
     const itemUpdates = {};
 
@@ -188,16 +194,16 @@ export class LogHorizonTRPGItem extends Item {
         }
     }
 
-    if ( consumeHate && this.actor.data.data.hate != undefined) {
+    if ( consumeHate && this.actor.system.hate != undefined) {
         const hatecost = id.hatecost;
 
-        actorUpdates["data.hate.value"] = Math.max(this.actor.data.data.hate.value + hatecost.total + hateChange, 0);
+        actorUpdates["data.hate.value"] = Math.max(this.actor.system.hate.value + hatecost.total + hateChange, 0);
     }
 
     if ( consumeFate ) {
         const fatecost = id.fatecost;
-        if (this.actor.data.data.fate.value > 0) {
-            actorUpdates["data.fate.value"] = Math.max(this.actor.data.data.fate.value - fatecost.value - fateChange, 0);
+        if (this.actor.system.fate.value > 0) {
+            actorUpdates["data.fate.value"] = Math.max(this.actor.system.fate.value - fatecost.value - fateChange, 0);
         }
     }
 
@@ -216,7 +222,7 @@ export class LogHorizonTRPGItem extends Item {
   async displayCard(rollMode) {
       const token = this.actor.token;
       const config = CONFIG.LOGHORIZONTRPG;
-      const itemData = this.data.data;
+      const itemData = this.system;
 
       const checkType = this.getCheckString;
       const targetType = this.getTargetString;
@@ -224,8 +230,8 @@ export class LogHorizonTRPGItem extends Item {
       const templateData = {
       actor: this.actor,
       tokenId: token?.uuid || null,
-      item: this.data,
-      data: this.getChatData(),
+      item: this,
+      data: await this.getChatData(),
       labels: this.labels,
       hasFormula: this.hasFormula,
       hasCasterCheck: this.hasCasterCheck,
@@ -242,13 +248,13 @@ export class LogHorizonTRPGItem extends Item {
       user: game.user.id,
       type: CONST.CHAT_MESSAGE_TYPES.OTHER,
       content: html,
-      flavor: this.data.data.chatFlavor || this.name,
+      flavor: this.system.chatFlavor || this.name,
       speaker: ChatMessage.getSpeaker({actor: this.actor, token}),
       flags: {"core.canPopout": true}
     };
 
-    if ( (this.data.type === "consumable") && !this.actor.items.has(this.id) ) {
-      chatData.flags["loghorizontrpg.itemData"] = this.data;
+    if ( (this.type === "consumable") && !this.actor.items.has(this.id) ) {
+      chatData.flags["loghorizontrpg.itemData"] = this;
     }
 
     ChatMessage.applyRollMode(chatData, game.settings.get("core", "rollMode"));
@@ -256,13 +262,13 @@ export class LogHorizonTRPGItem extends Item {
     return ChatMessage.create(chatData);
   }
 
-  getChatData(htmlOptions={}){
-    const data = foundry.utils.deepClone(this.data.data);
+  async getChatData(htmlOptions={}){
+    const data = foundry.utils.deepClone(this.system);
     const labels = this.labels;
-    data.description = TextEditor.enrichHTML(data.description, htmlOptions);
+    data.description = await TextEditor.enrichHTML(data.description, htmlOptions);
 
     const props = [];
-    const fn = this[`_${this.data.type}ChatData`];
+    const fn = this[`_${this.type}ChatData`];
     if ( fn ) fn.bind(this)(data, labels, props);
 
     if (this.hasAction) {
@@ -325,11 +331,11 @@ export class LogHorizonTRPGItem extends Item {
       break;
 
       case "formula":
-        await item.rollFormula(item.data.data.formula, {event});
+        await item.rollFormula(item.system.formula, {event});
       break;
 
       case "secondformula":
-        await item.rollFormula(item.data.data.secondformula, {event});
+        await item.rollFormula(item.system.secondformula, {event});
       break;
     }
 
@@ -346,8 +352,8 @@ export class LogHorizonTRPGItem extends Item {
 
 
 async rollFormula(formula, options={}) {
-    const itemData = this.data.data;
-    const actorData = this.actor.data.data;
+    const itemData = this.system;
+    const actorData = this.actor.system;
     const config = CONFIG.LOGHORIZONTRPG;
     const localized = {};
     Object.entries(config.combatstats).map(v => localized[v[0]] = game.i18n.localize(v[1]));
@@ -425,38 +431,38 @@ async rollFormula(formula, options={}) {
 }
 
   get hasCasterCheck() {
-    return ["basic", "opposed"].includes(this.data.data.check.type);
+    return ["basic", "opposed"].includes(this.system.check.type);
   }
 
   get hasTargetCheck() {
-    return ["opposed"].includes(this.data.data.check.type);
+    return ["opposed"].includes(this.system.check.type);
   }
 
   get hasFormula() {
-    return this.data.data.formula.value != "";
+    return this.system.formula.value != "";
   }
 
   get hasSecondFormula() {
-    return this.data.data.secondformula.value != "";
+    return this.system.secondformula.value != "";
   }
 
   get hasAction() {
-      return (this.data.data?.hasaction == true ?? false) || this.type === "skill" || this.type === "consumable";
+      return (this.system?.hasaction == true ?? false) || this.type === "skill" || this.type === "consumable";
   }
 
   async toggleEquipped() {
-    const itemData = this.data;
-    const actorData = this.actor.data;
+    const itemData = this;
+    const actorData = this.actor;
 
-    const effects = actorData.effects?.filter((e => e.data.origin === `Actor.${actorData.id}.Item.${itemData.id}`));
+    const effects = actorData.effects?.filter((e => e.origin === `Actor.${actorData.id}.Item.${itemData.id}`));
     for ( let e of effects ) {
         // If an ActiveConfig sheet is attached the object is too large to expand
         e._sheet = null;
-        e.disabled = itemData.data.equipped;
+        e.disabled = itemData.system.equipped;
     }
 
     const changes = await this.actor.updateEmbeddedDocuments("ActiveEffect", effects);
-    const itemupdate = await this.update({"data.equipped": !itemData.data.equipped});
+    const itemupdate = await this.update({"data.equipped": !itemData.system.equipped});
 
     return itemupdate;
   }
@@ -482,7 +488,7 @@ async rollFormula(formula, options={}) {
   }
 
   get getTargetString() {
-      const itemData = this.data.data;
+      const itemData = this.system;
       const config = CONFIG.LOGHORIZONTRPG;
 
       if (itemData.target.total == 0) {
@@ -498,7 +504,7 @@ async rollFormula(formula, options={}) {
   }
 
   get getCheckString() {
-      const itemData = this.data.data;
+      const itemData = this.system;
       const config = CONFIG.LOGHORIZONTRPG;
 
       if (!this.hasAction) {

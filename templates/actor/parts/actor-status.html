@@ -1,11 +1,11 @@
 <div class="status flexcol">
     <div class="status-combat grid grid-5col">
         <h2>Combat</h2>
-        {{#each data.status.combat as |status key|}}
+        {{#each system.status.combat as |status key|}}
         {{#ifNotEquals key "barrier"}}
         <div class="resource flex-group-center grid-span-2">
-            <label for="data.status.combat.{{key}}" class="resource-label flexlarge align-left">{{status.label}}</label>
-            <input type="text" name="data.status.combat.{{key}}.value" value="{{status.value}}" data-dtype="String"/>
+            <label for="system.status.combat.{{key}}" class="resource-label flexlarge align-left">{{status.label}}</label>
+            <input type="text" name="system.status.combat.{{key}}.value" value="{{status.value}}" data-dtype="String"/>
         </div>
         {{/ifNotEquals}}
         {{/each}}
@@ -13,15 +13,15 @@
     <div class="status-life flex-group-left grid grid-10col">
         <h2 class="grid-span-2">Life</h2>
         <div class="resource flex-group-center grid-span-3">
-            <label for="data.status.life.weakness" class="resource-label flexlarge align-left">{{data.status.life.weakness.label}}</label>
-            <input type="text" name="data.status.life.weakness.value" value="{{data.status.life.weakness.value}}" data-dtype="String"/>
+            <label for="system.status.life.weakness" class="resource-label flexlarge align-left">{{system.status.life.weakness.label}}</label>
+            <input type="text" name="system.status.life.weakness.value" value="{{system.status.life.weakness.value}}" data-dtype="String"/>
         </div>
         <div class=""></div>
         <div class="grid-span-4 grid grid-3col">
-            {{#each data.status.life as |status key|}}
+            {{#each system.status.life as |status key|}}
             {{#ifNotInArray key "decay,pursuit,weakness"}}
             <label class="checkbox flex-group-center flexcol">
-                <input type="checkbox" name="data.status.life.{{key}}.value" data-dtype="Boolean" {{checked (asIndexMiddle "data.status.life.$arg.value" key)}}>
+                <input type="checkbox" name="system.status.life.{{key}}.value" data-dtype="Boolean" {{checked (asIndexMiddle "system.status.life.$arg.value" key)}}>
                 {{status.label}}
             </label>
             {{/ifNotInArray}}
@@ -31,18 +31,18 @@
     <div class="status-bad flex-group-left grid grid-10col">
         <h2 class="grid-span-2">Bad</h2>
         <div class="resource flex-group-center grid-span-2">
-            <label for="data.status.bad.decay" class="resource-label flexlarge align-left">{{data.status.bad.decay.label}}</label>
-            <input type="text" name="data.status.bad.decay.value" value="{{data.status.bad.decay.value}}" data-dtype="String"/>
+            <label for="system.status.bad.decay" class="resource-label flexlarge align-left">{{system.status.bad.decay.label}}</label>
+            <input type="text" name="system.status.bad.decay.value" value="{{system.status.bad.decay.value}}" data-dtype="String"/>
         </div>
         <div class="resource flex-group-center grid-span-2">
-            <label for="data.status.bad.pursuit" class="resource-label flexlarge align-left">{{data.status.bad.pursuit.label}}</label>
-            <input type="text" name="data.status.bad.pursuit.value" value="{{data.status.bad.pursuit.value}}" data-dtype="String"/>
+            <label for="system.status.bad.pursuit" class="resource-label flexlarge align-left">{{system.status.bad.pursuit.label}}</label>
+            <input type="text" name="system.status.bad.pursuit.value" value="{{system.status.bad.pursuit.value}}" data-dtype="String"/>
         </div>
         <div class="grid-span-3 grid grid-3col">
-            {{#each data.status.bad as |status key|}}
+            {{#each system.status.bad as |status key|}}
             {{#ifNotInArray key "decay,pursuit,weakness"}}
             <label class="checkbox flex-group-center flexcol">
-                <input type="checkbox" name="data.status.bad.{{key}}.value" data-dtype="Boolean" {{checked (asIndexMiddle "data.status.bad.$arg.value" key)}}>
+                <input type="checkbox" name="system.status.bad.{{key}}.value" data-dtype="Boolean" {{checked (asIndexMiddle "system.status.bad.$arg.value" key)}}>
                 {{status.label}}
             </label>
             {{/ifNotInArray}}
@@ -52,8 +52,8 @@
     <div class="status-other flex-group-left grid grid-5col">
         <h2>Other</h2>
         <div class="resource flex-group-center grid-span-3">
-            <label for="data.status.other.other" class="resource-label flexlarge align-left">{{data.status.other.other.label}}</label>
-            <input type="text" name="data.status.other.other.value" value="{{data.status.other.other.value}}" data-dtype="String"/>
+            <label for="system.status.other.other" class="resource-label flexlarge align-left">{{system.status.other.other.label}}</label>
+            <input type="text" name="system.status.other.other.value" value="{{system.status.other.other.value}}" data-dtype="String"/>
         </div>
     </div>
 </div>

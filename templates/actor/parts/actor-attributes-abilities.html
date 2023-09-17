@@ -1,69 +1,69 @@
 <div class="abilities flexcol">
     <div class="ability flexrow flex-group-left" style=" margin-bottom: 4px;">
-        {{> "systems/loghorizontrpg/templates/actor/parts/actor-ability.html" ability=data.abilities.str key="str"}}
+        {{> "systems/loghorizontrpg/templates/actor/parts/actor-ability.html" ability=system.abilities.str key="str"}}
         
-        {{> "systems/loghorizontrpg/templates/actor/parts/actor-attribute.html" attribute=data.attributes.athletics key="athletics"}}
+        {{> "systems/loghorizontrpg/templates/actor/parts/actor-attribute.html" attribute=system.attributes.athletics key="athletics"}}
 
-        {{> "systems/loghorizontrpg/templates/actor/parts/actor-attribute.html" attribute=data.attributes.endurance key="endurance"}}
+        {{> "systems/loghorizontrpg/templates/actor/parts/actor-attribute.html" attribute=system.attributes.endurance key="endurance"}}
     </div>
     <div style="border-bottom:1px solid black;"></div>
     <div class="ability flexrow flex-group-left" style="margin-bottom: 4px; margin-top: 4px;">
         
-        {{> "systems/loghorizontrpg/templates/actor/parts/actor-ability.html" ability=data.abilities.dex key="dex"}}
+        {{> "systems/loghorizontrpg/templates/actor/parts/actor-ability.html" ability=system.abilities.dex key="dex"}}
         
-        {{> "systems/loghorizontrpg/templates/actor/parts/actor-attribute.html" attribute=data.attributes.disable key="disable"}}
+        {{> "systems/loghorizontrpg/templates/actor/parts/actor-attribute.html" attribute=system.attributes.disable key="disable"}}
 
-        {{> "systems/loghorizontrpg/templates/actor/parts/actor-attribute.html" attribute=data.attributes.operate key="operate"}}
+        {{> "systems/loghorizontrpg/templates/actor/parts/actor-attribute.html" attribute=system.attributes.operate key="operate"}}
     </div>
     <div style="border-bottom:1px solid black;"></div>
     <div class="ability flexrow flex-group-left" style="margin-bottom: 4px; margin-top: 4px;">
         
-        {{> "systems/loghorizontrpg/templates/actor/parts/actor-ability.html" ability=data.abilities.pow key="pow"}}
+        {{> "systems/loghorizontrpg/templates/actor/parts/actor-ability.html" ability=system.abilities.pow key="pow"}}
         
-        {{> "systems/loghorizontrpg/templates/actor/parts/actor-attribute.html" attribute=data.attributes.perception key="perception"}}
+        {{> "systems/loghorizontrpg/templates/actor/parts/actor-attribute.html" attribute=system.attributes.perception key="perception"}}
 
-        {{> "systems/loghorizontrpg/templates/actor/parts/actor-attribute.html" attribute=data.attributes.negotiation key="negotiation"}}
+        {{> "systems/loghorizontrpg/templates/actor/parts/actor-attribute.html" attribute=system.attributes.negotiation key="negotiation"}}
     </div>
     <div style="border-bottom:1px solid black;"></div>
     <div class="ability flexrow flex-group-left" style="margin-bottom: 4px; margin-top: 4px;">
         
-        {{> "systems/loghorizontrpg/templates/actor/parts/actor-ability.html" ability=data.abilities.int key="int"}}
+        {{> "systems/loghorizontrpg/templates/actor/parts/actor-ability.html" ability=system.abilities.int key="int"}}
         
-        {{> "systems/loghorizontrpg/templates/actor/parts/actor-attribute.html" attribute=data.attributes.knowledge key="knowledge"}}
+        {{> "systems/loghorizontrpg/templates/actor/parts/actor-attribute.html" attribute=system.attributes.knowledge key="knowledge"}}
 
-        {{> "systems/loghorizontrpg/templates/actor/parts/actor-attribute.html" attribute=data.attributes.analyze key="analyze"}}
+        {{> "systems/loghorizontrpg/templates/actor/parts/actor-attribute.html" attribute=system.attributes.analyze key="analyze"}}
     </div>
     <div style="border-bottom:1px solid black;"></div>
     <div class="ability flexrow flex-group-left" style="margin-bottom: 4px; margin-top: 4px;">
         
-        {{> "systems/loghorizontrpg/templates/actor/parts/actor-attribute.html" attribute=data.attributes.accuracy key="accuracy"}}
+        {{> "systems/loghorizontrpg/templates/actor/parts/actor-attribute.html" attribute=system.attributes.accuracy key="accuracy"}}
 
-        {{> "systems/loghorizontrpg/templates/actor/parts/actor-attribute.html" attribute=data.attributes.evasion key="evasion"}}
+        {{> "systems/loghorizontrpg/templates/actor/parts/actor-attribute.html" attribute=system.attributes.evasion key="evasion"}}
 
-        {{> "systems/loghorizontrpg/templates/actor/parts/actor-attribute.html" attribute=data.attributes.resistance key="resistance"}}
+        {{> "systems/loghorizontrpg/templates/actor/parts/actor-attribute.html" attribute=system.attributes.resistance key="resistance"}}
     </div>
     <div style="border-bottom:1px solid black;"></div>
     <div class="ability flexrow flex-group-left" style="margin-bottom: 4px; margin-top: 4px;">
         
-        {{> "systems/loghorizontrpg/templates/actor/parts/actor-combatstat.html" combatstat=data.combatstats.patk key="patk"}}
+        {{> "systems/loghorizontrpg/templates/actor/parts/actor-combatstat.html" combatstat=system.combatstats.patk key="patk"}}
 
-        {{> "systems/loghorizontrpg/templates/actor/parts/actor-combatstat.html" combatstat=data.combatstats.matk key="matk"}}
+        {{> "systems/loghorizontrpg/templates/actor/parts/actor-combatstat.html" combatstat=system.combatstats.matk key="matk"}}
 
-        {{> "systems/loghorizontrpg/templates/actor/parts/actor-combatstat.html" combatstat=data.combatstats.recovery key="recovery"}}
+        {{> "systems/loghorizontrpg/templates/actor/parts/actor-combatstat.html" combatstat=system.combatstats.recovery key="recovery"}}
     </div>
     <div style="border-bottom:1px solid black;"></div>
     <div class="ability flexrow flex-group-left" style="margin-bottom: 4px; margin-top: 4px;">
         
-        {{> "systems/loghorizontrpg/templates/actor/parts/actor-combatstat.html" combatstat=data.combatstats.pdef key="pdef"}}
+        {{> "systems/loghorizontrpg/templates/actor/parts/actor-combatstat.html" combatstat=system.combatstats.pdef key="pdef"}}
         
-        {{> "systems/loghorizontrpg/templates/actor/parts/actor-combatstat.html" combatstat=data.combatstats.mdef key="mdef"}}
+        {{> "systems/loghorizontrpg/templates/actor/parts/actor-combatstat.html" combatstat=system.combatstats.mdef key="mdef"}}
         
-        {{> "systems/loghorizontrpg/templates/actor/parts/actor-combatstat.html" combatstat=data.combatstats.initiative key="initiative"}}
+        {{> "systems/loghorizontrpg/templates/actor/parts/actor-combatstat.html" combatstat=system.combatstats.initiative key="initiative"}}
     </div>
     <div style="border-bottom:1px solid black;"></div>
     <div class="ability flexrow flex-group-left" style="margin-bottom: 4px; margin-top: 4px;">
         
-        {{> "systems/loghorizontrpg/templates/actor/parts/actor-combatstat.html" combatstat=data.combatstats.speed key="speed"}}
+        {{> "systems/loghorizontrpg/templates/actor/parts/actor-combatstat.html" combatstat=system.combatstats.speed key="speed"}}
         
     </div>
     <div style="border-bottom:1px solid black;"></div>

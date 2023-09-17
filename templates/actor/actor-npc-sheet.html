@@ -14,52 +14,52 @@
         and it will add a small amount of padding, a border, and will
         center all of its child elements content and text. --}}
         <div class="resource flex-group-center">
-          <label for="data.hp.value" class="resource-label">Health</label>
+          <label for="system.hp.value" class="resource-label">Health</label>
           <div class="resource-content flexrow flex-center flex-between flex-group-center">
-              <input type="text" name="data.hp.value" value="{{data.hp.value}}" data-dtype="Number"/>
+              <input type="text" name="system.hp.value" value="{{system.hp.value}}" data-dtype="Number"/>
               <span> / </span>
-              <input type="text" name="data.hp.max" value="{{data.hp.max}}" data-dtype="Number"/>
+              <input type="text" name="system.hp.max" value="{{system.hp.max}}" data-dtype="Number"/>
           </div>
         </div>
 
         <div class="resource flex-group-center">
-          <label for="data.fate.value" class="resource-label">Fate Points</label>
+          <label for="system.fate.value" class="resource-label">Fate Points</label>
           <div class="resource-content flexrow flex-center flex-between flex-group-center">
-              <input type="text" name="data.fate.value" value="{{data.fate.value}}" data-dtype="Number"/>
+              <input type="text" name="system.fate.value" value="{{system.fate.value}}" data-dtype="Number"/>
               <span> / </span>
-              <input type="text" name="data.fate.max" value="{{data.fate.max}}" data-dtype="Number"/>
+              <input type="text" name="system.fate.max" value="{{system.fate.max}}" data-dtype="Number"/>
           </div>
         </div>
 
         <div class="resource flex-group-center">
-            <label for="data.cr" class="resource-label">Character Rank</label>
+            <label for="system.cr" class="resource-label">Character Rank</label>
             <div class="resource-content flexrow flex-center flex-between flex-group-center">
-                <input type="text" name="data.cr" value="{{data.cr}}" data-dtype="Number"/>
+                <input type="text" name="system.cr" value="{{system.cr}}" data-dtype="Number"/>
             </div>
         </div>
     </div>
     <div class="resources grid grid-5col">
         <div class="resource flex-group-center">
-            <label for="data.status.combat.barrier" class="resource-label flexlarge align-left"">{{data.status.combat.barrier.label}}</label>
-            <input type="text" name="data.status.combat.barrier.value" value="{{data.status.combat.barrier.value}}" data-dtype="String"/>
+            <label for="system.status.combat.barrier" class="resource-label flexlarge align-left">{{system.status.combat.barrier.label}}</label>
+            <input type="text" name="system.status.combat.barrier.value" value="{{system.status.combat.barrier.value}}" data-dtype="String"/>
         </div>
 
         <div class="resource flex-group-center">
-            <label for="data.hp.temp" class="resource-label flexlarge align-left"">Temp. HP</label>
-            <input type="text" name="data.hp.temp" value="{{data.hp.temp}}" data-dtype="Number"/>
+            <label for="system.hp.temp" class="resource-label flexlarge align-left">Temp. HP</label>
+            <input type="text" name="system.hp.temp" value="{{system.hp.temp}}" data-dtype="Number"/>
         </div>
 
         <div class="resource flex-group-center">
-          <label for="data.hatemultiplier" class="resource-label">Hate Multiplier</label>
+          <label for="system.hatemultiplier" class="resource-label">Hate Multiplier</label>
           <div class="resource-content flexrow flex-center flex-between flex-group-center">
-              <input type="text" name="data.hatemultiplier" value="{{data.hatemultiplier}}" data-dtype="Number"/>
+              <input type="text" name="system.hatemultiplier" value="{{system.hatemultiplier}}" data-dtype="Number"/>
           </div>
         </div>
 
         <div class="resource flex-group-center grid-span-2">
-          <label for="data.tags" class="resource-label">Tags</label>
+          <label for="system.tags" class="resource-label tag-edit">Tags</label>
           <div class="resource-content flexrow flex-center flex-between flex-group-center">
-              <input type="text" name="data.tags" value="{{data.tags}}" data-dtype="String"/>
+              <label>{{#each system.tags as |tag key|}}<label class="tag">{{tag}}</label>{{/each}}</label>
           </div>
         </div>
 
@@ -95,29 +95,29 @@
                     <span>Base</span>
                     <span>Mod</span>
                 </div>
-                {{#each data.abilities as |ability key|}}
+                {{#each system.abilities as |ability key|}}
                 <div class="ability flexrow flex-group-center">
                   <div>
-                      <label for="data.abilities.{{key}}.value" class="resource-label rollable flexlarge align-left" data-roll="2d6+@abilities.{{key}}.mod" data-label="{{ability.label}}">{{ability.label}}</label>
+                      <label for="system.abilities.{{key}}.value" class="resource-label rollable flexlarge align-left" data-roll="2d6+@abilities.{{key}}.mod" data-label="{{ability.label}}">{{ability.label}}</label>
                   </div>
                     <div>
-                  <input type="text" name="data.abilities.{{key}}.value" value="{{ability.value}}" data-dtype="Number"/>
+                  <input type="text" name="system.abilities.{{key}}.value" value="{{ability.value}}" data-dtype="Number"/>
               </div>
                 <div>
                   <span>{{ability.base}}</span>
               </div>
                 <div>
-                  <span class="ability-mod"">{{numberFormat ability.mod decimals=0 sign=true}}</span>
+                  <span class="ability-mod">{{numberFormat ability.mod decimals=0 sign=true}}</span>
               </div>
                 </div>
                 {{/each}}
             </div>
             <label class="resource-text">Other Stats</label>
             <div class="combatstats flexcol">
-                {{#each data.combatstats as |combatstat key|}}
+                {{#each system.combatstats as |combatstat key|}}
                 <div class="combatstat flexrow flex-group-center">
-                    <label for="data.combatstats.{{key}}.value" class="resource-label flexlarge align-left"">{{combatstat.label}}</label>
-                    <input type="text" name="data.combatstats.{{key}}.value" value="{{combatstat.value}}" data-dtype="Number"/>
+                    <label for="system.combatstats.{{key}}.value" class="resource-label flexlarge align-left">{{combatstat.label}}</label>
+                    <input type="text" name="system.combatstats.{{key}}.value" value="{{combatstat.value}}" data-dtype="Number"/>
                     <span class="combatstat-total">{{numberFormat combatstat.total decimals=0}}</span>
                 </div>
                 {{/each}}
@@ -130,16 +130,16 @@
                   <span></span>
                   <span>Fixed</span>
               </div>
-              {{#each data.attributes as |attribute key|}}
+              {{#each system.attributes as |attribute key|}}
               <div class="attribute flexrow flex-group-center">
                 <div>
-                    <label for="data.attributes.{{key}}.value" class="resource-label rollable flexlarge align-left" data-roll-type="attribute" data-attribute="{{key}}">{{attribute.label}}</label>
+                    <label for="system.attributes.{{key}}.value" class="resource-label rollable flexlarge align-left" data-roll-type="attribute" data-attribute="{{key}}">{{attribute.label}}</label>
                 </div>
                 <div>
-                    <input type="text" name="data.attributes.{{key}}.value" value="{{attribute.value}}" data-dtype="String"/>
+                    <input type="text" name="system.attributes.{{key}}.value" value="{{attribute.value}}" data-dtype="String"/>
                 </div>
                 <div>
-                    <select name="data.attributes.{{key}}.static">
+                    <select name="system.attributes.{{key}}.static">
                         {{#select attribute.static}}
                         <option value="false">No</option>
                         <option value="true">Yes</option>
@@ -157,13 +157,13 @@
                   <label class="resource-text">Difficulties</label>
                   <span></span>
               </div>
-              {{#each data.difficulties as |difficulty key|}}
+              {{#each system.difficulties as |difficulty key|}}
               <div class="difficulties flexrow flex-group-center">
                   <div>
-                      <label for="data.difficulties.{{key}}.value" class="resource-label flexlarge align-left"">{{difficulty.label}}</label>
+                      <label for="system.difficulties.{{key}}.value" class="resource-label flexlarge align-left">{{difficulty.label}}</label>
                   </div>
                   <div>
-                      <input type="text" name="data.difficulties.{{key}}.value" value="{{difficulty.value}}" data-dtype="Number"/>
+                      <input type="text" name="system.difficulties.{{key}}.value" value="{{difficulty.value}}" data-dtype="Number"/>
                   </div>
               </div>
               {{/each}}
@@ -178,7 +178,7 @@
     {{!-- Biography Tab --}}
     <div class="tab biography" data-group="primary" data-tab="description">
       {{!-- If you want TinyMCE editors to output inline rolls when rendered, you need to pass the actor's roll data to the rollData property. --}}
-      {{editor content=data.biography target="data.biography" rollData=rollData button=true owner=owner editable=editable}}
+      {{editor enrichedBiography target="system.biography" button=true editable=editable}}
     </div>
 
     {{!-- Owned Items Tab --}}

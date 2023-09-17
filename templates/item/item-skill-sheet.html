@@ -19,22 +19,22 @@
 
     {{!-- Description Tab --}}
     <div class="tab" data-group="primary" data-tab="description">
-      {{editor content=data.description target="data.description" rollData=rollData button=true owner=owner editable=editable}}
+      {{editor enrichedDescription target="system.description" button=true editable=editable}}
     </div>
 
     {{!-- Attributes Tab --}}
     <div class="tab attributes" data-group="primary" data-tab="attributes">
       {{!-- As you add new fields, add them in here! --}}
       <div class="resource flexrow flex-group-left">
-          <label class="resource-label">Tags:</label>
-          <input type="text" name="data.tags" value="{{data.tags}}" data-dtype="String"/>
+          <label class="resource-label tag-edit">Tags:</label>
+          <label class="grid-span-2">{{#each system.tags as |tag key|}}<label class="tag">{{tag}}</label>{{/each}}</label>
       </div>
       <div class="resource flexrow flex-group-left">
           <label class="resource-label">Skill Rank:</label>
           <div class="resource flexrow flex-group-center">
-              <input type="text" name="data.sr.value" value="{{data.sr.value}}" data-dtype="Number"/>
+              <input type="text" name="system.sr.value" value="{{system.sr.value}}" data-dtype="Number"/>
               <span> / </span>
-              <input type="text" name="data.sr.max" value="{{data.sr.max}}" data-dtype="Number"/>
+              <input type="text" name="system.sr.max" value="{{system.sr.max}}" data-dtype="Number"/>
           </div>
       </div>
     </div>

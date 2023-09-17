@@ -129,7 +129,7 @@
             }
         },
         "biography": "",
-        "tags" : ""
+        "tags" : []
       }
     },
     "character": {
@@ -262,7 +262,7 @@
         "description": ""
         },
       "tagged": {
-          "tags": ""
+          "tags": []
       },
       "item": {
         "ir": 1,

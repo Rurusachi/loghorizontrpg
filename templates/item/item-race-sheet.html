@@ -18,7 +18,7 @@
 
     {{!-- Description Tab --}}
     <div class="tab" data-group="primary" data-tab="description">
-      {{editor content=data.description target="data.description" rollData=rollData button=true owner=owner editable=editable}}
+      {{editor enrichedDescription target="system.description" button=true editable=editable}}
     </div>
 
     {{!-- Attributes Tab --}}
@@ -28,28 +28,28 @@
           <div class="ability flexcol flex-group-center">
             <div class="resource">
               <label class="resource-label">HP</label>
-              <input type="text" name="data.hp.value" value="{{data.hp.value}}" data-dtype="Number"/>
+              <input type="text" name="system.hp.value" value="{{system.hp.value}}" data-dtype="Number"/>
             </div>
             <div class="resource">
               <label class="resource-label">Fate points</label>
-              <input type="text" name="data.fate.value" value="{{data.fate.value}}" data-dtype="Number"/>
+              <input type="text" name="system.fate.value" value="{{system.fate.value}}" data-dtype="Number"/>
             </div>
             <label class="resource-label">Abilities</label>
             <div class="resource">
               <label class="resource-label">STR</label>
-              <input type="text" name="data.abilities.str.value" value="{{data.abilities.str.value}}" data-dtype="Number"/>
+              <input type="text" name="system.abilities.str.value" value="{{system.abilities.str.value}}" data-dtype="Number"/>
             </div>
             <div class="resource">
               <label class="resource-label">DEX</label>
-              <input type="text" name="data.abilities.dex.value" value="{{data.abilities.dex.value}}" data-dtype="Number"/>
+              <input type="text" name="system.abilities.dex.value" value="{{system.abilities.dex.value}}" data-dtype="Number"/>
             </div>
             <div class="resource">
               <label class="resource-label">POW</label>
-              <input type="text" name="data.abilities.pow.value" value="{{data.abilities.pow.value}}" data-dtype="Number"/>
+              <input type="text" name="system.abilities.pow.value" value="{{system.abilities.pow.value}}" data-dtype="Number"/>
             </div>
             <div class="resource">
               <label class="resource-label">INT</label>
-              <input type="text" name="data.abilities.int.value" value="{{data.abilities.int.value}}" data-dtype="Number"/>
+              <input type="text" name="system.abilities.int.value" value="{{system.abilities.int.value}}" data-dtype="Number"/>
             </div>
           </div>
         </div>

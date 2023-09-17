@@ -9,5 +9,8 @@ They have been very helpful resources to understand how Foundry works.
 
 Manifest link: https://github.com/Rurusachi/loghorizontrpg/releases/latest/download/system.json
 
+Since v0.5.0 the compendium has been moved to a separate module.
+The compendium module can be found at: https://github.com/Rurusachi/loghorizontrpg-compendium
+
 You can toggle active effects in the active effect tab.  
-Style skills have conditional effects on by default. If you do not fulfill the condition turn off the corresponding effect.
+Style skills have conditional effects on by default. If you do not fulfill the condition you should turn off the corresponding effect.

@@ -171,3 +171,10 @@ LOGHORIZONTRPG.actionBonus = {
     "recovery": "LOGHORIZONTRPG.ActionBonusRecovery",
     "cr": "LOGHORIZONTRPG.ActionBonusCR"
 };
+
+LOGHORIZONTRPG.check = {
+    "hit": "LOGHORIZONTRPG.HitCheck",
+    "defense": "LOGHORIZONTRPG.DefenseCheck",
+    "evasion": "LOGHORIZONTRPG.EvasionCheck",
+    "resistance": "LOGHORIZONTRPG.RestistanceCheck"
+};
