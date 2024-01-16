@@ -7,6 +7,7 @@ export default class TagEditorDialog extends DocumentSheet {
           template: "systems/loghorizontrpg/templates/apps/tag-editor.html",
           classes: ["loghorizontrpg", "tag-editor"],
           title: "Tag Editor",
+          resizable: true,
           choices: {},
           config: {}
       });
@@ -46,6 +47,7 @@ export default class TagEditorDialog extends DocumentSheet {
                             <input type="text" name="${div.children().length}" value="" data-dtype="String"/>
                         </div>`);
             div.append(props);
+            this.setPosition({height: "auto"});
           });
     }
   
