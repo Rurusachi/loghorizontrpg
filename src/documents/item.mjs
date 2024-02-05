@@ -448,7 +448,7 @@ async rollFormula(formula, options={}) {
   }
 
   get hasAction() {
-      return (this.system?.hasaction == true ?? false) || this.type === "skill" || this.type === "consumable";
+      return (this.system?.hasAction == true ?? false) || this.type === "skill" || this.type === "consumable";
   }
 
   async toggleEquipped() {

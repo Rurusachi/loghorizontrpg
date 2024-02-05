@@ -10,3 +10,7 @@ npm-debug.log
 *.lock
 packs/
 *.code-workspace
+
+/loghorizontrpg.mjs
+/loghorizontrpg.mjs.map
+/style.css

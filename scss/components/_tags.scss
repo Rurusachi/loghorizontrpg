@@ -1,0 +1,11 @@
+.tag-edit:hover,
+.tag-edit:focus {
+    color: #000;
+    text-shadow: 0 0 10px red;
+    cursor: pointer;
+}
+
+.outlined {
+    border-style: solid;
+    border-width: thin;
+}

@@ -2,24 +2,29 @@
   "id": "loghorizontrpg",
   "title": "LogHorizonTRPG",
   "description": "The Log Horizon TRPG system for FoundryVTT",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "compatibility": {
-    "minimum": 11,
-    "verified": 11.307
+    "minimum": "11",
+    "verified": "11.307"
   },
   "authors": [
     {
-      "name": "Rurusachi"
+      "name": "Rurusachi",
+      "flags": {}
     }
   ],
-  "esmodules": ["module/loghorizontrpg.mjs"],
-  "styles": ["css/loghorizontrpg.css"],
-  "scripts": [],
+  "esmodules": [
+    "loghorizontrpg.mjs"
+  ],
+  "styles": [
+    "style.css"
+  ],
   "languages": [
     {
       "lang": "en",
       "name": "English",
-      "path": "lang/en.json"
+      "path": "lang/en.json",
+      "flags": {}
     }
   ],
   "packs": [
@@ -28,7 +33,12 @@
       "label": "System Info",
       "system": "loghorizontrpg",
       "path": "packs/system-info",
-      "type": "JournalEntry"
+      "type": "JournalEntry",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {}
     }
   ],
   "gridDistance": 1,
@@ -37,9 +47,9 @@
   "secondaryTokenAttribute": "hate",
   "url": "https://github.com/Rurusachi/loghorizontrpg",
   "manifest": "https://github.com/Rurusachi/loghorizontrpg/releases/latest/download/system.json",
-  "download": "",
+  "download": "https://github.com/Rurusachi/loghorizontrpg/releases/download/v0.5.0/lhrpg-v0.5.0.zip",
   "license": "LICENSE.txt",
   "flags": {
-    "needsMigrationVersion": "0.5.0"
+    "needsMigrationVersion": "0.6.0"
   }
 }
