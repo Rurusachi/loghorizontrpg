@@ -1,0 +1,44 @@
+<div class="compendium-browser">
+    <header>
+        <nav class="sheet-tabs tabs" data-group="primary">
+            {{!-- Default tab is specified in actor-sheet.mjs --}}
+            <button class="item compendium-browser-tab-button" data-tab="skills">Skills</button>
+            <button class="item compendium-browser-tab-button" data-tab="items">Items</button>
+            <button class="item compendium-browser-tab-button" data-tab="races">Races</button>
+            <button class="item compendium-browser-tab-button" data-tab="classes">Classes</button>
+            <button class="item compendium-browser-tab-button" data-tab="settings">Settings</button>
+        </nav>
+    </header>
+    
+    {{!-- Sheet Body --}}
+      <section class="sheet-body">
+        
+    
+        {{!-- Skills Tab --}}
+        <div class="tab skills" data-group="primary" data-tab="skills">
+            {{> "systems/loghorizontrpg/templates/apps/compendium-browser/parts/skills.html"}}
+        </div>
+    
+        {{!-- Items Tab --}}
+        <div class="tab items" data-group="primary" data-tab="items">
+            {{> "systems/loghorizontrpg/templates/apps/compendium-browser/parts/items.html"}}
+        </div>
+    
+        {{!-- Races Tab --}}
+        <div class="tab races" data-group="primary" data-tab="races">
+            {{> "systems/loghorizontrpg/templates/apps/compendium-browser/parts/races.html"}}
+        </div>
+    
+        {{!-- Classes Tab --}}
+        <div class="tab classes" data-group="primary" data-tab="classes">
+            {{> "systems/loghorizontrpg/templates/apps/compendium-browser/parts/classes.html"}}
+        </div>
+    
+        {{!-- Settings Tab --}}
+        <div class="tab settings" data-group="primary" data-tab="settings">
+            {{> "systems/loghorizontrpg/templates/apps/compendium-browser/parts/settings.html"}}
+        </div>
+    
+      </section>
+
+</div>

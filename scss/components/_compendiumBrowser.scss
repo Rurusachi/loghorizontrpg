@@ -1,0 +1,43 @@
+.compendium-browser {
+    overflow-y: hidden;
+}
+
+.compendium-browser-content {
+    height: calc(100% - 32px - 10px); // 32px = height of header, 10px = margin between header and content
+}
+
+.compendium-browser-tab-button {
+    color: white;
+    background-color: darkgreen;
+}
+
+.compendium-browser-filters {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    row-gap: 20px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.tag_negate_button {
+    order: 4;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50px;
+    cursor: pointer;
+    font: 14px/1 Arial;
+    background: var(--tag-remove-btn-bg);
+    color: var(--tag-remove-btn-color);
+    width: 14px;
+    height: 14px;
+    margin-inline: auto 4.6666666667px;
+    overflow: hidden;
+    transition: .2s ease-out;
+}
+
+.tagify__tag-text.tag_negated {
+    text-decoration: line-through;
+}

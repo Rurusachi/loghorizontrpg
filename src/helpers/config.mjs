@@ -178,3 +178,7 @@ LOGHORIZONTRPG.check = {
     "evasion": "LOGHORIZONTRPG.EvasionCheck",
     "resistance": "LOGHORIZONTRPG.ResistanceCheck"
 };
+
+LOGHORIZONTRPG.compendium = {
+  "browser": "LOGHORIZONTRPG.Compendium.CompendiumBrowser"  
+};

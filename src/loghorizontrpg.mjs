@@ -90,6 +90,11 @@ Hooks.once('init', async function() {
   return preloadHandlebarsTemplates();
 });
 
+Hooks.on('renderCompendiumDirectory', async function() {
+  console.log('renderCompendiumDirectory ');
+  addCompendiumButton();
+});
+
 Hooks.once('ready', async function() {
   
   if ( !game.user.isGM ) return;
@@ -114,6 +119,15 @@ Hooks.once('ready', async function() {
   ui.notifications.info(`Migrating world from version ${cv} to version ${game.system.version}`, {permanent: true});
   await migrateWorld(cv);
 });
+
+async function addCompendiumButton() {
+  const compendiumBrowserButton = `<button class="compendium-browser-button">${game.i18n.format(CONFIG.LOGHORIZONTRPG.compendium["browser"])}</button>`
+  const footer = $("#compendium > footer");
+  footer.append(compendiumBrowserButton);
+
+  // TODO: Bind function for the Compendium Browser
+  footer.find("button.compendium-browser-button").click(ev => {return new CompendiumBrowserDialog().render(true);});
+}
 
 async function showLatestVersionInfo() {
   try {

@@ -1,0 +1,39 @@
+<div class="grid grid-4col compendium-browser-content">
+    {{> "systems/loghorizontrpg/templates/apps/compendium-browser/parts/skill-filters.html"}}
+
+    <ol class="items-list grid-span-3">
+        <li class="item flexrow items-header">
+            <div class="item-name">Skills</div>
+            <div class="item-timing">Timing</div>
+            <div class="item-limit">Limit</div>
+            <div class="item-tags">Tags</div>
+            <div class="item-type">Compendium</div>
+        </li>
+        <div class="items-in-list {{tag}}">
+            {{#each skills as |item id|}}
+            <li class="item flexrow" data-item-id="{{item.uuid}}">
+                <div class="item-name rollable">
+                    <div class="item-image">
+                        <a class="" data-roll-type="item"><img src="{{item.img}}" title="{{item.name}}" width="24"
+                                height="24" /></a>
+                    </div>
+                    <h4>{{item.name}}</h4>
+                </div>
+                <div class="item-timing item-prop">
+                    <span>{{localize (asIndexMiddle "config.timingTypes.$arg" item.system.timing)}}</span>
+                </div>
+                <div class="item-limit item-prop">
+                    {{#ifNotEquals item.system.limit.type "None"}}
+                    <span>{{item.system.limit.value}} / {{item.system.limit.max}} {{localize (asIndexMiddle
+                        "config.limitTypes.$arg" system.limit.type)}}</span>
+                    {{/ifNotEquals}}
+                </div>
+                <div class="item-tags item-prop">{{#each item.system.tags as |tag key|}}<label
+                        class="tag">{{tag}}</label>{{/each}}</div>
+                
+                <div class="item-type item-prop">{{item.compendiumSource}}</div>
+            </li>
+            {{/each}}
+        </div>
+    </ol>
+</div>

@@ -154,6 +154,8 @@
   "LOGHORIZONTRPG.HitCheck": "Hit Check",
   "LOGHORIZONTRPG.DefenseCheck": "Defense Check",
   "LOGHORIZONTRPG.EvasionCheck": "Evasion Check",
-  "LOGHORIZONTRPG.RestistanceCheck": "Resistance Check"
+  "LOGHORIZONTRPG.ResistanceCheck": "Resistance Check",
+
+  "LOGHORIZONTRPG.Compendium.CompendiumBrowser": "Compendium Browser"
 
 }
