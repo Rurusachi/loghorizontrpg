@@ -14,16 +14,16 @@ const s_PACKAGE_ID = 'systems/loghorizontrpg';
 // by shortening 'template-svelte-esm'.
 const s_SVELTE_HASH_ID = 'lhtrpg';
 
-const s_COMPRESS = false;  // Set to true to compress the module bundle.
-const s_SOURCEMAPS = true; // Generate sourcemaps for the bundle (recommended).
 
 // Used in bundling particularly during development. If you npm-link packages to your project add them here.
 const s_RESOLVE_CONFIG = {
     browser: true
 };
-const plugins = s_COMPRESS ? [autoprefixer, postcssPresetEnv, cssnano] : [autoprefixer, postcssPresetEnv];
-export default () => {
+export default ({command, mode}) => {
     /** @type {import('vite').UserConfig} */
+    const s_COMPRESS = false;  // Set to true to compress the module bundle.
+    const s_SOURCEMAPS = mode === "development"; // Generate sourcemaps for the bundle (recommended).
+    const plugins = s_COMPRESS ? [autoprefixer, postcssPresetEnv, cssnano] : [autoprefixer, postcssPresetEnv];
     return {
         root: 'src/',                 // Source location / esbuild root.
         base: `/${s_PACKAGE_ID}/`,    // Base module path that 30001 / served dev directory.
