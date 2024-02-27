@@ -1,12 +1,14 @@
 import Tagify from "@yaireo/tagify";
 
 export default class CompendiumBrowserDialog extends Application {
-    skillFilters;
-    itemFilters;
+    defaultFilters = {skill: {text: "", tags: {mode: "or", tags: []}, timings:[], limits:[], compendiumSources: []},
+                       item: {text: "", tags: {mode: "or", tags: []}, timings:[], limits:[], itemrank: {min: 0, max: 0}, compendiumSources: []}};
     tagFilterModes = {and: "All", or: "Any"};
+
     compendiumData;
-    skillFilterScrollPos;
-    itemFilterScrollPos;
+    filteredCompendiumData;
+    tabData;
+    hiddenFilters;
 
     constructor(options={}) {
         super(options);
@@ -15,10 +17,12 @@ export default class CompendiumBrowserDialog extends Application {
         * Store a reference to the Item entity being used
         * @type {LogHorizonTRPGItem}
         */
-        this.skillFilters = {text: "", tags: {mode: "or", tags: []}, timings:[], limits:[], compendiumSources: []};
-        this.itemFilters = {text: "", tags: {mode: "or", tags: []}, timings:[], limits:[], itemrank: {min: 0, max: 0}, compendiumSources: []};
-        this.skillFilterScrollPos = 0;
-        this.itemFilterScrollPos = 0;
+        this.tabData = {skills: {filters: {}, scrollPositions: {filter: 0, list: 0}, refilter: true, listWindow: [0, 20]},
+                         items: {filters: {}, scrollPositions: {filter: 0, list: 0}, refilter: true, listWindow: [0, 20]}};
+        
+        this.tabData.skills.filters = foundry.utils.deepClone(this.defaultFilters.skill);
+        this.tabData.items.filters = foundry.utils.deepClone(this.defaultFilters.item);
+        this.hiddenFilters = [];
     }
 
     /** @inheritdoc */
@@ -42,18 +46,38 @@ export default class CompendiumBrowserDialog extends Application {
     render(force=false, options={}) {
         // Save scroll positions
         let skillFilters = $(".skills > .compendium-browser-content > .compendium-browser-filters");
-        this.skillFilterScrollPos = skillFilters.length > 0 ? this.skillFilterScrollPos = skillFilters.scrollTop() : 0;
+        this.tabData.skills.scrollPositions.filter = skillFilters.length > 0 ? this.tabData.skills.scrollPositions.filter = skillFilters.scrollTop() : 0;
 
         let itemFilters = $(".items > .compendium-browser-content > .compendium-browser-filters");
-        this.itemFilterScrollPos = itemFilters.length > 0 ? this.itemFilterScrollPos = itemFilters.scrollTop() : 0;
+        this.tabData.items.scrollPositions.filter = itemFilters.length > 0 ? this.tabData.items.scrollPositions.filter = itemFilters.scrollTop() : 0;
 
+        let hidden = $(".hideable-content.item-hidden");
+        this.hiddenFilters = hidden.parents(".hideable-parent").map((i, e) => {
+            return e.id
+        });
+
+        if (options.resetItemWindow) {
+            this.tabData.items.listWindow = [0, 20];
+            this.tabData.items.scrollPositions.list = 0;
+        } else {
+            let itemList = $(".items > .compendium-browser-content > .items-list");
+            this.tabData.items.scrollPositions.list = itemList.scrollTop()
+        }
+
+        if (options.resetSkillWindow) {
+            this.tabData.skills.listWindow = [0, 20];
+            this.tabData.skills.scrollPositions.list = 0;
+        } else {
+            let skillList = $(".skills > .compendium-browser-content > .items-list");
+            this.tabData.skills.scrollPositions.list = skillList.scrollTop()
+        }
+        
         super.render(force, options);
     }
 
     /** @override */
     async _onDragStart(event) {
         const li = event.currentTarget;
-        console.log(event);
         if ( event.target.classList.contains("entity-link") ) return;
 
         // Create drag data
@@ -79,178 +103,39 @@ export default class CompendiumBrowserDialog extends Application {
         const choices = {};
 
         if (this.compendiumData === undefined) {
-            console.log("Load first time only");
             this.compendiumData = await this.loadCompendiums();
         }
-        const compendiumData = foundry.utils.deepClone(this.compendiumData);
-
-
-        // Sort/Filter
-        // ITEMS
-        // FILTER
-        // FILTER ITEM RANK
-        if (this.itemFilters.itemrank) {
-            compendiumData.items = compendiumData.items.filter((item, index) => {
-                if ((this.itemFilters.itemrank.min == 0 || item.system.ir >= this.itemFilters.itemrank.min) && (this.itemFilters.itemrank.max == 0 || item.system.ir <= this.itemFilters.itemrank.max)) return true;
-                return false;
-            });
-        };
-        // FILTER COMPENDIUMS
-        if (this.itemFilters.compendiumSources.length > 0) {
-            compendiumData.items = compendiumData.items.filter((item, index) => {
-                if (this.itemFilters.compendiumSources.includes(item.compendiumSource)) return true;
-                return false;
-            });
-        };
-        // FILTER TIMINGS
-        if (this.itemFilters.timings.length > 0) {
-            compendiumData.items = compendiumData.items.filter((item, index) => {
-                if (item.hasAction && this.itemFilters.timings.includes(item.system.timing)) return true;
-                return false;
-            });
-        };
-        // FILTER LIMITS
-        if (this.itemFilters.limits.length > 0) {
-            compendiumData.items = compendiumData.items.filter((item, index) => {
-                if (item.hasAction && this.itemFilters.limits.includes(item.system.limit.type)) return true;
-                return false;
-            });
-        };
-        // FILTER TAGS INCLUDES
-        const itemIncludeTags = this.itemFilters.tags.tags.filter(tag => !tag.not).map(t => t.value.toLowerCase());
-        if (itemIncludeTags.length > 0) {
-            if (this.itemFilters.tags.mode == "and") {
-                compendiumData.items = compendiumData.items.filter((item, index) => {
-                    let loweredMap = item.system.tags.map(t => t.toLowerCase());
-                    return itemIncludeTags.every(tag => {
-                        return loweredMap.includes(tag);
-                    });
-                });
-            } else if (this.itemFilters.tags.mode == "or") {
-                compendiumData.items = compendiumData.items.filter((item, index) => {
-                    let loweredMap = item.system.tags.map(t => t.toLowerCase());
-                    return itemIncludeTags.some(tag => {
-                        return loweredMap.includes(tag);
-                    })
-                });
-            } else {
-                console.log("Invalid tag mode set");
-            }
-        }
-        // FILTER TAGS EXCLUDES
-        const itemExcludeTags = this.itemFilters.tags.tags.filter(tag => tag.not).map(t => t.value.toLowerCase());
-        if (itemExcludeTags.length > 0) {
-            compendiumData.items = compendiumData.items.filter((item, index) => {
-                let loweredMap = item.system.tags.map(t => t.toLowerCase());
-                return itemExcludeTags.some(tag => {
-                    return !loweredMap.includes(tag);
-                });
-            });
-        }
-        // FILTER TEXT
-        if (this.itemFilters.text != "") {
-            compendiumData.items = compendiumData.items.filter((item, index) => {
-                if (item.name.toLowerCase().search(this.itemFilters.text.toLowerCase()) != -1) return true;
-                if (item.system.description.toLowerCase().search(this.itemFilters.text.toLowerCase()) != -1) return true;
-                return false;
-            });
+        if (this.filteredCompendiumData === undefined) {
+            this.filteredCompendiumData = foundry.utils.deepClone(this.compendiumData)
         }
 
-        // SORT
-        //compendiumData.items.sort((a, b) => a.name.localeCompare(b.name));
-        compendiumData.items.sort((a, b) => a.compendiumSource.localeCompare(b.compendiumSource));
-        compendiumData.items.sort((a, b) => a.system.ir - b.system.ir);
+        if (this.tabData.items.refilter) {
+            const compendiumItems = foundry.utils.deepClone(this.compendiumData.items);
+            this.filteredCompendiumData.items = this.filterItems(compendiumItems)
+        }
 
-        // SKILLS
-        // FILTER
-        // FILTER COMPENDIUMS
-        if (this.skillFilters.compendiumSources.length > 0) {
-            compendiumData.skills = compendiumData.skills.filter((skill, index) => {
-                if (this.skillFilters.compendiumSources.includes(skill.compendiumSource)) return true;
-                return false;
-            });
-        };
-        // FILTER TIMINGS
-        if (this.skillFilters.timings.length > 0) {
-            compendiumData.skills = compendiumData.skills.filter((skill, index) => {
-                if (this.skillFilters.timings.includes(skill.system.timing)) return true;
-                return false;
-            });
-        };
-        // FILTER LIMITS
-        if (this.skillFilters.limits.length > 0) {
-            compendiumData.skills = compendiumData.skills.filter((skill, index) => {
-                if (this.skillFilters.limits.includes(skill.system.limit.type)) return true;
-                return false;
-            });
-        };
-        // FILTER TAGS INCLUDES
-        const skillIncludeTags = this.skillFilters.tags.tags.filter(tag => !tag.not).map(t => t.value.toLowerCase());
-        if (skillIncludeTags.length > 0) {
-            if (this.skillFilters.tags.mode == "and") {
-                compendiumData.skills = compendiumData.skills.filter((skill, index) => {
-                    let loweredMap = skill.system.tags.map(t => t.toLowerCase());
-                    return skillIncludeTags.every(tag => {
-                        return loweredMap.includes(tag);
-                    });
-                });
-            } else if (this.skillFilters.tags.mode == "or") {
-                compendiumData.skills = compendiumData.skills.filter((skill, index) => {
-                    let loweredMap = skill.system.tags.map(t => t.toLowerCase());
-                    return skillIncludeTags.some(tag => {
-                        return loweredMap.includes(tag);
-                    })
-                });
-            } else {
-                console.log("Invalid tag mode set");
-            }
+        if (this.tabData.skills.refilter) {
+            const compendiumSkills = foundry.utils.deepClone(this.compendiumData.skills);
+            this.filteredCompendiumData.skills = this.filterSkills(compendiumSkills)
         }
-        // FILTER TAGS EXCLUDES
-        const skillExcludeTags = this.skillFilters.tags.tags.filter(tag => tag.not).map(t => t.value.toLowerCase());
-        if (skillExcludeTags.length > 0) {
-            compendiumData.skills = compendiumData.skills.filter((skill, index) => {
-                let loweredMap = skill.system.tags.map(t => t.toLowerCase());
-                return skillExcludeTags.some(tag => {
-                    return !loweredMap.includes(tag);
-                });
-            });
-        }
+
+        let skillListSlice = this.filteredCompendiumData.skills.slice(this.tabData.skills.listWindow[0], this.tabData.skills.listWindow[1]);
+        let itemListSlice = this.filteredCompendiumData.items.slice(this.tabData.items.listWindow[0], this.tabData.items.listWindow[1]);
         
-        // FILTER TEXT
-        if (this.skillFilters.text != "") {
-            compendiumData.skills = compendiumData.skills.filter((skill, index) => {
-                if (skill.name.toLowerCase().search(this.skillFilters.text.toLowerCase()) != -1) return true;
-                if (skill.system.description.toLowerCase().search(this.skillFilters.text.toLowerCase()) != -1) return true;
-                return false;
-            });
-        }
-
-        // SORT
-        compendiumData.skills.sort((a, b) => a.name.localeCompare(b.name));
-        compendiumData.skills.sort((a, b) => a.system.timing.localeCompare(b.system.timing));
-        compendiumData.skills.sort((a, b) => {
-            let intA, intB;
-            intA = a.system.tags.includes("Combat") ? 1 : 2;
-            intB = b.system.tags.includes("Combat") ? 1 : 2;
-            return intA - intB;
-        });
-        compendiumData.skills.sort((a, b) => a.compendiumSource.localeCompare(b.compendiumSource));
 
         return {
             config: config,
             choices: choices,
             activeTab: this._tabs[0].active,
-            skills: compendiumData.skills,
-            items: compendiumData.items,
-            classes: compendiumData.classes,
-            races: compendiumData.races,
-            compendiums: compendiumData.compendiums,
-            skillFilters: this.skillFilters,
-            itemFilters: this.itemFilters,
+            skills: skillListSlice,
+            items: itemListSlice,
+            compendiums: this.filteredCompendiumData.compendiums,
+            skillFilters: this.tabData.skills.filters,
+            itemFilters: this.tabData.items.filters,
             tagFilterModes: this.tagFilterModes,
             itemTypes: ["item", "weapon", "equipment", "consumable"],
-            skillFilterTags: JSON.stringify(this.skillFilters.tags.tags),
-            itemFilterTags: JSON.stringify(this.itemFilters.tags.tags)
+            skillFilterTags: JSON.stringify(this.tabData.skills.filters.tags.tags),
+            itemFilterTags: JSON.stringify(this.tabData.items.filters.tags.tags)
         };
     }
 
@@ -258,14 +143,85 @@ export default class CompendiumBrowserDialog extends Application {
     activateListeners(html) {
         super.activateListeners(html);
 
-        // SKILLS
+        this.activateSkillListeners(html)
+
+        this.activateItemListeners(html)
+
+
+        // Set scroll positions
+        let skillFilters = $(".skills > .compendium-browser-content > .compendium-browser-filters");
+        skillFilters.scrollTop(this.tabData.skills.scrollPositions.filter);
+
+        let itemFilters = $(".items > .compendium-browser-content > .compendium-browser-filters");
+        itemFilters.scrollTop(this.tabData.items.scrollPositions.filter);
+
+        let skillList = html.find(".skills > .compendium-browser-content > .items-list");
+        skillList.scrollTop(this.tabData.skills.scrollPositions.list);
+
+        let itemList = html.find(".items > .compendium-browser-content > .items-list");
+        itemList.scrollTop(this.tabData.items.scrollPositions.list);
+        // Set hidden filter icons
+
+        let hideables = $(".compendium-browser-content .hideable");
+        hideables.on("click", async ev => {
+            const parent = $(ev.currentTarget).parent(".hideable-parent")
+            const div = parent.children(".hideable-content");
+            const icon = parent.find(".hideable-icon");
+    
+            // Toggle visibility
+            this._toggleHide(div, icon)
+        })
+        
+        for (let x of this.hiddenFilters) {
+            let hideableParent = $(`#${x}`)
+            let hideableContent = hideableParent.find(".hideable-content")
+            let hideableIcon = hideableParent.find(".hideable-icon")
+            this._toggleHide(hideableContent, hideableIcon, 0)
+        }
+        this.hiddenFilters = []
+        
+    }
+
+    _toggleHide(div, icon, speed=200) {
+        if ( div.hasClass("item-hidden") ) {
+            icon.removeClass("fa-plus")
+            icon.addClass("fa-minus")
+            div.slideDown(speed);
+        } else {
+            icon.removeClass("fa-minus")
+            icon.addClass("fa-plus")
+            div.slideUp(speed);
+        }
+        div.toggleClass("item-hidden");
+
+    }
+
+    activateSkillListeners(html) {
+        let skillClearFiltersButton = html.find('.skills .compendium-clear-filters-button')
+        skillClearFiltersButton.on("click", () => {
+            this.tabData.skills.filters = foundry.utils.deepClone(this.defaultFilters.skill);
+            this.tabData.skills.refilter = true;
+            this.render(undefined, {resetSkillWindow: true})
+        })
+        
+        let skillList = html.find(".skills > .compendium-browser-content > .items-list");
+        skillList.on("scroll", () => {
+            let scroller = skillList.get(0);
+            if (scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 5) {
+                if (this.tabData.skills.listWindow[1] < this.filteredCompendiumData.skills.length) {
+                    this.tabData.skills.listWindow[1] += 10;
+                    this.render();
+                }
+            }
+        })
+
         let skillSearchInput = html.find('.skills .compendium-text-search input');
         skillSearchInput.on("change", () => {
-            this.skillFilters.text = skillSearchInput.val();
-            this.render();
+            this.tabData.skills.filters.text = skillSearchInput.val();
+            this.tabData.skills.refilter = true;
+            this.render(undefined, {resetSkillWindow: true});
         });
 
-        
         // TAGIFY STUFF
         let skillTagInput = html.find('.skills .compendium-tag-search > input');
         let skillTagify = new Tagify(skillTagInput[0], {
@@ -290,59 +246,82 @@ export default class CompendiumBrowserDialog extends Application {
             let target = $(e.target);
             if (target.hasClass("tag_negate_button")) {
                 let clickedTag = e.currentTarget.__tagifyTagData;
-                let foundTag = this.skillFilters.tags.tags.find(tag => tag.value == clickedTag.value);
+                let foundTag = this.tabData.skills.filters.tags.tags.find(tag => tag.value == clickedTag.value);
                 foundTag.not = !foundTag.not;
-                this.render();
+                this.tabData.skills.refilter = true;
+                this.render(undefined, {resetSkillWindow: true});
             }
         });
         
         skillTagInput.on("change", e => {
             let values = skillTagify.value;
-            this.skillFilters.tags.tags = values;
-            this.render();
+            this.tabData.skills.filters.tags.tags = values;
+            this.tabData.skills.refilter = true;
+            this.render(undefined, {resetSkillWindow: true});
         });
-
-
-
         
         let skillTagMode = html.find('.skills .compendium-tag-search .checkbox input');
         skillTagMode.on("change", () => {
             let newChecked = html.find('.skills .compendium-tag-search .checkbox :checked');
-            this.skillFilters.tags.mode = newChecked.val();
-            this.render();
+            this.tabData.skills.filters.tags.mode = newChecked.val();
+            this.tabData.skills.refilter = true;
+            this.render(undefined, {resetSkillWindow: true});
         });
 
         let skillTimingInputs = html.find('.skills .compendium-timing-filter input');
         skillTimingInputs.on("change", () => {
             let allChecked = html.find('.skills .compendium-timing-filter :checked');
             let allValues = allChecked.map((_, html) => $(html).val()).get();
-            this.skillFilters.timings = allValues;
-            this.render();
+            this.tabData.skills.filters.timings = allValues;
+            this.tabData.skills.refilter = true;
+            this.render(undefined, {resetSkillWindow: true});
         });
 
         let skillLimitInputs = html.find('.skills .compendium-limit-filter input');
         skillLimitInputs.on("change", () => {
             let allChecked = html.find('.skills .compendium-limit-filter :checked');
             let allValues = allChecked.map((_, html) => $(html).val()).get();
-            this.skillFilters.limits = allValues;
-            this.render();
+            this.tabData.skills.filters.limits = allValues;
+            this.tabData.skills.refilter = true;
+            this.render(undefined, {resetSkillWindow: true});
         });
 
         let skillSourceInputs = html.find('.skills .compendium-source-filter input');
         skillSourceInputs.on("change", () => {
             let allChecked = html.find('.skills .compendium-source-filter :checked');
             let allValues = allChecked.map((_, html) => $(html).val()).get();
-            this.skillFilters.compendiumSources = allValues;
-            this.render();
+            this.tabData.skills.filters.compendiumSources = allValues;
+            this.tabData.skills.refilter = true;
+            this.render(undefined, {resetSkillWindow: true});
         });
+    }
 
+    activateItemListeners(html) {
+        let itemClearFiltersButton = html.find('.items .compendium-clear-filters-button')
+        itemClearFiltersButton.on("click", () => {
+            this.tabData.items.filters = foundry.utils.deepClone(this.defaultFilters.item);
+            this.tabData.items.refilter = true;
+            this.render(undefined, {resetItemWindow: true})
+        })
+        
+        let itemList = html.find(".items > .compendium-browser-content > .items-list");
+        itemList.on("scroll", () => {
+            let scroller = itemList.get(0);
+            if (scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 5) {
+                if (this.tabData.items.listWindow[1] < this.filteredCompendiumData.items.length) {
+                    this.tabData.items.listWindow[1] += 10;
+                    this.render();
+                }
+            }
+        })
 
-        // ITEMS
         let itemSearchInput = html.find('.items .compendium-text-search input');
         itemSearchInput.on("change", () => {
-            this.itemFilters.text = itemSearchInput.val();
-            this.render();
+            this.tabData.items.filters.text = itemSearchInput.val();
+            this.tabData.items.refilter = true;
+            this.render(undefined, {resetItemWindow: true});
         });
+        
         // TAGIFY STUFF
         let itemTagInput = html.find('.items .compendium-tag-search > input');
         let itemTagify = new Tagify(itemTagInput[0], {
@@ -367,39 +346,44 @@ export default class CompendiumBrowserDialog extends Application {
             let target = $(e.target);
             if (target.hasClass("tag_negate_button")) {
                 let clickedTag = e.currentTarget.__tagifyTagData;
-                let foundTag = this.itemFilters.tags.tags.find(tag => tag.value == clickedTag.value);
+                let foundTag = this.tabData.items.filters.tags.tags.find(tag => tag.value == clickedTag.value);
                 foundTag.not = !foundTag.not;
-                this.render();
+                this.tabData.items.refilter = true;
+                this.render(undefined, {resetItemWindow: true});
             }
         });
         
         itemTagInput.on("change", e => {
             let values = itemTagify.value;
-            this.itemFilters.tags.tags = values;
-            this.render();
+            this.tabData.items.filters.tags.tags = values;
+            this.tabData.items.refilter = true;
+            this.render(undefined, {resetItemWindow: true});
         });
         
         let itemTagMode = html.find('.items .compendium-tag-search .checkbox input');
         itemTagMode.on("change", () => {
             let newChecked = html.find('.items .compendium-tag-search .checkbox :checked');
-            this.itemFilters.tags.mode = newChecked.val();
-            this.render();
+            this.tabData.items.filters.tags.mode = newChecked.val();
+            this.tabData.items.refilter = true;
+            this.render(undefined, {resetItemWindow: true});
         });
 
         let itemTimingInputs = html.find('.items .compendium-timing-filter input');
         itemTimingInputs.on("change", () => {
             let allChecked = html.find('.items .compendium-timing-filter :checked');
             let allValues = allChecked.map((_, html) => $(html).val()).get();
-            this.itemFilters.timings = allValues;
-            this.render();
+            this.tabData.items.filters.timings = allValues;
+            this.tabData.items.refilter = true;
+            this.render(undefined, {resetItemWindow: true});
         });
 
         let itemLimitInputs = html.find('.items .compendium-limit-filter input');
         itemLimitInputs.on("change", () => {
             let allChecked = html.find('.items .compendium-limit-filter :checked');
             let allValues = allChecked.map((_, html) => $(html).val()).get();
-            this.itemFilters.limits = allValues;
-            this.render();
+            this.tabData.items.filters.limits = allValues;
+            this.tabData.items.refilter = true;
+            this.render(undefined, {resetItemWindow: true});
         });
 
         let itemRankFilter = html.find('.items .compendium-rank-filter input');
@@ -407,35 +391,37 @@ export default class CompendiumBrowserDialog extends Application {
             if (e.target.name === "itemFilters.itemrank.min") {
                 let value = parseInt(e.target.value);
                 if (Number.isInteger(value) && value >= 0) {
-                    this.itemFilters.itemrank.min = value;
+                    this.tabData.items.filters.itemrank.min = value;
                 } else {
-                    this.itemFilters.itemrank.min = 0;
+                    this.tabData.items.filters.itemrank.min = 0;
                 }
-                if (this.itemFilters.itemrank.min != 0 && this.itemFilters.itemrank.max != 0 && this.itemFilters.itemrank.min > this.itemFilters.itemrank.max) {
-                    this.itemFilters.itemrank.max = this.itemFilters.itemrank.min;
+                if (this.tabData.items.filters.itemrank.min != 0 && this.tabData.items.filters.itemrank.max != 0 && this.tabData.items.filters.itemrank.min > this.tabData.items.filters.itemrank.max) {
+                    this.tabData.items.filters.itemrank.max = this.tabData.items.filters.itemrank.min;
                 }
             } else if (e.target.name === "itemFilters.itemrank.max") {
                 let value = parseInt(e.target.value);
                 if (Number.isInteger(value) && value >= 0) {
-                    this.itemFilters.itemrank.max = value;
+                    this.tabData.items.filters.itemrank.max = value;
                 } else {
-                    this.itemFilters.itemrank.max = 0;
+                    this.tabData.items.filters.itemrank.max = 0;
                 }
-                if (this.itemFilters.itemrank.min != 0 && this.itemFilters.itemrank.max != 0 && this.itemFilters.itemrank.min > this.itemFilters.itemrank.max) {
-                    this.itemFilters.itemrank.min = this.itemFilters.itemrank.max;
+                if (this.tabData.items.filters.itemrank.min != 0 && this.tabData.items.filters.itemrank.max != 0 && this.tabData.items.filters.itemrank.min > this.tabData.items.filters.itemrank.max) {
+                    this.tabData.items.filters.itemrank.min = this.tabData.items.filters.itemrank.max;
                 }
             } else {
                 return;
             }
-            this.render();
+            this.tabData.items.refilter = true;
+            this.render(undefined, {resetItemWindow: true});
         });
 
         let itemSourceInputs = html.find('.items .compendium-source-filter input');
         itemSourceInputs.on("change", () => {
             let allChecked = html.find('.items .compendium-source-filter :checked');
             let allValues = allChecked.map((_, html) => $(html).val()).get();
-            this.itemFilters.compendiumSources = allValues;
-            this.render();
+            this.tabData.items.filters.compendiumSources = allValues;
+            this.tabData.items.refilter = true;
+            this.render(undefined, {resetItemWindow: true});
         });
 
 
@@ -443,18 +429,179 @@ export default class CompendiumBrowserDialog extends Application {
         itemNames.on("click", async ev => {
             const li = $(ev.currentTarget).parents(".item");
             const item = await fromUuid(li.data("itemId"));
-            console.log(item);
             item.sheet.render(true);
         })
+    }
 
-        
-        // Set scroll positions
-        let skillFilters = $(".skills > .compendium-browser-content > .compendium-browser-filters");
-        skillFilters.scrollTop(this.skillFilterScrollPos);
+    /* 
+    _onHideable(event) {
+        event.preventDefault();
+        const tag = event.currentTarget.innerText.split(" ")[0];
+        const div = $(event.currentTarget).parents(".items-list").children(`.items-in-list.${tag}`);
+    
+        // Toggle visibility
+        if ( div.hasClass("item-hidden") ) {
+          div.slideDown(200);
+        } else {
+          div.slideUp(200);
+        }
+        div.toggleClass("item-hidden");
+      }
+    */
 
-        let itemFilters = $(".items > .compendium-browser-content > .compendium-browser-filters");
-        itemFilters.scrollTop(this.itemFilterScrollPos);
+    filterItems(compendiumItems) {
+        this.tabData.items.refilter = false;
+
+        // FILTER ITEM RANK
+        if (this.tabData.items.filters.itemrank) {
+            compendiumItems = compendiumItems.filter((item, index) => {
+                if ((this.tabData.items.filters.itemrank.min == 0 || item.system.ir >= this.tabData.items.filters.itemrank.min) && (this.tabData.items.filters.itemrank.max == 0 || item.system.ir <= this.tabData.items.filters.itemrank.max)) return true;
+                return false;
+            });
+        };
+        // FILTER COMPENDIUMS
+        if (this.tabData.items.filters.compendiumSources.length > 0) {
+            compendiumItems = compendiumItems.filter((item, index) => {
+                if (this.tabData.items.filters.compendiumSources.includes(item.compendiumSource)) return true;
+                return false;
+            });
+        };
+        // FILTER TIMINGS
+        if (this.tabData.items.filters.timings.length > 0) {
+            compendiumItems = compendiumItems.filter((item, index) => {
+                if (item.hasAction && this.tabData.items.filters.timings.includes(item.system.timing)) return true;
+                return false;
+            });
+        };
+        // FILTER LIMITS
+        if (this.tabData.items.filters.limits.length > 0) {
+            compendiumItems = compendiumItems.filter((item, index) => {
+                if (item.hasAction && this.tabData.items.filters.limits.includes(item.system.limit.type)) return true;
+                return false;
+            });
+        };
+        // FILTER TAGS INCLUDES
+        const itemIncludeTags = this.tabData.items.filters.tags.tags.filter(tag => !tag.not).map(t => t.value.toLowerCase());
+        if (itemIncludeTags.length > 0) {
+            if (this.tabData.items.filters.tags.mode == "and") {
+                compendiumItems = compendiumItems.filter((item, index) => {
+                    let loweredMap = item.system.tags.map(t => t.toLowerCase());
+                    return itemIncludeTags.every(tag => {
+                        return loweredMap.includes(tag);
+                    });
+                });
+            } else if (this.tabData.items.filters.tags.mode == "or") {
+                compendiumItems = compendiumItems.filter((item, index) => {
+                    let loweredMap = item.system.tags.map(t => t.toLowerCase());
+                    return itemIncludeTags.some(tag => {
+                        return loweredMap.includes(tag);
+                    })
+                });
+            } else {
+                console.log("Invalid tag mode set");
+            }
+        }
+        // FILTER TAGS EXCLUDES
+        const itemExcludeTags = this.tabData.items.filters.tags.tags.filter(tag => tag.not).map(t => t.value.toLowerCase());
+        if (itemExcludeTags.length > 0) {
+            compendiumItems = compendiumItems.filter((item, index) => {
+                let loweredMap = item.system.tags.map(t => t.toLowerCase());
+                return itemExcludeTags.some(tag => {
+                    return !loweredMap.includes(tag);
+                });
+            });
+        }
+        // FILTER TEXT
+        if (this.tabData.items.filters.text != "") {
+            compendiumItems = compendiumItems.filter((item, index) => {
+                if (item.name.toLowerCase().search(this.tabData.items.filters.text.toLowerCase()) != -1) return true;
+                if (item.system.description.toLowerCase().search(this.tabData.items.filters.text.toLowerCase()) != -1) return true;
+                return false;
+            });
+        }
+
+        // SORT
+        //compendiumItems.sort((a, b) => a.name.localeCompare(b.name));
+        compendiumItems.sort((a, b) => a.compendiumSource.localeCompare(b.compendiumSource));
+        compendiumItems.sort((a, b) => a.system.ir - b.system.ir);
+        return compendiumItems
+    }
+
+    filterSkills(compendiumSkills) {
+        this.tabData.skills.refilter = false;
+        // FILTER COMPENDIUMS
+        if (this.tabData.skills.filters.compendiumSources.length > 0) {
+            compendiumSkills = compendiumSkills.filter((skill, index) => {
+                if (this.tabData.skills.filters.compendiumSources.includes(skill.compendiumSource)) return true;
+                return false;
+            });
+        };
+        // FILTER TIMINGS
+        if (this.tabData.skills.filters.timings.length > 0) {
+            compendiumSkills = compendiumSkills.filter((skill, index) => {
+                if (this.tabData.skills.filters.timings.includes(skill.system.timing)) return true;
+                return false;
+            });
+        };
+        // FILTER LIMITS
+        if (this.tabData.skills.filters.limits.length > 0) {
+            compendiumSkills = compendiumSkills.filter((skill, index) => {
+                if (this.tabData.skills.filters.limits.includes(skill.system.limit.type)) return true;
+                return false;
+            });
+        };
+        // FILTER TAGS INCLUDES
+        const skillIncludeTags = this.tabData.skills.filters.tags.tags.filter(tag => !tag.not).map(t => t.value.toLowerCase());
+        if (skillIncludeTags.length > 0) {
+            if (this.tabData.skills.filters.tags.mode == "and") {
+                compendiumSkills = compendiumSkills.filter((skill, index) => {
+                    let loweredMap = skill.system.tags.map(t => t.toLowerCase());
+                    return skillIncludeTags.every(tag => {
+                        return loweredMap.includes(tag);
+                    });
+                });
+            } else if (this.tabData.skills.filters.tags.mode == "or") {
+                compendiumSkills = compendiumSkills.filter((skill, index) => {
+                    let loweredMap = skill.system.tags.map(t => t.toLowerCase());
+                    return skillIncludeTags.some(tag => {
+                        return loweredMap.includes(tag);
+                    })
+                });
+            } else {
+                console.log("Invalid tag mode set");
+            }
+        }
+        // FILTER TAGS EXCLUDES
+        const skillExcludeTags = this.tabData.skills.filters.tags.tags.filter(tag => tag.not).map(t => t.value.toLowerCase());
+        if (skillExcludeTags.length > 0) {
+            compendiumSkills = compendiumSkills.filter((skill, index) => {
+                let loweredMap = skill.system.tags.map(t => t.toLowerCase());
+                return skillExcludeTags.some(tag => {
+                    return !loweredMap.includes(tag);
+                });
+            });
+        }
         
+        // FILTER TEXT
+        if (this.tabData.skills.filters.text != "") {
+            compendiumSkills = compendiumSkills.filter((skill, index) => {
+                if (skill.name.toLowerCase().search(this.tabData.skills.filters.text.toLowerCase()) != -1) return true;
+                if (skill.system.description.toLowerCase().search(this.tabData.skills.filters.text.toLowerCase()) != -1) return true;
+                return false;
+            });
+        }
+
+        // SORT
+        compendiumSkills.sort((a, b) => a.name.localeCompare(b.name));
+        compendiumSkills.sort((a, b) => a.system.timing.localeCompare(b.system.timing));
+        compendiumSkills.sort((a, b) => {
+            let intA, intB;
+            intA = a.system.tags.includes("Combat") ? 1 : 2;
+            intB = b.system.tags.includes("Combat") ? 1 : 2;
+            return intA - intB;
+        });
+        compendiumSkills.sort((a, b) => a.compendiumSource.localeCompare(b.compendiumSource));
+        return compendiumSkills
     }
 
     async loadCompendiums() {

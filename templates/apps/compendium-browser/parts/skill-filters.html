@@ -2,6 +2,7 @@
     <div class="compendium-text-search">
         <h2>Search</h2>
         <input type="search" name="skillFilters.text"  value="{{skillFilters.text}}" data-dtype="String">
+        <button class="compendium-clear-filters-button">Clear filters</button>
     </div>
     <div class="compendium-tag-search">
         <h2>Tags</h2>
@@ -10,33 +11,48 @@
             {{radioBoxes "tagFilterMode" tagFilterModes checked=skillFilters.tags.mode}}
         </form>
     </div>
-    <div class="compendium-timing-filter">
-        <h2>Timing</h2>
-        {{#each config.timingTypes as |name type|}}
-        <div class="compendium-timing-filter-checkbox">
-            <input type="checkbox" name="{{type}}" value="{{type}}" {{#ifInArray type ../skillFilters.timings}} checked {{/ifInArray}}>
-            <label for="{{type}}">{{localize name}}</label>
+    <div class="compendium-timing-filter hideable-parent" id="compendium-skill-timing-filter">
+        <div class="hideable grid-2ends">
+            <h2 class=>Timing</h2>
+            <i class="fas fa-minus hideable-icon"></i>
         </div>
-        {{/each}}
+        <div class="hideable-content">
+            {{#each config.timingTypes as |name type|}}
+            <div class="compendium-timing-filter-checkbox">
+                <input type="checkbox" name="{{type}}" value="{{type}}" {{#ifInArray type ../skillFilters.timings}} checked {{/ifInArray}}>
+                <label for="{{type}}">{{localize name}}</label>
+            </div>
+            {{/each}}
+        </div>
     </div>
-    <div class="compendium-limit-filter">
-        <h2>Limit</h2>
-        {{#each config.limitTypes as |name type|}}
-        <div class="compendium-limit-filter-checkbox">
-            <input type="checkbox" name="{{type}}" value="{{type}}" {{#ifInArray type ../skillFilters.limits}} checked {{/ifInArray}}>
-            <label for="{{type}}">{{localize name}}</label>
+    <div class="compendium-limit-filter hideable-parent" id="compendium-skill-limit-filter">
+        <div class="hideable grid-2ends">
+            <h2 class=>Limit</h2>
+            <i class="fas fa-minus hideable-icon"></i>
         </div>
-        {{/each}}
+        <div class="hideable-content">
+            {{#each config.limitTypes as |name type|}}
+            <div class="compendium-limit-filter-checkbox">
+                <input type="checkbox" name="{{type}}" value="{{type}}" {{#ifInArray type ../skillFilters.limits}} checked {{/ifInArray}}>
+                <label for="{{type}}">{{localize name}}</label>
+            </div>
+            {{/each}}
+        </div>
     </div>
-    <div class="compendium-source-filter flexcol">
-        <h2>Compendium</h2>
-        {{#each compendiums as |compendium id|}}
-        {{#ifInArray "skill" compendium.types}}
-        <div class="compendium-source-filter-checkbox">
-            <input type="checkbox" name="{{compendium.name}}" value="{{compendium.name}}" {{#ifInArray compendium.name ../skillFilters.compendiumSources}} checked {{/ifInArray}}>
-            <label for="{{compendium.name}}">{{compendium.name}}</label>
+    <div class="compendium-source-filter flexcol hideable-parent" id="compendium-skill-source-filter">
+        <div class="hideable grid-2ends">
+            <h2 class=>Compendium</h2>
+            <i class="fas fa-minus hideable-icon"></i>
         </div>
-        {{/ifInArray}}
-        {{/each}}
+        <div class="hideable-content">
+            {{#each compendiums as |compendium id|}}
+            {{#ifInArray "skill" compendium.types}}
+            <div class="compendium-source-filter-checkbox">
+                <input type="checkbox" name="{{compendium.name}}" value="{{compendium.name}}" {{#ifInArray compendium.name ../skillFilters.compendiumSources}} checked {{/ifInArray}}>
+                <label for="{{compendium.name}}">{{compendium.name}}</label>
+            </div>
+            {{/ifInArray}}
+            {{/each}}
+        </div>
     </div>
 </div>
