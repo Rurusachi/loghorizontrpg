@@ -5,7 +5,7 @@
   "version": "0.6.0",
   "compatibility": {
     "minimum": "11",
-    "verified": "11.307"
+    "verified": "11.315"
   },
   "authors": [
     {
@@ -46,8 +46,8 @@
   "primaryTokenAttribute": "hp",
   "secondaryTokenAttribute": "hate",
   "url": "https://github.com/Rurusachi/loghorizontrpg",
-  "manifest": "https://github.com/Rurusachi/loghorizontrpg/releases/latest/download/system.json",
-  "download": "https://github.com/Rurusachi/loghorizontrpg/releases/download/v0.5.0/lhrpg-v0.5.0.zip",
+  "manifest": "",
+  "download": "",
   "license": "LICENSE.txt",
   "flags": {
     "needsMigrationVersion": "0.6.0"
