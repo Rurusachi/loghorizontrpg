@@ -612,7 +612,14 @@ export default class CompendiumBrowserDialog extends Application {
         const compendiums = [];
         const skillTags = [];
         const itemTags = [];
+
+        
+        SceneNavigation.displayProgressBar({label:"Loading Compendiums", pct:0});
+        let nPacks = game.packs.size;
+        let current = 0;
         for (let pack of game.packs) {
+            let progress = Math.floor((current/nPacks) * 100);
+            SceneNavigation.displayProgressBar({label:`Loading ${current} of ${nPacks}`, pct: progress});
             if (pack.metadata.type === "Item") {
                 let itemTypes = [];
 
@@ -660,7 +667,9 @@ export default class CompendiumBrowserDialog extends Application {
                 let compendiumInfo = {name: pack.metadata.label, types: itemTypes}
                 compendiums.push(compendiumInfo);
             }
+            current += 1;
         }
+        SceneNavigation.displayProgressBar({label:`Loaded ${current} of ${nPacks}`, pct: 100});
         
         return {skills: skills, items: items, classes: classes, races: races, compendiums: compendiums, skillTags: skillTags, itemTags: itemTags}
     }
