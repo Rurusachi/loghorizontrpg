@@ -17,8 +17,8 @@ export default class CompendiumBrowserDialog extends Application {
         * Store a reference to the Item entity being used
         * @type {LogHorizonTRPGItem}
         */
-        this.tabData = {skills: {filters: {}, scrollPositions: {filter: 0, list: 0}, refilter: true, listWindow: [0, 20]},
-                         items: {filters: {}, scrollPositions: {filter: 0, list: 0}, refilter: true, listWindow: [0, 20]}};
+        this.tabData = {skills: {filters: {}, scrollPositions: {filter: 0, list: 0}, refilter: true, listWindow: [0, 50]},
+                         items: {filters: {}, scrollPositions: {filter: 0, list: 0}, refilter: true, listWindow: [0, 50]}};
         
         this.tabData.skills.filters = foundry.utils.deepClone(this.defaultFilters.skill);
         this.tabData.items.filters = foundry.utils.deepClone(this.defaultFilters.item);
@@ -57,7 +57,7 @@ export default class CompendiumBrowserDialog extends Application {
         });
 
         if (options.resetItemWindow) {
-            this.tabData.items.listWindow = [0, 20];
+            this.tabData.items.listWindow = [0, 50];
             this.tabData.items.scrollPositions.list = 0;
         } else {
             let itemList = $(".items > .compendium-browser-content > .items-list");
@@ -65,7 +65,7 @@ export default class CompendiumBrowserDialog extends Application {
         }
 
         if (options.resetSkillWindow) {
-            this.tabData.skills.listWindow = [0, 20];
+            this.tabData.skills.listWindow = [0, 50];
             this.tabData.skills.scrollPositions.list = 0;
         } else {
             let skillList = $(".skills > .compendium-browser-content > .items-list");
