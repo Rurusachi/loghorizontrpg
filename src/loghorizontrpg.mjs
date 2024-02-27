@@ -10,9 +10,12 @@ import { LOGHORIZONTRPG } from "./helpers/config.mjs";
 import { measureDistances } from "./helpers/canvas.mjs";
 import { ValidSpec } from "./ActiveEffects.mjs";
 
+import '../scss/loghorizontrpg.scss';
+import '@yaireo/tagify/src/tagify.scss';
+
 
 import RestDialog from "./apps/rest.mjs";
-
+import CompendiumBrowserDialog from "./apps/compendium-browser.mjs";
 /* -------------------------------------------- */
 /*  Init Hook                                   */
 /* -------------------------------------------- */
@@ -87,8 +90,12 @@ Hooks.once('init', async function() {
   return preloadHandlebarsTemplates();
 });
 
-Hooks.once('ready', async function() {
+Hooks.on('renderCompendiumDirectory', async function() {
+  console.log('renderCompendiumDirectory ');
+  addCompendiumButton();
+});
 
+Hooks.once('ready', async function() {
   
   if ( !game.user.isGM ) return;
 
@@ -113,6 +120,15 @@ Hooks.once('ready', async function() {
   await migrateWorld(cv);
 });
 
+async function addCompendiumButton() {
+  const compendiumBrowserButton = `<button class="compendium-browser-button">${game.i18n.format(CONFIG.LOGHORIZONTRPG.compendium["browser"])}</button>`
+  const footer = $("#compendium > footer");
+  footer.append(compendiumBrowserButton);
+
+  // TODO: Bind function for the Compendium Browser
+  footer.find("button.compendium-browser-button").click(ev => {return new CompendiumBrowserDialog().render(true);});
+}
+
 async function showLatestVersionInfo() {
   try {
     const infopage = await fromUuid("Compendium.loghorizontrpg.system-info.JournalEntry.yy2znlPUR5mO59Rl");
@@ -123,6 +139,12 @@ async function showLatestVersionInfo() {
 }
 
 async function migrateWorld(fromVersion) {
+
+  // Migrate items with actions if v0.5.0 or older
+  if (!fromVersion || !isNewerVersion(fromVersion, "0.5.0")) {
+    await migrateHasActionItems();
+    console.log("Migrated all items with actions");
+  }
 
   // Migrate tags and effects if v0.4.0 or older
   if (!fromVersion || !isNewerVersion(fromVersion, "0.4.0")) {
@@ -142,6 +164,18 @@ async function migrateWorld(fromVersion) {
   // Migration finished
   game.settings.set("loghorizontrpg", "systemMigrationVersion", game.system.version);
   ui.notifications.info(`Migrated world to version ${game.system.version}`, {permanent: true});
+}
+
+async function migrateHasActionItems() {
+  // HasAction was misspelled as "hasaction" in some places. This means the value was never stored in "hasAction" so it needs to be migrated.
+  for (const item of game.items) {
+    const hasAction = item.system?.hasaction;
+    if (hasAction) {
+      console.log(`Migrating hasAction for ${item.name}`);
+      
+      await item.update({"system.hasAction": hasAction})
+    }
+  }
 }
 
 async function migrateAllActorTags() {
@@ -380,6 +414,10 @@ Handlebars.registerHelper('ifInArray', function(str1, list, options) {
     return (list.includes(str1)) ? options.fn(this) : options.inverse(this);
 });
 
+Handlebars.registerHelper('ifAnyInArray', function(list1, list2, options) {
+    return (list1.some(str => list2.includes(str))) ? options.fn(this) : options.inverse(this);
+});
+
 Handlebars.registerHelper('asIndex', function(arg1, arg2, options) {
     let i = 0;
     let current = options.data.root;
@@ -402,6 +440,10 @@ Handlebars.registerHelper('asIndexMiddle', function(arg1, arg2, options) {
     }
 
     return current;
+});
+
+Handlebars.registerHelper('equals', function(arg1, arg2) {
+  return (arg1 === arg2);
 });
 
 Handlebars.registerHelper('and', function(arg1, arg2) {

@@ -21,5 +21,12 @@
     "systems/loghorizontrpg/templates/item/parts/item-attributes.html",
     "systems/loghorizontrpg/templates/item/parts/item-action.html",
     "systems/loghorizontrpg/templates/item/parts/item-startingskills.html",
+    "systems/loghorizontrpg/templates/apps/compendium-browser/parts/settings.html",
+    "systems/loghorizontrpg/templates/apps/compendium-browser/parts/classes.html",
+    "systems/loghorizontrpg/templates/apps/compendium-browser/parts/items.html",
+    "systems/loghorizontrpg/templates/apps/compendium-browser/parts/item-filters.html",
+    "systems/loghorizontrpg/templates/apps/compendium-browser/parts/races.html",
+    "systems/loghorizontrpg/templates/apps/compendium-browser/parts/skills.html",
+    "systems/loghorizontrpg/templates/apps/compendium-browser/parts/skill-filters.html",
   ]);
 };

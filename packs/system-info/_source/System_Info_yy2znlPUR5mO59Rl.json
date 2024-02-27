@@ -1,0 +1,93 @@
+{
+  "name": "System Info",
+  "_id": "yy2znlPUR5mO59Rl",
+  "pages": [
+    {
+      "sort": 100000,
+      "name": "Version 0.5.0",
+      "type": "text",
+      "_id": "dQ3qVJJBfSapcoEQ",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<p>Starting from v0.5.0 the compendium is a separate module.</p><p>More information can be found at: <a href=\"https://github.com/Rurusachi/loghorizontrpg\" title=\"Github repository\">https://github.com/Rurusachi/loghorizontrpg</a></p><p></p><p>It is recommended to remove and then re-add classes and races for each character.<br />Some skills may also have been updated or fixed, which will also require removing and re-adding them.</p><p>The ActiveEffects system has been changed. Effects can now be manage from owned items or from the owner's Effects page. The effects page separates effects into \"Own effects\" and \"Item effects\".</p><p>\"Item effects\" contains effects inherited from owned items/skills/races.<br />\"Own effects\" contains effects that belong to the character/item.</p><p>ActiveEffects from items and skills may be duplicated after the update due to this change. If so, remove the duplicated effects from \"Own effects\", and leave the \"Item effects\" version.</p>",
+        "markdown": ""
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "system": {},
+      "ownership": {
+        "default": -1,
+        "Dq6Ur8VOwxcpRzHA": 3
+      },
+      "flags": {},
+      "_stats": {
+        "systemId": "loghorizontrpg",
+        "systemVersion": "0.5.0",
+        "coreVersion": "11.308",
+        "createdTime": 1694965930745,
+        "modifiedTime": 1694968740855,
+        "lastModifiedBy": "Dq6Ur8VOwxcpRzHA"
+      },
+      "_key": "!journal.pages!yy2znlPUR5mO59Rl.dQ3qVJJBfSapcoEQ"
+    },
+    {
+      "sort": 0,
+      "name": "Version 0.6.0",
+      "type": "text",
+      "_id": "7r6Flws98RzpRlAC",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<p>Changes:</p><ul><li><p>Added a Compendium Browser</p></li><li><p>Made the tag editor resizable</p></li></ul><p></p><p>Bugfixes:</p><ul><li><p>Fixed a bug where skills that use CR in the damage formula would overwrite the character's CR</p></li><li><p>Fixed a bug with items that have actions. The variable was misspelled in some (important) places. Old items will be fixed automatically after updating.</p></li><li><p>Actually included the System Info compendium (This. Whoops)</p></li></ul>"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "system": {},
+      "ownership": {
+        "default": -1,
+        "Dq6Ur8VOwxcpRzHA": 3
+      },
+      "flags": {},
+      "_stats": {
+        "systemId": "loghorizontrpg",
+        "systemVersion": "0.6.0",
+        "coreVersion": "11.315",
+        "createdTime": 1707158049632,
+        "modifiedTime": 1707162419614,
+        "lastModifiedBy": "Dq6Ur8VOwxcpRzHA"
+      },
+      "_key": "!journal.pages!yy2znlPUR5mO59Rl.7r6Flws98RzpRlAC"
+    }
+  ],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "Dq6Ur8VOwxcpRzHA": 3
+  },
+  "flags": {},
+  "_stats": {
+    "systemId": "loghorizontrpg",
+    "systemVersion": "0.6.0",
+    "coreVersion": "11.315",
+    "createdTime": 1694965922485,
+    "modifiedTime": 1707162419614,
+    "lastModifiedBy": "Dq6Ur8VOwxcpRzHA"
+  },
+  "_key": "!journal!yy2znlPUR5mO59Rl"
+}

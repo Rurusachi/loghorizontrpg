@@ -118,3 +118,12 @@
   flex: 0 0 200px;
   padding: 0 8px;
 }
+
+.item-summary {
+  flex: 0 0 100%;
+  font-size: 12px;
+  line-height: 16px;
+  padding: 0.25em 0.5em;
+  /*color: @colorDark;*/
+  border-top: 1px solid #c9c7b8;
+}

@@ -368,24 +368,25 @@ async rollFormula(formula, options={}) {
 
     for (let [k, v] of Object.entries(formula.bonus)) {
         if (v) {
-            parts.push(`@${k}`);
+            let bonusName = `formulabonus.${k}` // Prevent overlap when merging with data later
+            parts.push(`@${bonusName}`);
             if (k == "sr") {
-                data[k] = `${formula.bonusmultiplier[k] * itemData.sr.value}[SR]`;
+                data[bonusName] = `${formula.bonusmultiplier[k] * itemData.sr.value}[SR]`;
             }
             else if (k == "srd") {
-                data[k] = `${formula.bonusmultiplier[k] * itemData.sr.value}d6[SRD]`;
+                data[bonusName] = `${formula.bonusmultiplier[k] * itemData.sr.value}d6[SRD]`;
             }
             else if (["patk", "matk", "recovery"].includes(k)) {
-                data[k] = `${formula.bonusmultiplier[k] * actorData.combatstats[k].total}[${localized[k]}]`;
+                data[bonusName] = `${formula.bonusmultiplier[k] * actorData.combatstats[k].total}[${localized[k]}]`;
             }
             else if (["strmod", "dexmod", "powmod", "intmod"].includes(k)) {
-                data[k] = `${formula.bonusmultiplier[k] * actorData.abilities[k.slice(0,3)].mod}[${localized[k]}]`;
+                data[bonusName] = `${formula.bonusmultiplier[k] * actorData.abilities[k.slice(0,3)].mod}[${localized[k]}]`;
             }
             else if (["strbase", "dexbase", "powbase", "intbase"].includes(k)) {
-                data[k] = `${formula.bonusmultiplier[k] * actorData.abilities[k.slice(0,3)].base}[${localized[k]}]`;
+                data[bonusName] = `${formula.bonusmultiplier[k] * actorData.abilities[k.slice(0,3)].base}[${localized[k]}]`;
             }
             else if (k == "cr") {
-                data[k] = `${formula.bonusmultiplier[k] * actorData.cr}[CR]`;
+                data[bonusName] = `${formula.bonusmultiplier[k] * actorData.cr}[CR]`;
             }
             else {
                 console.log(k);
@@ -447,7 +448,7 @@ async rollFormula(formula, options={}) {
   }
 
   get hasAction() {
-      return (this.system?.hasaction == true ?? false) || this.type === "skill" || this.type === "consumable";
+      return (this.system?.hasAction == true ?? false) || this.type === "skill" || this.type === "consumable";
   }
 
   async toggleEquipped() {

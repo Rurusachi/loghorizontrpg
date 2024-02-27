@@ -1,0 +1,10 @@
+# IDE
+.idea/
+.vs/
+
+# Foundry
+*.lock
+*
+!/**/
+!*.json
+!.gitignore

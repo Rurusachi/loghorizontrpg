@@ -7,9 +7,30 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [21.x]
+
     steps:
     - uses: actions/checkout@v2
 
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Build
+      run: |
+        npm ci
+        npm run build
+
+      # Install the FoundryVTT CLI.
+    - run: npm install -g @foundryvtt/foundryvtt-cli 
+      # Configure the datapath as the github workspace variable.
+    - run: fvtt configure set "dataPath" ${GITHUB_WORKSPACE}
+      # Package each folder of source json files into the appropriate LevelDB pack.
+    - run: bash .github/pack.sh
     # get part of the tag after the `v`
     - name: Extract tag version number
       id: get_version
@@ -28,7 +49,7 @@ jobs:
         download: https://github.com/${{github.repository}}/releases/download/${{github.event.release.tag_name}}/lhrpg-${{github.event.release.tag_name}}.zip
 
     # Create a zip file with all files required by the system to add to the release
-    - run: zip -r ./lhrpg-${{github.event.release.tag_name}}.zip system.json template.json LICENSE.txt css/ lang/ module/ packs/ templates/
+    - run: zip -r ./lhrpg-${{github.event.release.tag_name}}.zip loghorizontrpg.mjs style.css system.json template.json LICENSE.txt lang/ packs/ templates/  --exclude="*packs/*/_source*"
 
     # Create a release for this specific version
     - name: Update Release with Files
