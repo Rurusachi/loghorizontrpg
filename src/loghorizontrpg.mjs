@@ -140,9 +140,8 @@ async function showLatestVersionInfo() {
 
 async function migrateWorld(fromVersion) {
 
-  // Migrate tags and effects if v0.5.0 or older
+  // Migrate items with actions if v0.5.0 or older
   if (!fromVersion || !isNewerVersion(fromVersion, "0.5.0")) {
-    // Migrate actor tags
     await migrateHasActionItems();
     console.log("Migrated all items with actions");
   }
