@@ -94,6 +94,14 @@ export default class CompendiumBrowserDialog extends Application {
         // Set data transfer
         event.dataTransfer.setData("text/plain", JSON.stringify(dragData));
     }
+
+    /** @override */
+    _canDragStart(selector) {
+        // Anyone can drag from compendium
+        return true
+    }
+
+
   
     /** @override */
     async getData() {
